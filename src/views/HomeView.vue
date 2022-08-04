@@ -11,7 +11,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   async mounted() {
-    await this.$apiAuth.post("/formx");
+    console.log(import.meta.env.VITE_APP_TITLE2);
   },
 });
 </script>
