@@ -7,6 +7,8 @@ import router from "./router";
 import "primevue/resources/themes/saga-orange/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
+import "./assets/styles/layout.scss";
+
 // Primevue Components
 import PrimeVue from "primevue/config";
 import Button from "primevue/button";
