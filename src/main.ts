@@ -17,6 +17,7 @@ import "./assets/styles/layout.scss";
 // Primevue Components
 import PrimeVue from "primevue/config";
 import Button from "primevue/button";
+import InputText from "primevue/inputtext";
 
 const app = createApp(App);
 
@@ -28,5 +29,6 @@ app.use(i18n);
 
 // eslint-disable-next-line vue/multi-word-component-names, vue/no-reserved-component-names
 app.component("Button", Button);
+app.component("InputText", InputText);
 
 app.mount("#app");
