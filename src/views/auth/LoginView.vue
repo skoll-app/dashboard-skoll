@@ -26,12 +26,13 @@ function onSubmit(values: Record<string, unknown>) {
           :validation-schema="schema"
           :initial-values="formValues"
         >
-          <SKInputText
-            name="name"
-            placeholder="Escribe tu nombre"
-            label="Nombre"
+          <SKInputText name="name" :placeholder="$t('form.email')" />
+          <Button
+            class="uppercase"
+            :disabled="!valid"
+            type="submit"
+            :label="$t('login')"
           />
-          <Button :disabled="!valid" type="submit" :label="$t('login')" />
         </VeeForm>
       </div>
     </div>
