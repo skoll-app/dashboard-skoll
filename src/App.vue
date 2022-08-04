@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
-import SKInputText from "@/components/ux/SKInputText.vue";
 </script>
 
 <template>
@@ -20,7 +19,6 @@ import SKInputText from "@/components/ux/SKInputText.vue";
       </nav>
     </div>
   </header> -->
-  <SKInputText name="name" placeholder="Escribe tu nombre" label="Nombre" />
 
   <RouterView />
 </template>
