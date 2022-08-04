@@ -10,8 +10,8 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  setup() {
-    return {};
+  async mounted() {
+    await this.$apiAuth.post("/formx");
   },
 });
 </script>
