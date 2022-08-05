@@ -1,3 +1,4 @@
+/* eslint-disable vue/multi-word-component-names */
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 
@@ -19,6 +20,8 @@ import "./assets/styles/layout.scss";
 import PrimeVue from "primevue/config";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import Password from "primevue/password";
+import Checkbox from "primevue/checkbox";
 
 // Vee validate components
 import { Form } from "vee-validate";
@@ -31,9 +34,11 @@ app.use(router);
 app.use(VueAxios, { $api: api, $apiAuth: apiAuth });
 app.use(i18n);
 
-// eslint-disable-next-line vue/multi-word-component-names, vue/no-reserved-component-names
+// eslint-disable-next-line vue/no-reserved-component-names
 app.component("Button", Button);
 app.component("InputText", InputText);
+app.component("Password", Password);
 app.component("VeeForm", Form);
+app.component("Checkbox", Checkbox);
 
 app.mount("#app");

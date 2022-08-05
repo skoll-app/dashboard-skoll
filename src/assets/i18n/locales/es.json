@@ -1,10 +1,19 @@
 {
-  "login": "Inicia sesión",
+  "login": {
+    "welcome": "¡Bienvenido!",
+    "continue": "Inicia sesión para continuar"
+  },
   "form": {
     "email": "Correo",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste la contraseña?",
+    "rememberMe": "Recuerdame",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido"
+    },
+    "buttons": {
+      "login": "Iniciar sesión"
     }
   }
 }
