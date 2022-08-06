@@ -32,6 +32,15 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  labelClasses: {
+    type: String,
+  },
+  inputStyle: {
+    type: String,
+  },
+  inputClasses: {
+    type: String,
+  },
 });
 
 const name = toRef(props, "name");
@@ -47,17 +56,18 @@ const {
 </script>
 
 <template>
+  <label :class="labelClasses">{{ label }}</label>
   <div class="field">
-    <label>{{ label }}</label>
     <InputText
       :type="type"
       class="p-inputtext-lg"
-      :class="{ 'p-invalid': errorMessage }"
+      :class="[{ 'p-invalid': errorMessage }, inputClasses]"
       :placeholder="placeholder || label"
       :disabled="disabled"
       :value="inputValue"
       @input="handleChange"
       @blur="handleBlur"
+      :style="inputStyle"
     />
     <p class="p-error" v-show="errorMessage">
       {{ errorMessage }}
