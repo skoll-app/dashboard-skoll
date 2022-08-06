@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
+import setGlobalLocale from "./utils/yup-i18n.js";
+
+setGlobalLocale();
 </script>
 
 <template>

@@ -1,0 +1,10 @@
+{
+  "login": "Inicia sesión",
+  "form": {
+    "email": "Correo",
+    "validations": {
+      "required": "El campo es requerido",
+      "email": "Correo inválido"
+    }
+  }
+}

@@ -4,11 +4,11 @@ import * as Yup from "yup";
 import { reactive } from "vue";
 
 const schema = Yup.object().shape({
-  name: Yup.string().required(),
+  name: Yup.string().required().email(),
 });
 
 const formValues = reactive({
-  name: "Adan",
+  name: "",
 });
 
 function onSubmit(values: Record<string, unknown>) {
@@ -18,7 +18,7 @@ function onSubmit(values: Record<string, unknown>) {
 
 <template>
   <div class="grid">
-    <div class="col-12">
+    <div class="col-10 col-offset-1">
       <div class="card p-fluid">
         <VeeForm
           v-slot="{ meta: { valid } }"
@@ -26,12 +26,13 @@ function onSubmit(values: Record<string, unknown>) {
           :validation-schema="schema"
           :initial-values="formValues"
         >
-          <SKInputText
-            name="name"
-            placeholder="Escribe tu nombre"
-            label="Nombre"
+          <SKInputText name="name" :placeholder="$t('form.email')" />
+          <Button
+            class="uppercase"
+            :disabled="!valid"
+            type="submit"
+            :label="$t('login')"
           />
-          <Button :disabled="!valid" type="submit" label="Login" />
         </VeeForm>
       </div>
     </div>

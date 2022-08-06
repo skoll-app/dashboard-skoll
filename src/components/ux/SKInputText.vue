@@ -53,7 +53,7 @@ const {
       :type="type"
       class="p-inputtext-lg"
       :class="{ 'p-invalid': errorMessage }"
-      :placeholder="placeholder || name"
+      :placeholder="placeholder || label"
       :disabled="disabled"
       :value="inputValue"
       @input="handleChange"
