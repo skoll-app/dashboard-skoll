@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
+import * as yup from "yup";
+import SKInputText from "../../components/ux/SKInputText.vue";
+import SKInputPassword from "../../components/ux/SKInputPassword.vue";
+
+const schema = yup.object({
+  email: yup.string().required().email(),
+  password: yup.string().required(),
+});
 
 const checked = ref(false);
-const email = ref("");
-const password = ref("");
 
-const isValid = computed(() => email.value !== "" && password.value !== "");
+function onSubmit(values: Record<string, unknown>) {
+  console.log(values);
+}
 </script>
 
 <template>
@@ -17,56 +25,53 @@ const isValid = computed(() => email.value !== "" && password.value !== "");
         </div>
         <span class="text-600 font-medium">{{ $t("login.continue") }}</span>
       </div>
+      <VeeForm
+        :validation-schema="schema"
+        v-slot="{ meta: { valid } }"
+        @submit="onSubmit"
+      >
+        <div class="w-full md:w-10 mx-auto">
+          <SKInputText
+            name="email"
+            :label="$t('form.email')"
+            labelClasses="block text-900 text-xl font-medium mb-2"
+            :placeholder="$t('form.email')"
+            inputStyle="padding: 1rem"
+            inputClasses="w-full"
+          />
 
-      <div class="w-full md:w-10 mx-auto">
-        <label for="email1" class="block text-900 text-xl font-medium mb-2">{{
-          $t("form.email")
-        }}</label>
-        <InputText
-          id="email1"
-          v-model="email"
-          type="text"
-          class="w-full mb-3"
-          :placeholder="$t('form.email')"
-          style="padding: 1rem"
-        />
+          <SKInputPassword
+            name="password"
+            :label="$t('form.password')"
+            labelClasses="block text-900 text-xl font-medium mb-2"
+            inputStyle="padding:1rem"
+            passwordClasses="w-full"
+            inputClasses="w-full"
+          />
 
-        <label
-          for="password1"
-          class="block text-900 font-medium text-xl mb-2"
-          >{{ $t("form.password") }}</label
-        >
-        <Password
-          id="password1"
-          v-model="password"
-          :placeholder="$t('form.password')"
-          toggleMask
-          :feedback="false"
-          class="w-full mb-3"
-          inputClass="w-full"
-          inputStyle="padding:1rem"
-        ></Password>
-
-        <div class="flex align-items-center justify-content-between mb-5">
-          <div class="flex align-items-center">
-            <Checkbox
-              id="rememberme1"
-              v-model="checked"
-              :binary="true"
-              class="mr-2"
-            ></Checkbox>
-            <label for="rememberme1">{{ $t("form.rememberMe") }}</label>
+          <div class="flex align-items-center justify-content-between mb-5">
+            <div class="flex align-items-center">
+              <Checkbox
+                id="rememberme1"
+                v-model="checked"
+                :binary="true"
+                class="mr-2"
+              ></Checkbox>
+              <label for="rememberme1">{{ $t("form.rememberMe") }}</label>
+            </div>
+            <a
+              class="font-medium no-underline ml-2 text-right cursor-pointer"
+              >{{ $t("form.forgotPassword") }}</a
+            >
           </div>
-          <a class="font-medium no-underline ml-2 text-right cursor-pointer">{{
-            $t("form.forgotPassword")
-          }}</a>
+          <Button
+            type="submit"
+            :disabled="!valid"
+            :label="$t('form.buttons.login')"
+            class="w-full p-3 text-xl"
+          ></Button>
         </div>
-        <Button
-          :disabled="!isValid"
-          :label="$t('form.buttons.login')"
-          class="w-full p-3 text-xl"
-        ></Button>
-      </div>
+      </VeeForm>
     </div>
   </div>
 </template>
