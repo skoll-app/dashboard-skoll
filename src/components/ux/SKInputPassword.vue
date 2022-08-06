@@ -2,7 +2,6 @@
 import { toRef } from "vue";
 import { useField } from "vee-validate";
 
-// eslint-disable-next-line no-undef
 const props = defineProps({
   name: {
     type: String,
@@ -41,6 +40,13 @@ const props = defineProps({
   inputClasses: {
     type: String,
   },
+  passwordClasses: {
+    type: String,
+  },
+  toggleType: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const name = toRef(props, "name");
@@ -58,17 +64,18 @@ const {
 <template>
   <label :class="labelClasses">{{ label }}</label>
   <div class="field">
-    <InputText
-      :type="type"
-      class="p-inputtext-lg"
-      :class="[{ 'p-invalid': errorMessage }, inputClasses]"
+    <Password
+      :name="name"
       :placeholder="placeholder || label"
-      :disabled="disabled"
-      :value="inputValue"
+      :toggleMask="toggleType"
+      :feedback="false"
+      :class="[{ 'p-invalid': errorMessage }, inputClasses, passwordClasses]"
+      :inputClass="inputClasses"
+      :inputStyle="inputStyle"
       @input="handleChange"
       @blur="handleBlur"
-      :style="inputStyle"
-    />
+      :value="inputValue"
+    ></Password>
     <p class="p-error" v-show="errorMessage">
       {{ errorMessage }}
     </p>
