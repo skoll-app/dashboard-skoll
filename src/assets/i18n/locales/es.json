@@ -1,7 +1,7 @@
 {
   "login": {
     "welcome": "¡Bienvenido!",
-    "continue": "Inicia sesión para continuar"
+    "continue": "Inicia sesión o <b>crea tu negocio</b> para continuar"
   },
   "form": {
     "email": "Correo",
@@ -13,7 +13,8 @@
       "email": "Correo inválido"
     },
     "buttons": {
-      "login": "Iniciar sesión"
+      "login": "Iniciar sesión",
+      "createBusiness": "Crear negocio"
     }
   }
 }
