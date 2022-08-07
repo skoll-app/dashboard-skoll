@@ -4,13 +4,19 @@
     "continue": "Inicia sesión o <b>crea tu negocio</b> para continuar"
   },
   "form": {
+    "name": "Nombre",
+    "lastname": "Apellidos",
     "email": "Correo",
+    "phone": "Teléfono",
+    "country": "País",
+    "city": "Ciudad",
     "password": "Contraseña",
     "forgotPassword": "¿Olvidaste la contraseña?",
     "rememberMe": "Recuerdame",
     "validations": {
       "required": "El campo es requerido",
-      "email": "Correo inválido"
+      "email": "Correo inválido",
+      "onlyLetters": "Solo letras"
     },
     "buttons": {
       "login": "Iniciar sesión",

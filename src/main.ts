@@ -6,6 +6,9 @@ import App from "./App.vue";
 import router from "./router";
 import i18n from "./assets/i18n";
 
+// Yup
+import "./utils/yup-custom-validations";
+
 // Axios
 import VueAxios from "vue-axios";
 import { api, apiAuth } from "./axios";
