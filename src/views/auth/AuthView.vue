@@ -5,9 +5,7 @@
       <div class="bartender h-full w-full"></div>
     </div>
     <div class="col-12 md:col-6">
-      <div class="p-7">
-        <router-view />
-      </div>
+      <router-view />
     </div>
   </div>
 </template>

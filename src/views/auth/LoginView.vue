@@ -30,7 +30,7 @@ function onSubmit(values: Record<string, unknown>) {
         v-slot="{ meta: { valid } }"
         @submit="onSubmit"
       >
-        <div class="w-full md:w-10 mx-auto">
+        <div class="w-full w-11 md:w-10 lg:w-8 mx-auto">
           <SKInputText
             name="email"
             :label="$t('form.email')"
