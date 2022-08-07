@@ -1,12 +1,24 @@
 import { useI18n } from "vue-i18n";
 import * as yup from "yup";
 
-function onlyLetters(msg?: string) {
-  const { t } = useI18n();
-  return yup.string().matches(/^[a-zA-ZÀ-ÿ]+( [a-zA-ZÀ-ÿ]+)*$/, {
-    message: msg || t("form.validations.onlyLetters"),
-    excludeEmptyStrings: true,
-  });
-}
+yup.addMethod<yup.StringSchema>(
+  yup.string,
+  "onlyLetters",
+  function onlyLetters(msg: string) {
+    const { t } = useI18n();
 
-yup.addMethod<yup.StringSchema>(yup.string, "onlyLetters", onlyLetters);
+    return this.test({
+      name: "onlyLetters",
+      message: msg || t("form.validations.onlyLetters"),
+      test: (value) => {
+        if (value === "") {
+          return true;
+        }
+        if (!/^[a-zA-ZÀ-ÿ]+( [a-zA-ZÀ-ÿ]+)*$/.test(value as string)) {
+          return false;
+        }
+        return !!value;
+      },
+    });
+  }
+);
