@@ -56,21 +56,23 @@ const {
 </script>
 
 <template>
-  <label :class="labelClasses">{{ label }}</label>
-  <div class="field">
-    <InputText
-      :type="type"
-      class="p-inputtext-lg"
-      :class="[{ 'p-invalid': errorMessage }, inputClasses]"
-      :placeholder="placeholder || label"
-      :disabled="disabled"
-      :value="inputValue"
-      @input="handleChange"
-      @blur="handleBlur"
-      :style="inputStyle"
-    />
-    <p class="p-error" v-show="errorMessage">
-      {{ errorMessage }}
-    </p>
+  <div>
+    <label :class="labelClasses">{{ label }}</label>
+    <div class="field">
+      <InputText
+        :type="type"
+        class="p-inputtext-lg"
+        :class="[{ 'p-invalid': errorMessage }, inputClasses]"
+        :placeholder="placeholder || label"
+        :disabled="disabled"
+        :value="inputValue"
+        @input="handleChange"
+        @blur="handleBlur"
+        :style="inputStyle"
+      />
+      <p class="p-error" v-show="errorMessage">
+        {{ errorMessage }}
+      </p>
+    </div>
   </div>
 </template>
