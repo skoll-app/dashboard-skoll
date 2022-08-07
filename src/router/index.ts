@@ -5,6 +5,8 @@ import {
 } from "vue-router";
 import LoginView from "../views/auth/LoginView.vue";
 
+console.log(process.env.NODE_ENV);
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
