@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import * as yup from "yup";
 import SKInputText from "../../components/ux/SKInputText.vue";
+import SKInputMask from "../../components/ux/SKInputMask.vue";
 // import SKInputPassword from "../../components/ux/SKInputPassword.vue";
 
 const schema = yup.object({
   name: yup.string().onlyLetters().required(),
-  lastname: yup.string().onlyLetters(),
+  lastname: yup.string().onlyLetters().required(),
   email: yup.string().email().required(),
-  phone: yup.string().required(),
+  phone: yup.string().required().min(10),
 });
+
+const onSubmit = (values: Record<string, unknown>) => {
+  console.log(values);
+};
 </script>
 
 <template>
-  <VeeForm :validation-schema="schema" v-slot="{ meta: { valid } }">
+  <VeeForm
+    :validation-schema="schema"
+    @submit="onSubmit"
+    v-slot="{ meta: { valid } }"
+  >
     <div class="w-full w-11 md:w-10 mx-auto">
       <div class="grid">
         <div class="col-12 md:col">
@@ -45,12 +54,13 @@ const schema = yup.object({
           />
         </div>
         <div class="col-12 md:col">
-          <SKInputText
+          <SKInputMask
             name="phone"
             :label="$t('form.phone')"
             labelClasses="block mb-2"
-            :placeholder="$t('form.phone')"
             inputClasses="w-full"
+            mask="(999) 999 9999"
+            placeholder="(999) 999 9999"
           />
         </div>
       </div>

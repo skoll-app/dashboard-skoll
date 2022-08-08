@@ -16,7 +16,8 @@
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",
-      "onlyLetters": "Solo letras"
+      "onlyLetters": "Solo letras",
+      "min": "Mínimo {min} caracteres"
     },
     "buttons": {
       "login": "Iniciar sesión",
