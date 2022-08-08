@@ -21,7 +21,12 @@
     },
     "buttons": {
       "login": "Iniciar sesión",
-      "createBusiness": "Crear negocio"
+      "createBusiness": "Crear negocio",
+      "signup": "Registrar"
     }
+  },
+  "signup": {
+    "title": "¡ÚNETE AHORA Y HAZ CRECER LAS VENTAS DE TU NEGOCIO!",
+    "subtitle": "Si eres el propietario y/o representante legal del negocio, por favor completa la siguiente información con tus datos"
   }
 }
