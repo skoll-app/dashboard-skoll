@@ -26,6 +26,7 @@ import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import Checkbox from "primevue/checkbox";
 import InputMask from "primevue/inputmask";
+import Dropdown from "primevue/dropdown";
 
 // Vee validate components
 import { Form } from "vee-validate";
@@ -45,5 +46,6 @@ app.component("Password", Password);
 app.component("VeeForm", Form);
 app.component("Checkbox", Checkbox);
 app.component("InputMask", InputMask);
+app.component("Dropdown", Dropdown);
 
 app.mount("#app");
