@@ -2,7 +2,6 @@
 import { toRef } from "vue";
 import { useField } from "vee-validate";
 
-// eslint-disable-next-line no-undef
 const props = defineProps({
   name: {
     type: String,
@@ -60,6 +59,7 @@ const {
     <label :class="labelClasses">{{ label }}</label>
     <div class="field">
       <InputText
+        :name="name"
         :type="type"
         class="p-inputtext-lg"
         :class="[{ 'p-invalid': errorMessage }, inputClasses]"
