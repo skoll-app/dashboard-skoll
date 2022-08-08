@@ -25,6 +25,7 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import Checkbox from "primevue/checkbox";
+import InputMask from "primevue/inputmask";
 
 // Vee validate components
 import { Form } from "vee-validate";
@@ -43,5 +44,6 @@ app.component("InputText", InputText);
 app.component("Password", Password);
 app.component("VeeForm", Form);
 app.component("Checkbox", Checkbox);
+app.component("InputMask", InputMask);
 
 app.mount("#app");
