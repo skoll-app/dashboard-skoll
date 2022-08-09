@@ -36,7 +36,8 @@
     "buttons": {
       "login": "Iniciar sesión",
       "createBusiness": "Crear negocio",
-      "signup": "Registrar"
+      "signup": "Registrar",
+      "back": "Volver"
     }
   },
   "signup": {

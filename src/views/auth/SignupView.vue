@@ -129,12 +129,22 @@ const onSubmit = (values: Record<string, unknown>) => {
           </div>
         </div>
 
-        <Button
-          type="submit"
-          :disabled="!valid"
-          :label="$t('form.buttons.signup')"
-          class="w-full p-3 text-xl"
-        ></Button>
+        <div class="flex justify-content-between">
+          <RouterLink to="/" v-slot="{ navigate }">
+            <Button
+              type="submit"
+              :label="$t('form.buttons.back')"
+              class="p-button-secondary py-3 px-5 text-xl"
+              @click="navigate"
+            ></Button>
+          </RouterLink>
+          <Button
+            type="submit"
+            :disabled="!valid"
+            :label="$t('form.buttons.signup')"
+            class="py-3 px-5 text-xl"
+          ></Button>
+        </div>
       </div>
     </VeeForm>
   </div>
