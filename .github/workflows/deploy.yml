@@ -41,6 +41,10 @@ jobs:
 
       - name: Build dashboard
         run: npm run build
+        
+      - name: Copy index.html
+        run: cp index.html 404.html
+        
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
 
