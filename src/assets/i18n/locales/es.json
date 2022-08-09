@@ -11,13 +11,7 @@
     "country": "País",
     "city": "Ciudad",
     "password": "Contraseña",
-    "forgotPassword": "¿Olvidaste la contraseña?",
-    "rememberMe": "Recuerdame",
-    "validations": {
-      "required": "El campo es requerido",
-      "email": "Correo inválido",
-      "onlyLetters": "Solo letras",
-      "min": "Mínimo {min} caracteres",
+    "helpers": {
       "password": {
         "weak": "Débil",
         "medium": "Medio",
@@ -26,8 +20,18 @@
         "uppercase": "Al menos una letra mayúscula",
         "number": "Al menos un número",
         "minimum": "Mínimo 8 caracteres",
+        "specialChar": "Al menos un caractér especial: ",
         "type": "Escribe una contraseña"
       }
+    },
+    "forgotPassword": "¿Olvidaste la contraseña?",
+    "rememberMe": "Recuerdame",
+    "validations": {
+      "required": "El campo es requerido",
+      "email": "Correo inválido",
+      "onlyLetters": "Solo letras",
+      "min": "Mínimo {min} caracteres",
+      "password": "No cumple con los requisitos"
     },
     "buttons": {
       "login": "Iniciar sesión",

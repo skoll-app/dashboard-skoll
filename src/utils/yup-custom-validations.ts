@@ -31,7 +31,7 @@ yup.addMethod<yup.StringSchema>(
 
     return this.test({
       name: "password",
-      message: msg || t("form.validations.password.lowercase"),
+      message: msg || t("form.validations.password"),
       test: (value) => {
         if (value === "") {
           return true;
