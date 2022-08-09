@@ -22,3 +22,29 @@ yup.addMethod<yup.StringSchema>(
     });
   }
 );
+
+yup.addMethod<yup.StringSchema>(
+  yup.string,
+  "password",
+  function password(msg: string) {
+    const { t } = useI18n();
+
+    return this.test({
+      name: "password",
+      message: msg || t("form.validations.password.lowercase"),
+      test: (value) => {
+        if (value === "") {
+          return true;
+        }
+        if (
+          !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?./¿])[A-Za-z\d#$@!%&*?./¿]{8,30}$/.test(
+            value as string
+          )
+        ) {
+          return false;
+        }
+        return !!value;
+      },
+    });
+  }
+);

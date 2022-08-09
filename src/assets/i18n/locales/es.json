@@ -17,7 +17,17 @@
       "required": "El campo es requerido",
       "email": "Correo inválido",
       "onlyLetters": "Solo letras",
-      "min": "Mínimo {min} caracteres"
+      "min": "Mínimo {min} caracteres",
+      "password": {
+        "weak": "Débil",
+        "medium": "Medio",
+        "strong": "Fuerte",
+        "lowercase": "Al menos una letra minúscula",
+        "uppercase": "Al menos una letra mayúscula",
+        "number": "Al menos un número",
+        "minimum": "Mínimo 8 caracteres",
+        "type": "Escribe una contraseña"
+      }
     },
     "buttons": {
       "login": "Iniciar sesión",

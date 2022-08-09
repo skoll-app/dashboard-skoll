@@ -15,7 +15,7 @@ const schema = yup.object({
   phone: yup.string().required().min(10),
   country: yup.string().required(),
   city: yup.string().required(),
-  password: yup.string().required(),
+  password: yup.string().required().password(),
 });
 
 const countries = ref([{ name: "Colombia", code: "CO" }]);
@@ -124,6 +124,7 @@ const onSubmit = (values: Record<string, unknown>) => {
               inputStyle="padding:1rem"
               passwordClasses="w-full"
               inputClasses="w-full"
+              feedback
             />
           </div>
         </div>
