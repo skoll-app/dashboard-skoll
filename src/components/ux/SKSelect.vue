@@ -1,29 +1,9 @@
 <script setup lang="ts">
-import { toRef } from "vue";
 import { useField } from "vee-validate";
+import { toRef } from "vue";
 
 const props = defineProps({
   name: {
-    type: String,
-    default: "",
-  },
-  type: {
-    type: String,
-    default: "text",
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  size: {
-    type: String,
-    default: "",
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  value: {
     type: String,
     default: "",
   },
@@ -34,11 +14,27 @@ const props = defineProps({
   labelClasses: {
     type: String,
   },
-  inputStyle: {
-    type: String,
+  options: {
+    type: Array<unknown>,
+    default: () => ({}),
   },
-  inputClasses: {
+  placeholder: {
     type: String,
+    default: "",
+  },
+  value: {
+    type: String,
+    default: "",
+  },
+  selectClasses: {
+    type: String,
+    default: "",
+  },
+  filter: {
+    type: Boolean,
+  },
+  disabled: {
+    type: Boolean,
   },
 });
 
@@ -53,22 +49,21 @@ const {
   initialValue: props.value,
 });
 </script>
-
 <template>
   <div>
     <label :class="labelClasses">{{ label }}</label>
     <div class="field">
-      <InputText
-        :name="name"
-        :type="type"
-        class="p-inputtext-lg"
-        :class="[{ 'p-invalid': errorMessage }, inputClasses]"
-        :placeholder="placeholder || label"
-        :disabled="disabled"
-        :value="inputValue"
-        @input="handleChange"
+      <Dropdown
+        :model-value="inputValue"
+        @update:model-value="handleChange"
         @blur="handleBlur"
-        :style="inputStyle"
+        :options="options"
+        optionLabel="name"
+        optionValue="code"
+        :placeholder="placeholder"
+        :class="selectClasses"
+        :filter="filter"
+        :disabled="disabled"
       />
       <p class="p-error" v-show="errorMessage">
         {{ errorMessage }}
@@ -76,3 +71,5 @@ const {
     </div>
   </div>
 </template>
+
+<style scoped></style>

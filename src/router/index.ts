@@ -4,6 +4,7 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 import LoginView from "../views/auth/LoginView.vue";
+import SignupView from "../views/auth/SignupView.vue";
 
 console.log(process.env.NODE_ENV);
 
@@ -18,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "login",
         name: "login",
         component: LoginView,
+      },
+      {
+        path: "sign-up",
+        name: "sign-up",
+        component: SignupView,
       },
     ],
   },

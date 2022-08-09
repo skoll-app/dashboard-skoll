@@ -6,6 +6,9 @@ import App from "./App.vue";
 import router from "./router";
 import i18n from "./assets/i18n";
 
+// Yup
+import "./utils/yup-custom-validations";
+
 // Axios
 import VueAxios from "vue-axios";
 import { api, apiAuth } from "./axios";
@@ -22,6 +25,9 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Password from "primevue/password";
 import Checkbox from "primevue/checkbox";
+import InputMask from "primevue/inputmask";
+import Dropdown from "primevue/dropdown";
+import Divider from "primevue/divider";
 
 // Vee validate components
 import { Form } from "vee-validate";
@@ -40,5 +46,8 @@ app.component("InputText", InputText);
 app.component("Password", Password);
 app.component("VeeForm", Form);
 app.component("Checkbox", Checkbox);
+app.component("InputMask", InputMask);
+app.component("Dropdown", Dropdown);
+app.component("Divider", Divider);
 
 app.mount("#app");

@@ -7,10 +7,6 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  type: {
-    type: String,
-    default: "text",
-  },
   placeholder: {
     type: String,
     default: "",
@@ -18,6 +14,9 @@ const props = defineProps({
   size: {
     type: String,
     default: "",
+  },
+  mask: {
+    type: String,
   },
   disabled: {
     type: Boolean,
@@ -58,17 +57,19 @@ const {
   <div>
     <label :class="labelClasses">{{ label }}</label>
     <div class="field">
-      <InputText
+      <InputMask
         :name="name"
-        :type="type"
         class="p-inputtext-lg"
         :class="[{ 'p-invalid': errorMessage }, inputClasses]"
         :placeholder="placeholder || label"
         :disabled="disabled"
-        :value="inputValue"
-        @input="handleChange"
+        :modelValue="inputValue"
+        @update:modelValue="handleChange"
         @blur="handleBlur"
         :style="inputStyle"
+        :mask="mask"
+        type="text"
+        unmask
       />
       <p class="p-error" v-show="errorMessage">
         {{ errorMessage }}
@@ -76,3 +77,5 @@ const {
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped></style>

@@ -1,19 +1,47 @@
 {
   "login": {
     "welcome": "¡Bienvenido!",
-    "continue": "Inicia sesión para continuar"
+    "continue": "Inicia sesión o <b>crea tu negocio</b> para continuar"
   },
   "form": {
+    "name": "Nombre",
+    "lastname": "Apellidos",
     "email": "Correo",
+    "phone": "Teléfono",
+    "country": "País",
+    "city": "Ciudad",
     "password": "Contraseña",
+    "helpers": {
+      "password": {
+        "weak": "Débil",
+        "medium": "Medio",
+        "strong": "Fuerte",
+        "lowercase": "Al menos una letra minúscula",
+        "uppercase": "Al menos una letra mayúscula",
+        "number": "Al menos un número",
+        "minimum": "Mínimo 8 caracteres",
+        "specialChar": "Al menos un caractér especial: ",
+        "type": "Escribe una contraseña"
+      }
+    },
     "forgotPassword": "¿Olvidaste la contraseña?",
     "rememberMe": "Recuerdame",
     "validations": {
       "required": "El campo es requerido",
-      "email": "Correo inválido"
+      "email": "Correo inválido",
+      "onlyLetters": "Solo letras",
+      "min": "Mínimo {min} caracteres",
+      "password": "No cumple con los requisitos"
     },
     "buttons": {
-      "login": "Iniciar sesión"
+      "login": "Iniciar sesión",
+      "createBusiness": "Crear negocio",
+      "signup": "Registrar",
+      "back": "Volver"
     }
+  },
+  "signup": {
+    "title": "¡ÚNETE AHORA Y HAZ CRECER LAS VENTAS DE TU NEGOCIO!",
+    "subtitle": "Si eres el propietario y/o representante legal del negocio, por favor completa la siguiente información con tus datos"
   }
 }
