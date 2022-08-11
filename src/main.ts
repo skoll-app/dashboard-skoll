@@ -28,6 +28,8 @@ import Checkbox from "primevue/checkbox";
 import InputMask from "primevue/inputmask";
 import Dropdown from "primevue/dropdown";
 import Divider from "primevue/divider";
+import Steps from "primevue/steps";
+import Card from "primevue/card";
 
 // Vee validate components
 import { Form } from "vee-validate";
@@ -49,5 +51,7 @@ app.component("Checkbox", Checkbox);
 app.component("InputMask", InputMask);
 app.component("Dropdown", Dropdown);
 app.component("Divider", Divider);
+app.component("Steps", Steps);
+app.component("Card", Card);
 
 app.mount("#app");

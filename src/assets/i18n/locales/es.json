@@ -24,6 +24,7 @@
         "type": "Escribe una contraseña"
       }
     },
+    "businessName": "Nombre de tu negocio",
     "forgotPassword": "¿Olvidaste la contraseña?",
     "rememberMe": "Recuerdame",
     "validations": {
@@ -43,5 +44,15 @@
   "signup": {
     "title": "¡ÚNETE AHORA Y HAZ CRECER LAS VENTAS DE TU NEGOCIO!",
     "subtitle": "Si eres el propietario y/o representante legal del negocio, por favor completa la siguiente información con tus datos"
+  },
+  "onboarding": {
+    "steps": {
+      "basicData": "Información del negocio",
+      "customization": "Personalización",
+      "menu": "Menú / Categorías",
+      "scheduler": "Horarios y turnos",
+      "documents": "Documentos",
+      "summary": "Resumen"
+    }
   }
 }

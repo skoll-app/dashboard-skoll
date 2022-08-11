@@ -5,8 +5,8 @@ import {
 } from "vue-router";
 import LoginView from "../views/auth/LoginView.vue";
 import SignupView from "../views/auth/SignupView.vue";
-
-console.log(process.env.NODE_ENV);
+import BasicData from "../views/onboarding/steps/BasicData.vue";
+import CustomizationView from "../views/onboarding/steps/CustomizationView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -24,6 +24,19 @@ const routes: Array<RouteRecordRaw> = [
         path: "sign-up",
         name: "sign-up",
         component: SignupView,
+      },
+    ],
+  },
+  {
+    path: "/onboarding",
+    name: "onboarding",
+    component: () => import("../views/onboarding/OnboardingView.vue"),
+    redirect: { name: "basic-data" },
+    children: [
+      {
+        path: "",
+        name: "basic-data",
+        component: BasicData,
       },
     ],
   },
