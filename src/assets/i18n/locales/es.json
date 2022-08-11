@@ -25,6 +25,20 @@
       }
     },
     "businessName": "Nombre de tu negocio",
+    "businessType": "Tipo de negocio",
+    "businessAddress": "Dirección del negocio",
+    "kindOfperson": "Tipo de persona",
+    "taxation": "Régimen tributario",
+    "documentTypeList": {
+      "CC": "Cédula de ciudadanía",
+      "CE": "Cédula de extranjería",
+      "NIP": "Número de identificación personal",
+      "PAP": "Pasaporte",
+      "NIT": "NIT"
+    },
+    "documentType": "Tipo de documento",
+    "document": "Número de documento",
+    "companyName": "Razón social / Nombre legal de tu negocio",
     "forgotPassword": "¿Olvidaste la contraseña?",
     "rememberMe": "Recuerdame",
     "validations": {
@@ -53,6 +67,7 @@
       "scheduler": "Horarios y turnos",
       "documents": "Documentos",
       "summary": "Resumen"
-    }
+    },
+    "managerLegalInfo": "Información del representante legal"
   }
 }
