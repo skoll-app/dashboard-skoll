@@ -1,5 +1,8 @@
 <script setup lang="ts">
+// Imports
+// Vue
 import { ref } from "vue";
+// Utils
 import { useI18n } from "vue-i18n";
 // Components
 import SKInputText from "@/components/ux/SKInputText.vue";
@@ -7,16 +10,20 @@ import SKSelect from "@/components/ux/SKSelect.vue";
 import SKInputMask from "@/components/ux/SKInputMask.vue";
 // Enums
 import KindOfPerson from "@/enums/person";
+// Interfaces
+import type SelectOption from "@/interfaces/select-option";
+// End imports
 
 const { t } = useI18n();
 
-const businessTypes = ref([
+// Begin select fields
+const businessTypes = ref<SelectOption[]>([
   { name: "Bar", code: "Bar" },
   { name: "Discoteca", code: "Discoteca" },
   { name: "Restaurante", code: "Restaurante" },
 ]);
 
-const kindOfperson = ref([
+const kindOfperson = ref<SelectOption[]>([
   {
     name: KindOfPerson.NATURAL.toLowerCase(),
     code: KindOfPerson.NATURAL,
@@ -27,7 +34,7 @@ const kindOfperson = ref([
   },
 ]);
 
-const documentTypeBusiness = ref([
+const documentTypeBusiness = ref<SelectOption[]>([
   {
     name: t("form.documentTypeList.CC"),
     code: "CC",
@@ -38,7 +45,7 @@ const documentTypeBusiness = ref([
   },
 ]);
 
-const documentTypeManager = ref([
+const documentTypeManager = ref<SelectOption[]>([
   {
     name: t("form.documentTypeList.CC"),
     code: "CC",
@@ -52,9 +59,12 @@ const documentTypeManager = ref([
     code: "CE",
   },
 ]);
+// End select fields
 
+// Emit
 const emit = defineEmits(["next-page"]);
 
+// Functions
 function nextPage() {
   emit("next-page", {
     formData: {},
