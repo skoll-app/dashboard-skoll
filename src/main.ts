@@ -30,6 +30,7 @@ import Dropdown from "primevue/dropdown";
 import Divider from "primevue/divider";
 import Steps from "primevue/steps";
 import Card from "primevue/card";
+import InputNumber from "primevue/inputnumber";
 
 // Vee validate components
 import { Form } from "vee-validate";
@@ -53,5 +54,6 @@ app.component("Dropdown", Dropdown);
 app.component("Divider", Divider);
 app.component("Steps", Steps);
 app.component("Card", Card);
+app.component("InputNumber", InputNumber);
 
 app.mount("#app");

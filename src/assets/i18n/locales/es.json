@@ -41,6 +41,8 @@
     "companyName": "Razón social / Nombre legal de tu negocio",
     "forgotPassword": "¿Olvidaste la contraseña?",
     "rememberMe": "Recuerdame",
+    "allowedReservations": "Reservas permitidas",
+    "minimumBookingValue": "Valor mínimo reserva",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",
@@ -68,6 +70,7 @@
       "documents": "Documentos legales",
       "summary": "Resumen"
     },
-    "managerLegalInfo": "Información del representante legal"
+    "managerLegalInfo": "Información del representante legal",
+    "bookings": "Reservas"
   }
 }
