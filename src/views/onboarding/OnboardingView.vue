@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, type Ref } from "vue";
+import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -34,29 +34,14 @@ const items = ref([
     to: "/",
   },
 ]);
-const formObject: Ref<Record<string, unknown>> = ref({
-  name: "",
-  type: {},
-  email: "",
-  phone: "",
-  address: "",
-  kindOfperson: {},
-  taxation: {},
-  documentType: {},
-  document: "",
-  companyName: "",
-  manager: {
-    name: "",
-    lastname: "",
-    documentType: {},
-    document: "",
-  },
-});
+let formObject: Record<string, unknown> = reactive({});
 
 const nextPage = (event: any) => {
-  for (const field in event.formData) {
-    formObject.value[field] = event.formData[field];
-  }
+  formObject = { ...event.formData };
+  console.log(formObject);
+  // for (const field in event.formData) {
+  //   formObject[field] = event.formData[field];
+  // }
   router.push(items.value[event.pageIndex + 1].to);
 };
 const prevPage = (event: any) => {

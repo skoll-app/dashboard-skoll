@@ -100,6 +100,9 @@ const formRef = reactive(
       companyName: "",
       manager: {
         name: "",
+        lastname: "",
+        document: "",
+        documentType: "",
       },
     },
   })
@@ -111,7 +114,7 @@ const emit = defineEmits(["next-page"]);
 // Functions
 function nextPage() {
   emit("next-page", {
-    formData: {},
+    formData: formRef.values,
     pageIndex: 0,
   });
 }
