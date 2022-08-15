@@ -64,9 +64,8 @@
     "steps": {
       "basicData": "Información del negocio",
       "customization": "Personalización",
-      "menu": "Menú / Categorías",
-      "scheduler": "Horarios y turnos",
-      "documents": "Documentos",
+      "bankAccount": "Cuenta bancaria",
+      "documents": "Documentos legales",
       "summary": "Resumen"
     },
     "managerLegalInfo": "Información del representante legal"

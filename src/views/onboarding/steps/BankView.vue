@@ -1,5 +1,5 @@
 <template>
-  <div>Horario</div>
+  <div>Cuenta</div>
 </template>
 
 <script setup lang="ts"></script>

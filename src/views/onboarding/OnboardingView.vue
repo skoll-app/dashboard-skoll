@@ -38,15 +38,15 @@ const items = ref([
     to: "/onboarding/customization",
   },
   {
-    label: t("onboarding.steps.menu"),
-    to: "/onboarding/menu",
-  },
-  {
-    label: t("onboarding.steps.scheduler"),
-    to: "/onboarding/scheduler",
+    label: t("onboarding.steps.bankAccount"),
+    to: "/onboarding/bank",
   },
   {
     label: t("onboarding.steps.documents"),
+    to: "/onboarding/documents",
+  },
+  {
+    label: t("onboarding.steps.summary"),
     to: "/onboarding/documents",
   },
 ]);
