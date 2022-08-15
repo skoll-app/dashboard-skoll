@@ -306,6 +306,7 @@ const taxation = computed(() => {
       <div class="grid grid-nogutter justify-content-between">
         <i></i>
         <Button
+          :disabled="!formRef.meta.valid"
           :label="$t('form.buttons.next')"
           @click="nextPage()"
           icon="pi pi-angle-right"
