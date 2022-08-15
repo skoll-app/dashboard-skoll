@@ -31,7 +31,23 @@ const router = useRouter();
 const items = ref([
   {
     label: t("onboarding.steps.basicData"),
-    to: "/",
+    to: "/onboarding/basic-data",
+  },
+  {
+    label: t("onboarding.steps.customization"),
+    to: "/onboarding/customization",
+  },
+  {
+    label: t("onboarding.steps.menu"),
+    to: "/onboarding/menu",
+  },
+  {
+    label: t("onboarding.steps.scheduler"),
+    to: "/onboarding/scheduler",
+  },
+  {
+    label: t("onboarding.steps.documents"),
+    to: "/onboarding/documents",
   },
 ]);
 let formObject: Record<string, unknown> = reactive({});
@@ -59,5 +75,19 @@ const complete = () => {
 
 ::v-deep(.p-card-body) {
   padding: 2rem;
+}
+
+::v-deep(.p-steps-title) {
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+::v-deep(.p-steps-item) {
+  @media (max-width: 768px) {
+    &::before {
+      border-top: 0;
+    }
+  }
 }
 </style>
