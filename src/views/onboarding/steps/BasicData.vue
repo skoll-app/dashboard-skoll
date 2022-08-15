@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Imports
 // Vue
-import { ref } from "vue";
+import { computed, reactive, ref } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
 // Components
@@ -12,6 +12,9 @@ import SKInputMask from "@/components/ux/SKInputMask.vue";
 import KindOfPerson from "@/enums/person";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
+import { useForm } from "vee-validate";
+import * as yup from "yup";
+import Taxation from "@/enums/taxation";
 // End imports
 
 const { t } = useI18n();
@@ -34,7 +37,7 @@ const kindOfperson = ref<SelectOption[]>([
   },
 ]);
 
-const documentTypeBusiness = ref<SelectOption[]>([
+const businessDocumentType = ref<SelectOption[]>([
   {
     name: t("form.documentTypeList.CC"),
     code: "CC",
@@ -45,7 +48,7 @@ const documentTypeBusiness = ref<SelectOption[]>([
   },
 ]);
 
-const documentTypeManager = ref<SelectOption[]>([
+const managerDocumentType = ref<SelectOption[]>([
   {
     name: t("form.documentTypeList.CC"),
     code: "CC",
@@ -61,6 +64,47 @@ const documentTypeManager = ref<SelectOption[]>([
 ]);
 // End select fields
 
+// Form
+const validationSchema = yup.object({
+  businessName: yup.string().required(),
+  businessType: yup.string().required(),
+  email: yup.string().required().email(),
+  phone: yup.string().required().min(10),
+  businessAddress: yup.string().required(),
+  kindOfperson: yup.string().required(),
+  taxation: yup.string().required(),
+  businessDocumentType: yup.string().required(),
+  businessDocument: yup.string().required(),
+  companyName: yup.string().required(),
+  manager: yup.object({
+    name: yup.string().required().onlyLetters(),
+    lastname: yup.string().required().onlyLetters(),
+    documentType: yup.string().required(),
+    document: yup.string().required(),
+  }),
+});
+
+const formRef = reactive(
+  useForm({
+    validationSchema,
+    initialValues: {
+      businessName: "",
+      email: "",
+      phone: "",
+      businessType: "",
+      businessAddress: "",
+      kindOfperson: "",
+      taxation: "",
+      businessDocumentType: "",
+      businessDocument: "",
+      companyName: "",
+      manager: {
+        name: "",
+      },
+    },
+  })
+);
+
 // Emit
 const emit = defineEmits(["next-page"]);
 
@@ -71,12 +115,51 @@ function nextPage() {
     pageIndex: 0,
   });
 }
+
+const taxation = computed(() => {
+  const naturalPerson = [0, 1, 2];
+  const juridicalPerson = [1, 2, 3, 4, 5, 6, 7];
+  const options: SelectOption[] = [];
+
+  const taxation = Object.keys(Taxation);
+  taxation.forEach((key, index) => {
+    if (
+      formRef.values.kindOfperson === KindOfPerson.NATURAL &&
+      naturalPerson.includes(index)
+    ) {
+      options.push({
+        name: Taxation[key as keyof typeof Taxation],
+        code: key,
+      });
+    } else if (
+      formRef.values.kindOfperson === KindOfPerson.JURIDICAL &&
+      juridicalPerson.includes(index)
+    ) {
+      options.push({
+        name: Taxation[key as keyof typeof Taxation],
+        code: key,
+      });
+    }
+  });
+
+  return options;
+});
+
+// watch(
+//   () => formRef.values.kindOfperson,
+//   (newValue, oldValue) => {
+//     if (newValue !== oldValue) {
+//       console.log("por aca");
+//     }
+//   },
+//   { deep: true }
+// );
 </script>
 <template>
   <Card>
     <template v-slot:title> {{ t("onboarding.steps.basicData") }} </template>
     <template v-slot:content>
-      <VeeForm>
+      <form>
         <div class="grid">
           <div class="col-12 md:col-8">
             <SKInputText
@@ -89,7 +172,7 @@ function nextPage() {
           </div>
           <div class="col-12 md:col-4">
             <SKSelect
-              name="country"
+              name="businessType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
               :options="businessTypes"
@@ -140,24 +223,24 @@ function nextPage() {
               name="taxation"
               placeholder="Seleccione"
               select-classes="w-full p-1"
-              :options="businessTypes"
+              :options="taxation"
               :label="$t('form.taxation')"
               labelClasses="block mb-2"
             />
           </div>
           <div class="col-12 md:col-6">
             <SKSelect
-              name="documentTypeBusiness"
+              name="businessDocumentType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
-              :options="documentTypeBusiness"
+              :options="businessDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
             />
           </div>
           <div class="col-12 md:col-6">
             <SKInputText
-              name="document"
+              name="businessDocument"
               :label="$t('form.document')"
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
@@ -179,7 +262,7 @@ function nextPage() {
         <div class="grid">
           <div class="col-12 md:col-6">
             <SKInputText
-              name="name"
+              name="manager.name"
               :label="$t('form.name')"
               labelClasses="block mb-2"
               :placeholder="$t('form.name')"
@@ -189,7 +272,7 @@ function nextPage() {
           </div>
           <div class="col-12 md:col-6">
             <SKInputText
-              name="lastname"
+              name="manager.lastname"
               :label="$t('form.lastname')"
               labelClasses="block mb-2"
               :placeholder="$t('form.lastname')"
@@ -199,17 +282,17 @@ function nextPage() {
           </div>
           <div class="col-12 md:col-6">
             <SKSelect
-              name="documentTypeManager"
+              name="manager.documentType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
-              :options="documentTypeManager"
+              :options="managerDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
             />
           </div>
           <div class="col-12 md:col-6">
             <SKInputText
-              name="document"
+              name="manager.document"
               :label="$t('form.document')"
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
@@ -217,13 +300,13 @@ function nextPage() {
             />
           </div>
         </div>
-      </VeeForm>
+      </form>
     </template>
     <template v-slot:footer>
       <div class="grid grid-nogutter justify-content-between">
         <i></i>
         <Button
-          label="Next"
+          :label="$t('form.buttons.next')"
           @click="nextPage()"
           icon="pi pi-angle-right"
           iconPos="right"
