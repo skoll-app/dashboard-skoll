@@ -13,27 +13,33 @@ const { t } = useI18n();
 // Form
 const validationSchema = yup.object({
   allowedReservations: yup.number().min(1).required(),
-  minimumValue: yup.number().min(1).required(),
+  minimumValue: yup.number().min(1000).required(),
 });
 
 const formRef = reactive(
   useForm({
     validationSchema,
     initialValues: {
-      allowedReservations: "",
-      minimumValue: "",
+      allowedReservations: 1,
+      minimumValue: 1000,
     },
   })
 );
 // Emit
-const emit = defineEmits(["next-page"]);
+const emit = defineEmits(["next-page", "prev-page"]);
 // Functions
-function nextPage() {
+const nextPage = () => {
   emit("next-page", {
     formData: formRef.values,
-    pageIndex: 0,
+    pageIndex: 1,
   });
-}
+};
+
+const prevPage = () => {
+  emit("prev-page", {
+    pageIndex: 1,
+  });
+};
 </script>
 <template>
   <Card>
@@ -51,8 +57,7 @@ function nextPage() {
               name="allowedReservations"
               mode="decimal"
               showButtons
-              :min="0"
-              :max="100"
+              :min="1"
               inputClasses="w-full"
             />
           </div>
@@ -65,6 +70,9 @@ function nextPage() {
               currency="COP"
               name="minimumValue"
               inputClasses="w-full"
+              showButtons
+              :min="1000"
+              :step="1000"
             />
           </div>
         </div>
@@ -72,7 +80,13 @@ function nextPage() {
     </template>
     <template v-slot:footer>
       <div class="grid grid-nogutter justify-content-between">
-        <i></i>
+        <Button
+          :label="$t('form.buttons.back')"
+          @click="prevPage()"
+          icon="pi pi-angle-left"
+          iconPos="left"
+          class="p-button-secondary"
+        />
         <Button
           :disabled="!formRef.meta.valid"
           :label="$t('form.buttons.next')"

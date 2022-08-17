@@ -59,6 +59,14 @@ const props = defineProps({
   currency: {
     type: String,
   },
+  step: {
+    type: Number,
+    default: 1,
+  },
+  allowEmpty: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const name = toRef(props, "name");
@@ -66,6 +74,7 @@ const name = toRef(props, "name");
 const {
   value: inputValue,
   errorMessage,
+  handleBlur,
   handleChange,
 } = useField(name, undefined, {
   initialValue: props.value,
@@ -85,21 +94,24 @@ const inputClasses = computed(() => {
     <label :for="inputId" :class="labelClasses">{{ label }}</label>
     <div class="field">
       <InputNumber
+        class="w-full"
         :inputId="inputId"
         :name="name"
         :inputClass="inputClasses"
         :placeholder="placeholder || label"
         :disabled="disabled"
         :model-value="inputValue"
-        @update:model-value="handleChange"
         :style="inputStyle"
         :mode="mode"
         :min="min"
         :max="max"
         :showButtons="showButtons"
-        class="w-full"
         :currency="currency"
         :minFractionDigits="0"
+        :step="step"
+        :allow-empty="allowEmpty"
+        @blur="(e) => handleBlur(e.originalEvent)"
+        @update:model-value="handleChange"
       />
       <p class="p-error" v-show="errorMessage">
         {{ errorMessage }}
