@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
+
+import VueCropper from "@ballcat/vue-cropper";
+import type { VueCropperInstance } from "@ballcat/vue-cropper";
+import "cropperjs/dist/cropper.css";
+import type Cropper from "cropperjs";
 
 // Components
 import SKInputNumber from "@/components/ux/SKInputNumber.vue";
@@ -40,11 +45,43 @@ const prevPage = () => {
     pageIndex: 1,
   });
 };
+
+const imageSrc = ref(
+  new URL("../../../assets/img/paisaje.jpg", import.meta.url).href
+);
+
+const vueCropperRef = ref<VueCropperInstance>();
+
+const cropperOptions: Cropper.Options = reactive({
+  aspectRatio: 16 / 9,
+  viewMode: 1,
+  responsive: true,
+  restore: true,
+  cropBoxMovable: false,
+  cropBoxResizable: false,
+  toggleDragModeOnDblclick: true,
+  dragMode: "move",
+});
+
+const data = ref<Cropper.SetDataOptions>({});
+
+const onCrop = (e: CustomEvent) => {
+  data.value = e.detail;
+};
 </script>
 <template>
   <Card>
     <template v-slot:title>{{ t("onboarding.steps.customization") }}</template>
     <template v-slot:content>
+      <VueCropper
+        ref="vueCropperRef"
+        class="img-container"
+        :src="imageSrc"
+        preview=".img-preview"
+        v-bind="cropperOptions"
+        @crop="onCrop"
+        :imgStyle="{ maxHeight: '300px', width: 'auto' }"
+      />
       <Divider />
       <h5 class="p-card-title">{{ t("onboarding.bookings") }}</h5>
       <form>
