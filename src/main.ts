@@ -11,7 +11,7 @@ import "./utils/yup-custom-validations";
 
 // Axios
 import VueAxios from "vue-axios";
-import { api, apiAuth } from "./axios";
+import { api, apiAuth } from "./http/axios";
 
 import "primevue/resources/themes/saga-orange/theme.css";
 import "primevue/resources/primevue.min.css";
