@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import setGlobalLocale from "./utils/yup-i18n.js";
+import { useLoadingStore } from "@/stores/loading";
+import { storeToRefs } from "pinia";
 
 setGlobalLocale();
+
+const store = useLoadingStore();
+const { active } = storeToRefs(store);
 </script>
 
 <template>
@@ -22,7 +27,7 @@ setGlobalLocale();
       </nav>
     </div>
   </header> -->
-
+  <Loading v-model:active="active" :can-cancel="false" is-full-page />
   <RouterView />
 </template>
 

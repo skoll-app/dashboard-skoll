@@ -12,6 +12,7 @@ import * as yup from "yup";
 import service from "@/http/services";
 import type SelectOption from "@/interfaces/select-option";
 import type HttpResponse from "@/interfaces/http-response";
+import { useLoadingStore } from "@/stores/loading";
 
 const schema = yup.object({
   name: yup.string().onlyLetters().required(),
@@ -27,18 +28,23 @@ const countries = ref([{ name: "Colombia", code: "CO" }]);
 
 const cities: SelectOption[] = reactive([]);
 
+const loading = useLoadingStore();
+
 const onSubmit = (values: Record<string, unknown>) => {
   console.log(values);
 };
 
 onMounted(async () => {
   try {
+    loading.show();
     const res: HttpResponse = await service.utils.getDepartments();
-    const localCities = res.data.data.colombia.departments;
-    localCities.map((city: { name: string; id: string }) => {
+    const departments = res.data.data.colombia.departments;
+    departments.map((city: { name: string; id: string }) => {
       cities.push({ name: city.name, code: city.id });
     });
+    loading.hide();
   } catch (error) {
+    loading.hide();
     console.log(error);
   }
 });
