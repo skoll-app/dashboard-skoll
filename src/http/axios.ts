@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios, { type AxiosInstance } from "axios";
 
-const api = axios.create();
-api.defaults.baseURL = "https://localhost:9001";
+const api: AxiosInstance = axios.create();
+api.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL;
 
 // API AUTH
-const apiAuth = axios.create();
-apiAuth.defaults.baseURL = "https://localhost:9002";
+const apiAuth: AxiosInstance = axios.create();
+apiAuth.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL;
 // Interceptor
 apiAuth.interceptors.request.use(
   function (config) {

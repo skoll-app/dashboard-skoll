@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 // Components
 import SKInputText from "../../components/ux/SKInputText.vue";
 import SKInputMask from "../../components/ux/SKInputMask.vue";
@@ -7,6 +7,11 @@ import SKSelect from "../../components/ux/SKSelect.vue";
 import SKInputPassword from "../../components/ux/SKInputPassword.vue";
 // Utils
 import * as yup from "yup";
+
+// Services
+import service from "@/http/services";
+import type SelectOption from "@/interfaces/select-option";
+import type HttpResponse from "@/interfaces/http-response";
 
 const schema = yup.object({
   name: yup.string().onlyLetters().required(),
@@ -20,14 +25,22 @@ const schema = yup.object({
 
 const countries = ref([{ name: "Colombia", code: "CO" }]);
 
-const cities = ref([
-  { name: "Bogotá", code: "BOG" },
-  { name: "Medellín", code: "MDE" },
-]);
-
+const cities: SelectOption[] = reactive([]);
 const onSubmit = (values: Record<string, unknown>) => {
   console.log(values);
 };
+
+onMounted(async () => {
+  try {
+    const res: HttpResponse = await service.utils.getDepartments();
+    const departments = res.data.data.colombia.departments;
+    departments.map((city: { name: string; id: string }) => {
+      cities.push({ name: city.name, code: city.id });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>
 
 <template>

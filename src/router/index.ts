@@ -5,8 +5,10 @@ import {
 } from "vue-router";
 import LoginView from "../views/auth/LoginView.vue";
 import SignupView from "../views/auth/SignupView.vue";
-
-console.log(process.env.NODE_ENV);
+import BasicData from "../views/onboarding/steps/BasicDataView.vue";
+import CustomizationView from "../views/onboarding/steps/CustomizationView.vue";
+import BankView from "@/views/onboarding/steps/BankView.vue";
+import DocumentsView from "@/views/onboarding/steps/DocumentsView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -24,6 +26,34 @@ const routes: Array<RouteRecordRaw> = [
         path: "sign-up",
         name: "sign-up",
         component: SignupView,
+      },
+    ],
+  },
+  {
+    path: "/onboarding",
+    name: "onboarding",
+    component: () => import("../views/onboarding/OnboardingView.vue"),
+    redirect: { name: "basic-data" },
+    children: [
+      {
+        path: "basic-data",
+        name: "basic-data",
+        component: BasicData,
+      },
+      {
+        path: "customization",
+        name: "customization",
+        component: CustomizationView,
+      },
+      {
+        path: "bank",
+        name: "bank",
+        component: BankView,
+      },
+      {
+        path: "documents",
+        name: "documents",
+        component: DocumentsView,
       },
     ],
   },

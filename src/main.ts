@@ -11,7 +11,7 @@ import "./utils/yup-custom-validations";
 
 // Axios
 import VueAxios from "vue-axios";
-import { api, apiAuth } from "./axios";
+import { api, apiAuth } from "./http/axios";
 
 import "primevue/resources/themes/saga-orange/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -28,6 +28,12 @@ import Checkbox from "primevue/checkbox";
 import InputMask from "primevue/inputmask";
 import Dropdown from "primevue/dropdown";
 import Divider from "primevue/divider";
+import Steps from "primevue/steps";
+import Card from "primevue/card";
+import InputNumber from "primevue/inputnumber";
+
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 
 // Vee validate components
 import { Form } from "vee-validate";
@@ -49,5 +55,9 @@ app.component("Checkbox", Checkbox);
 app.component("InputMask", InputMask);
 app.component("Dropdown", Dropdown);
 app.component("Divider", Divider);
+app.component("Steps", Steps);
+app.component("Card", Card);
+app.component("InputNumber", InputNumber);
+app.component("Loading", Loading);
 
 app.mount("#app");

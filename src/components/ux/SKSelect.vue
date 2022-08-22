@@ -48,6 +48,12 @@ const {
 } = useField(name, undefined, {
   initialValue: props.value,
 });
+
+const emit = defineEmits(["change"]);
+
+function onChange(e: any) {
+  emit("change", e);
+}
 </script>
 <template>
   <div>
@@ -57,6 +63,7 @@ const {
         :model-value="inputValue"
         @update:model-value="handleChange"
         @blur="handleBlur"
+        @change="onChange"
         :options="options"
         optionLabel="name"
         optionValue="code"

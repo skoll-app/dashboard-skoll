@@ -1,8 +1,39 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import setGlobalLocale from "./utils/yup-i18n.js";
+import { api } from "./http/axios";
+import { onMounted, ref } from "vue";
 
-setGlobalLocale();
+const isLoading = ref(false);
+
+function enableInterceptor() {
+  api.interceptors.request.use(
+    (config) => {
+      isLoading.value = true;
+      return config;
+    },
+    (error) => {
+      isLoading.value = false;
+      return Promise.reject(error);
+    }
+  );
+
+  api.interceptors.response.use(
+    (response) => {
+      isLoading.value = false;
+      return response;
+    },
+    function (error) {
+      isLoading.value = false;
+      return Promise.reject(error);
+    }
+  );
+}
+
+onMounted(() => {
+  setGlobalLocale();
+  enableInterceptor();
+});
 </script>
 
 <template>
@@ -22,7 +53,7 @@ setGlobalLocale();
       </nav>
     </div>
   </header> -->
-
+  <Loading v-model:active="isLoading" :can-cancel="false" is-full-page />
   <RouterView />
 </template>
 
