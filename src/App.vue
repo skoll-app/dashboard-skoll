@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import setGlobalLocale from "./utils/yup-i18n.js";
-import { api } from "./http/axios";
+import { api, apiAuth } from "./http/axios";
 import { onMounted, ref } from "vue";
 
 const isLoading = ref(false);
@@ -30,9 +30,34 @@ function enableInterceptor() {
   );
 }
 
+function enableAuthInterceptor() {
+  apiAuth.interceptors.request.use(
+    (config) => {
+      isLoading.value = true;
+      return config;
+    },
+    (error) => {
+      isLoading.value = false;
+      return Promise.reject(error);
+    }
+  );
+
+  apiAuth.interceptors.response.use(
+    (response) => {
+      isLoading.value = false;
+      return response;
+    },
+    function (error) {
+      isLoading.value = false;
+      return Promise.reject(error);
+    }
+  );
+}
+
 onMounted(() => {
   setGlobalLocale();
   enableInterceptor();
+  enableAuthInterceptor();
 });
 </script>
 
