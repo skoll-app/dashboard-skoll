@@ -12,6 +12,7 @@ import type Cropper from "cropperjs";
 import SKInputNumber from "@/components/ux/SKInputNumber.vue";
 
 import * as yup from "yup";
+import service from "@/http/services";
 
 const { t } = useI18n();
 
@@ -68,6 +69,28 @@ const data = ref<Cropper.SetDataOptions>({});
 const onCrop = (e: CustomEvent) => {
   data.value = e.detail;
 };
+
+const cropImage = (options: Cropper.GetCroppedCanvasOptions) => {
+  const croppedCanvas = vueCropperRef.value?.getCroppedCanvas(
+    options
+  ) as HTMLCanvasElement;
+
+  croppedCanvas?.toBlob((blob: any) => {
+    const formData = new FormData();
+    formData.append("file", blob, `cover-page-${Date.now()}.png`);
+    formData.append("description", "avatar");
+    submitProfilePic(formData);
+  }, "image/png");
+};
+
+const submitProfilePic = async (formData: any) => {
+  try {
+    await service.utils.updateLogo(formData);
+    // location.reload();
+  } catch (error: any) {
+    console.log(error);
+  }
+};
 </script>
 <template>
   <Card>
@@ -82,6 +105,11 @@ const onCrop = (e: CustomEvent) => {
         @crop="onCrop"
         :imgStyle="{ maxHeight: '300px', width: 'auto' }"
       />
+      <Button
+        class="btn btn-primary mt-2"
+        label="Cortar"
+        @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
+      ></Button>
       <Divider />
       <h5 class="p-card-title">{{ t("onboarding.bookings") }}</h5>
       <form>
