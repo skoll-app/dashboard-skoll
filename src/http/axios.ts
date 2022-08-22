@@ -8,9 +8,10 @@ const apiAuth: AxiosInstance = axios.create();
 apiAuth.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL;
 // Interceptor
 apiAuth.interceptors.request.use(
-  function (config) {
-    apiAuth.defaults.headers.common["Authorization"] = "Bearer jejejeje";
+  (config: any) => {
     // Do something before request is sent
+    const token = localStorage.getItem("token") || "undefined";
+    config.headers.common.Authorization = token;
     return config;
   },
   function (error) {
@@ -27,7 +28,7 @@ apiAuth.interceptors.response.use(
     if (error.response.status === 401 || error.response.status === 500) {
       console.log("error....");
     }
-    return Promise.resolve({ error });
+    return Promise.reject({ error });
   }
 );
 

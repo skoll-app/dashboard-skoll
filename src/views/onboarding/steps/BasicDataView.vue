@@ -15,8 +15,10 @@ import type SelectOption from "@/interfaces/select-option";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import Taxation from "@/enums/taxation";
+import { useRouter } from "vue-router";
 // End imports
 
+const router = useRouter();
 const { t } = useI18n();
 
 // Begin select fields
@@ -118,6 +120,10 @@ function nextPage() {
     pageIndex: 0,
   });
 }
+
+const prevPage = () => {
+  router.push("/");
+};
 
 const taxation = computed(() => {
   const naturalPerson = [0, 1, 2];
@@ -307,7 +313,13 @@ const taxation = computed(() => {
     </template>
     <template v-slot:footer>
       <div class="grid grid-nogutter justify-content-between">
-        <i></i>
+        <Button
+          :label="$t('form.buttons.back')"
+          @click="prevPage()"
+          icon="pi pi-angle-left"
+          iconPos="left"
+          class="p-button-secondary"
+        />
         <Button
           :disabled="!formRef.meta.valid"
           :label="$t('form.buttons.next')"

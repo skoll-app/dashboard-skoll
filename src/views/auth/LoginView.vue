@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import * as yup from "yup";
 import SKInputText from "../../components/ux/SKInputText.vue";
 import SKInputPassword from "../../components/ux/SKInputPassword.vue";
+import service from "@/http/services";
+import type HttpResponse from "@/interfaces/http-response";
+import type { Business } from "@/interfaces/business";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const schema = yup.object({
   email: yup.string().required().email(),
@@ -11,9 +17,71 @@ const schema = yup.object({
 
 const checked = ref(false);
 
-function onSubmit(values: Record<string, unknown>) {
-  console.log(values);
-}
+const initialValues = {
+  email: "soyvendedor@gmail.com",
+  password: "1121933094",
+};
+
+let merchantAssociated: Array<Business> = reactive([]);
+
+onMounted(() => {
+  localStorage.removeItem("token");
+});
+
+const userLogin = async (values: Record<string, string>) => {
+  try {
+    const response: HttpResponse = await service.seller.login({
+      user: values.email,
+      password: values.password,
+    });
+    localStorage.setItem("token", response.data.token);
+  } catch (error) {
+    throw new Error("user login error");
+  }
+};
+
+const getAssociatedBusinesses = async () => {
+  try {
+    const response: HttpResponse = await service.seller.associatedBusinesses();
+
+    merchantAssociated = response.data.data.merchantAssociated;
+
+    const someActive = merchantAssociated.some((business) => business.status);
+
+    if (merchantAssociated.length === 1 && someActive) {
+      await businessLogin(merchantAssociated[0]);
+      router.push("/dashboard");
+    } else if (merchantAssociated.length > 1 && someActive) {
+      router.push("/businesses-list");
+      console.log("no va a pasar por ahora");
+    } else {
+      router.push("/onboarding");
+    }
+  } catch (error) {
+    throw new Error("associated business error");
+  }
+};
+
+const businessLogin = async (merchantAssociated: Business) => {
+  try {
+    const response: HttpResponse = await service.business.login(
+      merchantAssociated.apiKey,
+      merchantAssociated.apiLogin
+    );
+    localStorage.setItem("token", response.data.data);
+  } catch (error) {
+    throw new Error("business login error");
+  }
+};
+
+const onSubmit = async (values: Record<string, string>) => {
+  try {
+    await userLogin(values);
+    await getAssociatedBusinesses();
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <template>
@@ -25,6 +93,7 @@ function onSubmit(values: Record<string, unknown>) {
   </div>
   <VeeForm
     :validation-schema="schema"
+    :initial-values="initialValues"
     v-slot="{ meta: { valid } }"
     @submit="onSubmit"
   >
