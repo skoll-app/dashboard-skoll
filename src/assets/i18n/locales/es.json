@@ -72,5 +72,9 @@
     },
     "managerLegalInfo": "Información del representante legal",
     "bookings": "Reservas"
+  },
+  "errors": {
+    "userExists": "El usuario ya se encuentra registrado",
+    "signUp": "Error al registrarse"
   }
 }

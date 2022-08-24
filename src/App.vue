@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
-import setGlobalLocale from "./utils/yup-i18n.js";
-import { api, apiAuth } from "./http/axios";
+// Vue
 import { onMounted, ref } from "vue";
+import { RouterView } from "vue-router";
+// Utils
+import setGlobalLocale from "./utils/yup-i18n.js";
+// Axios
+import { api, apiAuth } from "./http/axios";
 
 const isLoading = ref(false);
 
@@ -79,6 +82,7 @@ onMounted(() => {
     </div>
   </header> -->
   <Loading v-model:active="isLoading" :can-cancel="false" is-full-page />
+  <Toast position="bottom-right" />
   <RouterView />
 </template>
 

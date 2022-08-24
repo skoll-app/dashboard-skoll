@@ -1,5 +1,6 @@
 import { SKOLL_MERCHANT, SKOLL_PARAMETER, SKOLL_SECURITY } from "@/constants";
 import type HttpResponse from "@/interfaces/http-response";
+import type User from "@/interfaces/user";
 import { api, apiAuth } from "../axios";
 
 const service = {
@@ -16,6 +17,20 @@ const service = {
     },
   },
   seller: {
+    signUp(user: Partial<User>, password: string): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = api.post(`${SKOLL_MERCHANT}/seller/create`, {
+            ...user,
+            password,
+            prefixCellPhone: "+57",
+          });
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
     login({
       user,
       password,
