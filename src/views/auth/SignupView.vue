@@ -1,18 +1,26 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 // Components
 import SKInputText from "../../components/ux/SKInputText.vue";
 import SKInputMask from "../../components/ux/SKInputMask.vue";
 import SKSelect from "../../components/ux/SKSelect.vue";
 import SKInputPassword from "../../components/ux/SKInputPassword.vue";
+import { useToast } from "primevue/usetoast";
 // Utils
 import * as yup from "yup";
-
+import { useI18n } from "vue-i18n";
+import getError from "@/utils/handle-errors";
 // Services
 import service from "@/http/services";
+// Interfaces
 import type SelectOption from "@/interfaces/select-option";
 import type HttpResponse from "@/interfaces/http-response";
+import type User from "@/interfaces/user";
 
+const router = useRouter();
+const toast = useToast();
+const { t } = useI18n();
 const schema = yup.object({
   name: yup.string().onlyLetters().required(),
   lastname: yup.string().onlyLetters().required(),
@@ -22,15 +30,20 @@ const schema = yup.object({
   city: yup.string().required(),
   password: yup.string().required().password(),
 });
-
-const countries = ref([{ name: "Colombia", code: "CO" }]);
-
-const cities: SelectOption[] = reactive([]);
-const onSubmit = (values: Record<string, unknown>) => {
-  console.log(values);
+const initialValues = {
+  name: "",
+  lastname: "",
+  email: "",
+  phone: "",
+  country: "CO",
+  city: "",
+  password: "",
 };
+const countries = ref([{ name: "Colombia", code: "CO" }]);
+const cities: SelectOption[] = reactive([]);
 
 onMounted(async () => {
+  cleanSession();
   try {
     const res: HttpResponse = await service.utils.getDepartments();
     const departments = res.data.data.colombia.departments;
@@ -41,6 +54,34 @@ onMounted(async () => {
     console.log(error);
   }
 });
+
+// Methods
+const cleanSession = () => {
+  localStorage.removeItem("token");
+};
+
+const signUp = async (values: typeof initialValues) => {
+  try {
+    const user: Partial<User> = {
+      cellPhone: values.phone,
+      cityId: values.city,
+      email: values.email,
+      firstName: values.name,
+      lastName: values.lastname,
+    };
+    const response = await service.seller.signUp(user, values.password);
+    localStorage.setItem("token", response.data.data);
+    router.push("/onboarding");
+  } catch (error) {
+    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
+  }
+};
 </script>
 
 <template>
@@ -53,8 +94,8 @@ onMounted(async () => {
     </div>
     <VeeForm
       :validation-schema="schema"
-      :initial-values="{ country: 'CO' }"
-      @submit="onSubmit"
+      :initial-values="initialValues"
+      @submit="signUp"
       v-slot="{ meta: { valid } }"
     >
       <div>
