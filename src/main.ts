@@ -31,6 +31,8 @@ import Divider from "primevue/divider";
 import Steps from "primevue/steps";
 import Card from "primevue/card";
 import InputNumber from "primevue/inputnumber";
+import ToastService from "primevue/toastservice";
+import Toast from "primevue/toast";
 
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -45,6 +47,7 @@ app.use(createPinia());
 app.use(router);
 app.use(VueAxios, { $api: api, $apiAuth: apiAuth });
 app.use(i18n);
+app.use(ToastService);
 
 // eslint-disable-next-line vue/no-reserved-component-names
 app.component("Button", Button);
@@ -59,5 +62,6 @@ app.component("Steps", Steps);
 app.component("Card", Card);
 app.component("InputNumber", InputNumber);
 app.component("Loading", Loading);
+app.component("Toast", Toast);
 
 app.mount("#app");
