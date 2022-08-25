@@ -1,7 +1,8 @@
 <script setup lang="ts">
 // Imports
 // Vue
-import { computed, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
 // Components
@@ -12,22 +13,28 @@ import SKInputMask from "@/components/ux/SKInputMask.vue";
 import KindOfPerson from "@/enums/person";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
+import type HttpResponse from "@/interfaces/http-response";
+import type { BusinessBasicData } from "@/interfaces/business";
+// Enums
+import Taxation from "@/enums/taxation";
+// Utils
 import { useForm } from "vee-validate";
 import * as yup from "yup";
-import Taxation from "@/enums/taxation";
-import { useRouter } from "vue-router";
+// Services
+import getError from "@/utils/handle-errors";
+import service from "@/http/services";
+import { useToast } from "primevue/usetoast";
 // End imports
 
 const router = useRouter();
 const { t } = useI18n();
-
+const toast = useToast();
 // Begin select fields
 const businessTypes = ref<SelectOption[]>([
   { name: "Bar", code: "Bar" },
   { name: "Discoteca", code: "Discoteca" },
   { name: "Restaurante", code: "Restaurante" },
 ]);
-
 const kindOfperson = ref<SelectOption[]>([
   {
     name: KindOfPerson.NATURAL.toLowerCase(),
@@ -38,7 +45,6 @@ const kindOfperson = ref<SelectOption[]>([
     code: KindOfPerson.JURIDICAL,
   },
 ]);
-
 const businessDocumentType = ref<SelectOption[]>([
   {
     name: t("form.documentTypeList.CC"),
@@ -49,7 +55,6 @@ const businessDocumentType = ref<SelectOption[]>([
     code: "NIT",
   },
 ]);
-
 const managerDocumentType = ref<SelectOption[]>([
   {
     name: t("form.documentTypeList.CC"),
@@ -65,13 +70,13 @@ const managerDocumentType = ref<SelectOption[]>([
   },
 ]);
 // End select fields
-
 // Form
 const validationSchema = yup.object({
   businessName: yup.string().required(),
   businessType: yup.string().required(),
   email: yup.string().required().email(),
   phone: yup.string().required().min(10),
+  businessCity: yup.string().required(),
   businessAddress: yup.string().required(),
   kindOfperson: yup.string().required(),
   taxation: yup.string().required(),
@@ -85,41 +90,97 @@ const validationSchema = yup.object({
     document: yup.string().required(),
   }),
 });
-
+const initialValues = {
+  businessName: "",
+  email: "",
+  phone: "",
+  businessType: "",
+  businessAddress: "",
+  kindOfperson: "",
+  taxation: "",
+  businessDocumentType: "",
+  businessDocument: "",
+  companyName: "",
+  businessCity: "",
+  manager: {
+    name: "",
+    lastname: "",
+    document: "",
+    documentType: "",
+  },
+};
 const formRef = reactive(
   useForm({
     validationSchema,
-    initialValues: {
-      businessName: "",
-      email: "",
-      phone: "",
-      businessType: "",
-      businessAddress: "",
-      kindOfperson: "",
-      taxation: "",
-      businessDocumentType: "",
-      businessDocument: "",
-      companyName: "",
-      manager: {
-        name: "",
-        lastname: "",
-        document: "",
-        documentType: "",
-      },
-    },
+    initialValues,
   })
 );
+const cities: SelectOption[] = reactive([]);
+
+onMounted(async () => {
+  try {
+    const res: HttpResponse = await service.utils.getDepartments();
+    const response = res.data.data.colombia.departments;
+    response.map(
+      (department: { name: string; id: string; cities: Array<any> }) => {
+        // cities.push({ name: city.name, code: city.id });
+        department.cities.map((city) => {
+          cities.push({ code: city.id, name: city.name });
+        });
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 // Emit
 const emit = defineEmits(["next-page"]);
-
 // Functions
-function nextPage() {
+const registerBusiness = formRef.handleSubmit(async (values) => {
+  try {
+    const businessData: BusinessBasicData = {
+      name: values.businessName,
+      category: values.businessType,
+      address: values.businessAddress,
+      prefixCellPhone: "+57",
+      cellPhone: values.phone,
+      email: values.email,
+      taxRegime: values.taxation,
+      kindOfPerson: values.kindOfperson,
+      documentNumber: values.businessDocument,
+      documentType: values.businessDocumentType,
+      bussinesName: values.companyName,
+      cityId: values.businessCity,
+      legalRepresentative: {
+        documentNumber: values.manager.document,
+        documentType: values.manager.documentType,
+        firstName: values.manager.name,
+        lastName: values.manager.lastname,
+      },
+    };
+    console.log(businessData);
+    const response = await service.business.signUp(businessData);
+    console.log(response);
+    localStorage.setItem("token", response.data.data);
+    nextPage(businessData);
+  } catch (error) {
+    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
+  }
+});
+
+const nextPage = (values: BusinessBasicData) => {
   emit("next-page", {
-    formData: formRef.values,
+    formData: values,
     pageIndex: 0,
   });
-}
+};
 
 const prevPage = () => {
   router.push("/");
@@ -165,10 +226,12 @@ const taxation = computed(() => {
 // );
 </script>
 <template>
-  <Card>
-    <template v-slot:title> {{ t("onboarding.steps.basicData") }} </template>
-    <template v-slot:content>
-      <form>
+  <form @submit="registerBusiness">
+    <Card>
+      <template v-slot:title>
+        {{ t("onboarding.steps.basicData") }}
+      </template>
+      <template v-slot:content>
         <div class="grid">
           <div class="col-12 md:col-8">
             <SKInputText
@@ -189,7 +252,7 @@ const taxation = computed(() => {
               labelClasses="block mb-2"
             />
           </div>
-          <div class="col-12 md:col-4">
+          <div class="col-12 md:col-3">
             <SKInputText
               name="email"
               :label="$t('form.email')"
@@ -198,7 +261,7 @@ const taxation = computed(() => {
               inputClasses="w-full"
             />
           </div>
-          <div class="col-12 md:col-4">
+          <div class="col-12 md:col-3">
             <SKInputMask
               name="phone"
               :label="$t('form.phone')"
@@ -208,7 +271,18 @@ const taxation = computed(() => {
               placeholder="(999) 999 9999"
             />
           </div>
-          <div class="col-12 md:col-4">
+          <div class="col-12 md:col-3">
+            <SKSelect
+              name="businessCity"
+              placeholder="Seleccione"
+              select-classes="w-full p-1"
+              :options="cities"
+              :label="$t('form.city')"
+              labelClasses="block mb-2"
+              filter
+            />
+          </div>
+          <div class="col-12 md:col-3">
             <SKInputText
               name="businessAddress"
               :label="$t('form.businessAddress')"
@@ -309,26 +383,25 @@ const taxation = computed(() => {
             />
           </div>
         </div>
-      </form>
-    </template>
-    <template v-slot:footer>
-      <div class="grid grid-nogutter justify-content-between">
-        <Button
-          :label="$t('form.buttons.back')"
-          @click="prevPage()"
-          icon="pi pi-angle-left"
-          iconPos="left"
-          class="p-button-secondary"
-        />
-        <Button
-          :disabled="!formRef.meta.valid"
-          :label="$t('form.buttons.next')"
-          @click="nextPage()"
-          icon="pi pi-angle-right"
-          iconPos="right"
-        />
-      </div>
-    </template>
-  </Card>
+      </template>
+      <template v-slot:footer>
+        <div class="grid grid-nogutter justify-content-between">
+          <Button
+            :label="$t('form.buttons.back')"
+            @click="prevPage()"
+            icon="pi pi-angle-left"
+            iconPos="left"
+            class="p-button-secondary"
+          />
+          <Button
+            type="submit"
+            :label="$t('form.buttons.next')"
+            icon="pi pi-angle-right"
+            iconPos="right"
+          />
+        </div>
+      </template>
+    </Card>
+  </form>
 </template>
 <style scoped></style>
