@@ -14,7 +14,7 @@ import KindOfPerson from "@/enums/person";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
 import type HttpResponse from "@/interfaces/http-response";
-import type { BusinessBasicData } from "@/interfaces/business";
+import type { Business, BusinessBasicData } from "@/interfaces/business";
 // Enums
 import Taxation from "@/enums/taxation";
 // Utils
@@ -116,8 +116,58 @@ const formRef = reactive(
   })
 );
 const cities: SelectOption[] = reactive([]);
+const businessExists = ref(false);
 
-onMounted(async () => {
+// Computed
+const taxation = computed(() => {
+  const naturalPerson = [0, 1, 2];
+  const juridicalPerson = [1, 2, 3, 4, 5, 6, 7];
+  const options: SelectOption[] = [];
+
+  const taxation = Object.keys(Taxation);
+  taxation.forEach((key, index) => {
+    if (
+      formRef.values.kindOfperson === KindOfPerson.NATURAL &&
+      naturalPerson.includes(index)
+    ) {
+      options.push({
+        name: Taxation[key as keyof typeof Taxation],
+        code: key,
+      });
+    } else if (
+      formRef.values.kindOfperson === KindOfPerson.JURIDICAL &&
+      juridicalPerson.includes(index)
+    ) {
+      options.push({
+        name: Taxation[key as keyof typeof Taxation],
+        code: key,
+      });
+    }
+  });
+
+  return options;
+});
+
+// watch(
+//   () => formRef.values.kindOfperson,
+//   (newValue, oldValue) => {
+//     if (newValue !== oldValue) {
+//       console.log("por aca");
+//     }
+//   },
+//   { deep: true }
+// );
+
+onMounted(() => {
+  getDepartments();
+  getAssociatedBusiness();
+});
+
+// Emit
+const emit = defineEmits(["next-page"]);
+
+// Functions
+const getDepartments = async () => {
   try {
     const res: HttpResponse = await service.utils.getDepartments();
     const response = res.data.data.colombia.departments;
@@ -132,11 +182,40 @@ onMounted(async () => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-// Emit
-const emit = defineEmits(["next-page"]);
-// Functions
+const getAssociatedBusiness = async () => {
+  try {
+    const res = await service.seller.associatedBusinesses();
+    if (res.data.data.merchantAssociated.length > 0) {
+      businessExists.value = true;
+      const merchantAssociated: Business = res.data.data.merchantAssociated[0];
+      businessLogin(merchantAssociated.apiKey, merchantAssociated.apiLogin);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const businessLogin = async (apiKey: string, apiLogin: string) => {
+  try {
+    const res = await service.business.login(apiKey, apiLogin);
+    localStorage.setItem("token", res.data.data);
+    businessDetail();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const businessDetail = async () => {
+  try {
+    const res = await service.business.detail();
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const registerBusiness = formRef.handleSubmit(async (values) => {
   try {
     const businessData: BusinessBasicData = {
@@ -185,45 +264,6 @@ const nextPage = (values: BusinessBasicData) => {
 const prevPage = () => {
   router.push("/");
 };
-
-const taxation = computed(() => {
-  const naturalPerson = [0, 1, 2];
-  const juridicalPerson = [1, 2, 3, 4, 5, 6, 7];
-  const options: SelectOption[] = [];
-
-  const taxation = Object.keys(Taxation);
-  taxation.forEach((key, index) => {
-    if (
-      formRef.values.kindOfperson === KindOfPerson.NATURAL &&
-      naturalPerson.includes(index)
-    ) {
-      options.push({
-        name: Taxation[key as keyof typeof Taxation],
-        code: key,
-      });
-    } else if (
-      formRef.values.kindOfperson === KindOfPerson.JURIDICAL &&
-      juridicalPerson.includes(index)
-    ) {
-      options.push({
-        name: Taxation[key as keyof typeof Taxation],
-        code: key,
-      });
-    }
-  });
-
-  return options;
-});
-
-// watch(
-//   () => formRef.values.kindOfperson,
-//   (newValue, oldValue) => {
-//     if (newValue !== oldValue) {
-//       console.log("por aca");
-//     }
-//   },
-//   { deep: true }
-// );
 </script>
 <template>
   <form @submit="registerBusiness">
