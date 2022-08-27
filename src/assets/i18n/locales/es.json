@@ -6,6 +6,7 @@
   "form": {
     "name": "Nombre",
     "lastname": "Apellidos",
+    "fullname": "Nombre completo",
     "email": "Correo",
     "phone": "Teléfono",
     "country": "País",
@@ -43,6 +44,14 @@
     "rememberMe": "Recuerdame",
     "allowedReservations": "Reservas permitidas",
     "minimumBookingValue": "Valor mínimo reserva",
+    "accountHolderFullname": "Nombre completo del titular de la cuenta",
+    "accountHolderDocument": "Documento del titular de la cuenta",
+    "accountType": "Tipo de cuenta",
+    "accountTypeList": {
+      "savingAccount": "Cuenta de ahorros",
+      "currentAccount": "Cuenta corriente",
+      "virtualAccount": "Cuenta virtual"
+    },
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",
