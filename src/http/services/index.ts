@@ -1,6 +1,10 @@
+// Constants
 import { SKOLL_MERCHANT, SKOLL_PARAMETER, SKOLL_SECURITY } from "@/constants";
+// Interface
 import type HttpResponse from "@/interfaces/http-response";
+import type { BusinessBasicData } from "@/interfaces/business";
 import type User from "@/interfaces/user";
+// Axios
 import { api, apiAuth } from "../axios";
 
 const service = {
@@ -79,6 +83,19 @@ const service = {
       return new Promise((resolve, reject) => {
         try {
           const response = apiAuth.get(`${SKOLL_MERCHANT}/merchant/`);
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    signUp(businessData: BusinessBasicData): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.post(
+            `${SKOLL_MERCHANT}/merchant/`,
+            businessData
+          );
           resolve(response);
         } catch (error) {
           reject(error);

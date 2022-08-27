@@ -18,8 +18,8 @@ const schema = yup.object({
 const checked = ref(false);
 
 const initialValues = {
-  email: "soyvendedor@gmail.com",
-  password: "1121933094",
+  email: "adan.florez@skoll.com.co",
+  password: "Af12345*",
 };
 
 let merchantAssociated: Array<Business> = reactive([]);
