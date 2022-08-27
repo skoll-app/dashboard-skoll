@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Imports
 // Vue
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onBeforeMount, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
@@ -101,7 +101,7 @@ const initialValues = {
   businessDocumentType: "",
   businessDocument: "",
   companyName: "",
-  businessCity: "",
+  businessCity: 0,
   manager: {
     name: "",
     lastname: "",
@@ -117,6 +117,7 @@ const formRef = reactive(
 );
 const cities: SelectOption[] = reactive([]);
 const businessExists = ref(false);
+let businessData: BusinessBasicData = reactive({});
 
 // Computed
 const taxation = computed(() => {
@@ -158,9 +159,9 @@ const taxation = computed(() => {
 //   { deep: true }
 // );
 
-onMounted(() => {
-  getDepartments();
+onBeforeMount(() => {
   getAssociatedBusiness();
+  getDepartments();
 });
 
 // Emit
@@ -173,7 +174,6 @@ const getDepartments = async () => {
     const response = res.data.data.colombia.departments;
     response.map(
       (department: { name: string; id: string; cities: Array<any> }) => {
-        // cities.push({ name: city.name, code: city.id });
         department.cities.map((city) => {
           cities.push({ code: city.id, name: city.name });
         });
@@ -210,7 +210,26 @@ const businessLogin = async (apiKey: string, apiLogin: string) => {
 const businessDetail = async () => {
   try {
     const res = await service.business.detail();
-    console.log(res);
+    const business = res.data.data;
+    formRef.setValues({
+      businessName: business.name,
+      businessType: business.merchantCategory,
+      email: business.email,
+      phone: business.cellPhone,
+      businessCity: 20001, // cambiar
+      businessAddress: business.adress,
+      kindOfperson: "NATURAL", // cambiar
+      businessDocumentType: business.documentType,
+      businessDocument: "123456789", // cambiar
+      companyName: "Capachos SAS", // cambiar
+      taxation: "NO_IVA", // cambiar
+      manager: {
+        name: business.legalRepresentative.firstName,
+        lastname: business.legalRepresentative.lastName,
+        document: business.legalRepresentative.documentNumber,
+        documentType: business.legalRepresentative.documentType,
+      },
+    });
   } catch (error) {
     console.error(error);
   }
@@ -218,7 +237,7 @@ const businessDetail = async () => {
 
 const registerBusiness = formRef.handleSubmit(async (values) => {
   try {
-    const businessData: BusinessBasicData = {
+    businessData = {
       name: values.businessName,
       category: values.businessType,
       address: values.businessAddress,
@@ -238,10 +257,10 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
         lastName: values.manager.lastname,
       },
     };
-    console.log(businessData);
-    const response = await service.business.signUp(businessData);
-    console.log(response);
-    localStorage.setItem("token", response.data.data);
+    if (!businessExists.value) {
+      const response = await service.business.signUp(businessData);
+      localStorage.setItem("token", response.data.data);
+    }
     nextPage(businessData);
   } catch (error) {
     console.error(error);
@@ -280,6 +299,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessName')"
               inputClasses="w-full"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-4">
@@ -290,6 +310,7 @@ const prevPage = () => {
               :options="businessTypes"
               :label="$t('form.businessType')"
               labelClasses="block mb-2"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -299,6 +320,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.email')"
               inputClasses="w-full"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -309,6 +331,7 @@ const prevPage = () => {
               inputClasses="w-full"
               mask="(999) 999 9999"
               placeholder="(999) 999 9999"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -320,6 +343,7 @@ const prevPage = () => {
               :label="$t('form.city')"
               labelClasses="block mb-2"
               filter
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -329,6 +353,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessAddress')"
               inputClasses="w-full"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -339,6 +364,7 @@ const prevPage = () => {
               :options="kindOfperson"
               :label="$t('form.kindOfperson')"
               labelClasses="block mb-2"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -349,6 +375,7 @@ const prevPage = () => {
               :options="taxation"
               :label="$t('form.taxation')"
               labelClasses="block mb-2"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -359,6 +386,7 @@ const prevPage = () => {
               :options="businessDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -368,6 +396,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -377,6 +406,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.companyName')"
               inputClasses="w-full"
+              :disabled="businessExists"
             />
           </div>
         </div>
@@ -391,6 +421,7 @@ const prevPage = () => {
               :placeholder="$t('form.name')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -401,6 +432,7 @@ const prevPage = () => {
               :placeholder="$t('form.lastname')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -411,6 +443,7 @@ const prevPage = () => {
               :options="managerDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
+              :disabled="businessExists"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -420,6 +453,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
+              :disabled="businessExists"
             />
           </div>
         </div>
