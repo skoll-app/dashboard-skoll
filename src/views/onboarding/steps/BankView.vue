@@ -1,8 +1,10 @@
 <script setup lang="ts">
 // Vue
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
+import * as yup from "yup";
+import { useForm } from "vee-validate";
 // Components
 import SKInputText from "@/components/ux/SKInputText.vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
@@ -10,8 +12,8 @@ import SKInputMask from "@/components/ux/SKInputMask.vue";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
 
-const { t } = useI18n();
 // Data
+const { t } = useI18n();
 const bankList = ref<SelectOption[]>([
   {
     code: "00001",
@@ -47,6 +49,22 @@ const accountTypeList = ref<SelectOption[]>([
     code: "VA",
   },
 ]);
+// Form
+const validationSchema = yup.object({
+  fullname: yup.string().required().onlyLetters(),
+  bank: yup.string().required(),
+  documentType: yup.string().required(),
+  document: yup.string().required(),
+  type: yup.string().required(),
+  email: yup.string().required().email(),
+  phone: yup.string().required().min(10),
+  account: yup.string().required(),
+});
+const formRef = reactive(
+  useForm({
+    validationSchema,
+  })
+);
 </script>
 <template>
   <form>
@@ -106,7 +124,7 @@ const accountTypeList = ref<SelectOption[]>([
           </div>
           <div class="col-12 md:col-6">
             <SKInputText
-              name="number"
+              name="account"
               :label="$t('form.accountNumber')"
               labelClasses="block mb-2"
               :placeholder="$t('form.accountNumber')"
