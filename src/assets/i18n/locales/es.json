@@ -45,6 +45,7 @@
     "allowedReservations": "Reservas permitidas",
     "minimumBookingValue": "Valor mínimo reserva",
     "accountHolderFullname": "Nombre completo del titular de la cuenta",
+    "accountBank": "Banco",
     "accountHolderDocument": "Documento del titular de la cuenta",
     "accountType": "Tipo de cuenta",
     "accountTypeList": {
@@ -52,6 +53,7 @@
       "currentAccount": "Cuenta corriente",
       "virtualAccount": "Cuenta virtual"
     },
+    "accountNumber": "Número de cuenta",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",

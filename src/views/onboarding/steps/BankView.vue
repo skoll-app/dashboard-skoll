@@ -6,11 +6,12 @@ import { useI18n } from "vue-i18n";
 // Components
 import SKInputText from "@/components/ux/SKInputText.vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
+import SKInputMask from "@/components/ux/SKInputMask.vue";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
 
 const { t } = useI18n();
-
+// Data
 const bankList = ref<SelectOption[]>([
   {
     code: "00001",
@@ -57,7 +58,7 @@ const accountTypeList = ref<SelectOption[]>([
         <div class="grid">
           <div class="col-12 md:col-6">
             <SKInputText
-              name="businessName"
+              name="fullname"
               :label="$t('form.accountHolderFullname')"
               labelClasses="block mb-2"
               :placeholder="$t('form.fullname')"
@@ -66,17 +67,17 @@ const accountTypeList = ref<SelectOption[]>([
           </div>
           <div class="col-12 md:col-6">
             <SKSelect
-              name="businessType"
+              name="bank"
               placeholder="Seleccione"
               select-classes="w-full p-1"
               :options="bankList"
-              :label="$t('form.businessType')"
+              :label="$t('form.accountBank')"
               labelClasses="block mb-2"
             />
           </div>
           <div class="col-12 md:col-6">
             <SKSelect
-              name="manager.documentType"
+              name="documentType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
               :options="documentTypeList"
@@ -86,7 +87,7 @@ const accountTypeList = ref<SelectOption[]>([
           </div>
           <div class="col-12 md:col-6">
             <SKInputText
-              name="manager.document"
+              name="document"
               :label="$t('form.accountHolderDocument')"
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
@@ -95,12 +96,40 @@ const accountTypeList = ref<SelectOption[]>([
           </div>
           <div class="col-12 md:col-6">
             <SKSelect
-              name="manager.documentType"
+              name="type"
               placeholder="Seleccione"
               select-classes="w-full p-1"
               :options="accountTypeList"
               :label="$t('form.accountType')"
               labelClasses="block mb-2"
+            />
+          </div>
+          <div class="col-12 md:col-6">
+            <SKInputText
+              name="number"
+              :label="$t('form.accountNumber')"
+              labelClasses="block mb-2"
+              :placeholder="$t('form.accountNumber')"
+              inputClasses="w-full"
+            />
+          </div>
+          <div class="col-12 md:col-6">
+            <SKInputText
+              name="email"
+              :label="$t('form.email')"
+              labelClasses="block mb-2"
+              :placeholder="$t('form.email')"
+              inputClasses="w-full"
+            />
+          </div>
+          <div class="col-12 md:col-6">
+            <SKInputMask
+              name="phone"
+              :label="$t('form.phone')"
+              labelClasses="block mb-2"
+              inputClasses="w-full"
+              mask="(999) 999 9999"
+              placeholder="(999) 999 9999"
             />
           </div>
         </div>
