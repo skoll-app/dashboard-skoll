@@ -89,12 +89,12 @@ const service = {
         }
       });
     },
-    signUp(businessData: BusinessBasicData): Promise<any> {
+    signUp(businessData: Partial<BusinessBasicData>): Promise<any> {
       return new Promise((resolve, reject) => {
         try {
           const response = apiAuth.post(
             `${SKOLL_MERCHANT}/merchant/`,
-            businessData
+            parseBusiness(businessData)
           );
           resolve(response);
         } catch (error) {
@@ -103,6 +103,26 @@ const service = {
       });
     },
   },
+};
+
+const parseBusiness = (
+  businessData: Partial<BusinessBasicData>
+): Partial<BusinessBasicData> => {
+  const business = {
+    address: businessData.address,
+    bussinesName: businessData.companyName,
+    cellPhone: businessData.phone,
+    cityId: businessData.city,
+    documentNumber: businessData.documentNumber,
+    documentType: businessData.documentType,
+    email: businessData.email,
+    kindOfPerson: businessData.kindOfPerson,
+    legalRepresentative: businessData.legalRepresentative,
+    category: businessData.category,
+    name: businessData.name,
+    taxRegime: businessData.taxRegime,
+  };
+  return business;
 };
 
 export default service;

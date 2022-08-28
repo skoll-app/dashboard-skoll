@@ -2,7 +2,6 @@
 // Imports
 // Vue
 import { computed, onBeforeMount, reactive, ref } from "vue";
-import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
 // Components
@@ -14,7 +13,7 @@ import KindOfPerson from "@/enums/person";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
 import type HttpResponse from "@/interfaces/http-response";
-import type { Business, BusinessBasicData } from "@/interfaces/business";
+import type { BusinessBasicData } from "@/interfaces/business";
 // Enums
 import Taxation from "@/enums/taxation";
 // Utils
@@ -26,7 +25,6 @@ import service from "@/http/services";
 import { useToast } from "primevue/usetoast";
 // End imports
 
-const router = useRouter();
 const { t } = useI18n();
 const toast = useToast();
 // Begin select fields
@@ -101,7 +99,7 @@ const initialValues = {
   businessDocumentType: "",
   businessDocument: "",
   companyName: "",
-  businessCity: 0,
+  businessCity: "",
   manager: {
     name: "",
     lastname: "",
@@ -117,7 +115,7 @@ const formRef = reactive(
 );
 const cities: SelectOption[] = reactive([]);
 const businessExists = ref(false);
-let businessData: BusinessBasicData = reactive({});
+let businessData: Partial<BusinessBasicData> = reactive({});
 
 // Computed
 const taxation = computed(() => {
@@ -160,7 +158,6 @@ const taxation = computed(() => {
 // );
 
 onBeforeMount(() => {
-  getAssociatedBusiness();
   getDepartments();
 });
 
@@ -183,64 +180,6 @@ const getDepartments = async () => {
     console.log(error);
   }
 };
-
-const getAssociatedBusiness = async () => {
-  try {
-    const res = await service.seller.associatedBusinesses();
-    if (res.data.data.merchantAssociated.length > 0) {
-      businessExists.value = true;
-      const merchantAssociated: Business = res.data.data.merchantAssociated[0];
-      businessLogin(merchantAssociated.apiKey, merchantAssociated.apiLogin);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const businessLogin = async (apiKey: string, apiLogin: string) => {
-  try {
-    const res = await service.business.login(apiKey, apiLogin);
-    localStorage.setItem("token", res.data.data);
-    businessDetail();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const businessDetail = async () => {
-  try {
-    const res = await service.business.detail();
-    const business = res.data.data;
-    formRef.setValues({
-      businessName: business.name,
-      businessType: business.merchantCategory,
-      email: business.email,
-      phone: business.cellPhone,
-      businessCity: business.cityId,
-      businessAddress: business.adress,
-      kindOfperson: business.kindOfPerson,
-      businessDocumentType: business.documentType,
-      businessDocument: business.documentNumber,
-      companyName: business.bussinesName,
-      taxation: business.taxRegime,
-      manager: {
-        name: business.legalRepresentative.firstName,
-        lastname: business.legalRepresentative.lastName,
-        document: business.legalRepresentative.documentNumber,
-        documentType: business.legalRepresentative.documentType,
-      },
-    });
-    if (businessExists.value) {
-      emit("step-complete", {
-        formData: formRef.values,
-        step: 0,
-      });
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 const registerBusiness = formRef.handleSubmit(async (values) => {
   try {
     businessData = {
@@ -248,14 +187,14 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
       category: values.businessType,
       address: values.businessAddress,
       prefixCellPhone: "+57",
-      cellPhone: values.phone,
+      phone: values.phone,
       email: values.email,
       taxRegime: values.taxation,
       kindOfPerson: values.kindOfperson,
       documentNumber: values.businessDocument,
       documentType: values.businessDocumentType,
-      bussinesName: values.companyName,
-      cityId: values.businessCity,
+      companyName: values.companyName,
+      city: values.businessCity,
       legalRepresentative: {
         documentNumber: values.manager.document,
         documentType: values.manager.documentType,
@@ -279,7 +218,7 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
   }
 });
 
-const nextPage = (values: BusinessBasicData) => {
+const nextPage = (values: Partial<BusinessBasicData>) => {
   emit("next-page", {
     formData: values,
     pageIndex: 0,
