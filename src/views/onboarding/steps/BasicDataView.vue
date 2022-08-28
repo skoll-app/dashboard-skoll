@@ -216,13 +216,13 @@ const businessDetail = async () => {
       businessType: business.merchantCategory,
       email: business.email,
       phone: business.cellPhone,
-      // businessCity: 20001, // cambiar
+      businessCity: business.cityId,
       businessAddress: business.adress,
-      // kindOfperson: "NATURAL", // cambiar
+      kindOfperson: business.kindOfPerson,
       businessDocumentType: business.documentType,
-      // businessDocument: "123456789", // cambiar
-      // companyName: "Capachos SAS", // cambiar
-      // taxation: "NO_IVA", // cambiar
+      businessDocument: business.documentNumber,
+      companyName: business.bussinesName,
+      taxation: business.taxRegime,
       manager: {
         name: business.legalRepresentative.firstName,
         lastname: business.legalRepresentative.lastName,
