@@ -66,7 +66,8 @@
       "createBusiness": "Crear negocio",
       "signup": "Registrar",
       "back": "Volver",
-      "next": "Siguiente"
+      "next": "Siguiente",
+      "continue": "Continuar"
     }
   },
   "signup": {

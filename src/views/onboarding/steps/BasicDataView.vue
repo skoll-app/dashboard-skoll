@@ -279,10 +279,6 @@ const nextPage = (values: BusinessBasicData) => {
     pageIndex: 0,
   });
 };
-
-const prevPage = () => {
-  router.push("/");
-};
 </script>
 <template>
   <form @submit="registerBusiness">

@@ -41,12 +41,6 @@ const nextPage = () => {
   });
 };
 
-const prevPage = () => {
-  emit("prev-page", {
-    pageIndex: 1,
-  });
-};
-
 const imageSrc = ref(
   new URL("../../../assets/img/paisaje.jpg", import.meta.url).href
 );
@@ -85,7 +79,7 @@ const cropImage = (options: Cropper.GetCroppedCanvasOptions) => {
 
 const submitProfilePic = async (formData: any) => {
   try {
-    await service.utils.updateLogo(formData);
+    // await service.utils.updateLogo(formData);
     // location.reload();
   } catch (error: any) {
     console.log(error);
@@ -144,20 +138,11 @@ const submitProfilePic = async (formData: any) => {
       </form>
     </template>
     <template v-slot:footer>
-      <div class="grid grid-nogutter justify-content-between">
+      <div class="grid grid-nogutter justify-content-center">
         <Button
-          :label="$t('form.buttons.back')"
-          @click="prevPage()"
-          icon="pi pi-angle-left"
-          iconPos="left"
-          class="p-button-secondary"
-        />
-        <Button
-          :disabled="!formRef.meta.valid"
-          :label="$t('form.buttons.next')"
-          @click="nextPage()"
-          icon="pi pi-angle-right"
-          iconPos="right"
+          type="submit"
+          :label="$t('form.buttons.continue')"
+          class="py-3 px-5 text-xl"
         />
       </div>
     </template>

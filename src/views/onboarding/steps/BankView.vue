@@ -186,19 +186,11 @@ const saveAccount = formRef.handleSubmit(async (values) => {
         </div>
       </template>
       <template v-slot:footer>
-        <div class="grid grid-nogutter justify-content-between">
-          <Button
-            :label="$t('form.buttons.back')"
-            @click="prevPage()"
-            icon="pi pi-angle-left"
-            iconPos="left"
-            class="p-button-secondary"
-          />
+        <div class="grid grid-nogutter justify-content-center">
           <Button
             type="submit"
-            :label="$t('form.buttons.next')"
-            icon="pi pi-angle-right"
-            iconPos="right"
+            :label="$t('form.buttons.continue')"
+            class="py-3 px-5 text-xl"
           />
         </div>
       </template>
