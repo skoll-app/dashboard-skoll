@@ -76,7 +76,9 @@ import { useI18n } from "vue-i18n";
 // Services
 import service from "@/http/services";
 // Interfaces
-import type { Business } from "@/interfaces/business";
+import type { Business, BusinessBasicData } from "@/interfaces/business";
+// Store
+import { useBusinessStore } from "@/stores/business";
 
 // Data
 const { t } = useI18n();
@@ -121,10 +123,12 @@ const userOptionsItems = ref([
     },
   },
 ]);
-let formObject: Record<string, unknown> = reactive({});
+let formObject = reactive<Partial<BusinessBasicData>>({});
 const stepsCompleted = reactive<number[]>([]);
-// Vue lifecycle
+const store = useBusinessStore();
+const { setBasicData } = store;
 
+// Vue lifecycle
 onBeforeMount(() => {
   getAssociatedBusiness();
 });
@@ -166,24 +170,25 @@ const businessDetail = async () => {
     const res = await service.business.detail();
     const business = res.data.data;
     formObject = {
-      businessName: business.name,
-      businessType: business.merchantCategory,
+      name: business.name,
+      category: business.merchantCategory,
       email: business.email,
       phone: business.cellPhone,
-      businessCity: business.cityId,
-      businessAddress: business.adress,
-      kindOfperson: business.kindOfPerson,
-      businessDocumentType: business.documentType,
-      businessDocument: business.documentNumber,
+      city: business.cityId,
+      address: business.adress,
+      kindOfPerson: business.kindOfPerson,
+      documentType: business.documentType,
+      documentNumber: business.documentNumber,
       companyName: business.bussinesName,
-      taxation: business.taxRegime,
-      manager: {
-        name: business.legalRepresentative.firstName,
-        lastname: business.legalRepresentative.lastName,
-        document: business.legalRepresentative.documentNumber,
+      taxRegime: business.taxRegime,
+      legalRepresentative: {
+        firstName: business.legalRepresentative.firstName,
+        lastName: business.legalRepresentative.lastName,
+        documentNumber: business.legalRepresentative.documentNumber,
         documentType: business.legalRepresentative.documentType,
       },
     };
+    setBasicData(formObject);
   } catch (error) {
     console.error(error);
   }
