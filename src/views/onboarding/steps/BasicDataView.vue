@@ -216,13 +216,13 @@ const businessDetail = async () => {
       businessType: business.merchantCategory,
       email: business.email,
       phone: business.cellPhone,
-      businessCity: 20001, // cambiar
+      // businessCity: 20001, // cambiar
       businessAddress: business.adress,
-      kindOfperson: "NATURAL", // cambiar
+      // kindOfperson: "NATURAL", // cambiar
       businessDocumentType: business.documentType,
-      businessDocument: "123456789", // cambiar
-      companyName: "Capachos SAS", // cambiar
-      taxation: "NO_IVA", // cambiar
+      // businessDocument: "123456789", // cambiar
+      // companyName: "Capachos SAS", // cambiar
+      // taxation: "NO_IVA", // cambiar
       manager: {
         name: business.legalRepresentative.firstName,
         lastname: business.legalRepresentative.lastName,
@@ -459,19 +459,12 @@ const prevPage = () => {
         </div>
       </template>
       <template v-slot:footer>
-        <div class="grid grid-nogutter justify-content-between">
-          <Button
-            :label="$t('form.buttons.back')"
-            @click="prevPage()"
-            icon="pi pi-angle-left"
-            iconPos="left"
-            class="p-button-secondary"
-          />
+        <div class="grid grid-nogutter justify-content-center">
           <Button
             type="submit"
-            :label="$t('form.buttons.next')"
-            icon="pi pi-angle-right"
-            iconPos="right"
+            :label="$t('form.buttons.createBusiness')"
+            class="py-3 px-5 text-xl"
+            :disabled="businessExists"
           />
         </div>
       </template>
