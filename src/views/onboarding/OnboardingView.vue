@@ -68,12 +68,18 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { useI18n } from "vue-i18n";
+// Vue
+import { onBeforeMount, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+// Utils
+import { useI18n } from "vue-i18n";
+// Services
+import service from "@/http/services";
+// Interfaces
+import type { Business } from "@/interfaces/business";
 
+// Data
 const { t } = useI18n();
-
 const router = useRouter();
 const stepItems = ref([
   {
@@ -107,7 +113,6 @@ const stepItems = ref([
     index: 4,
   },
 ]);
-
 const userOptionsItems = ref([
   {
     label: "Cerrar sesión",
@@ -117,12 +122,14 @@ const userOptionsItems = ref([
   },
 ]);
 let formObject: Record<string, unknown> = reactive({});
-
 const stepsCompleted = reactive<number[]>([]);
+// Vue lifecycle
 
+onBeforeMount(() => {
+  getAssociatedBusiness();
+});
+// Methods
 const nextPage = (event: any) => {
-  formObject = { ...event.formData };
-  console.log(formObject);
   // for (const field in event.formData) {
   //   formObject[field] = event.formData[field];
   // }
@@ -130,6 +137,56 @@ const nextPage = (event: any) => {
 };
 const complete = (e: any) => {
   stepsCompleted.push(e.step);
+};
+
+const getAssociatedBusiness = async () => {
+  try {
+    const res = await service.seller.associatedBusinesses();
+    if (res.data.data.merchantAssociated.length > 0) {
+      const merchantAssociated: Business = res.data.data.merchantAssociated[0];
+      businessLogin(merchantAssociated.apiKey, merchantAssociated.apiLogin);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const businessLogin = async (apiKey: string, apiLogin: string) => {
+  try {
+    const res = await service.business.login(apiKey, apiLogin);
+    localStorage.setItem("token", res.data.data);
+    businessDetail();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const businessDetail = async () => {
+  try {
+    const res = await service.business.detail();
+    const business = res.data.data;
+    formObject = {
+      businessName: business.name,
+      businessType: business.merchantCategory,
+      email: business.email,
+      phone: business.cellPhone,
+      businessCity: business.cityId,
+      businessAddress: business.adress,
+      kindOfperson: business.kindOfPerson,
+      businessDocumentType: business.documentType,
+      businessDocument: business.documentNumber,
+      companyName: business.bussinesName,
+      taxation: business.taxRegime,
+      manager: {
+        name: business.legalRepresentative.firstName,
+        lastname: business.legalRepresentative.lastName,
+        document: business.legalRepresentative.documentNumber,
+        documentType: business.legalRepresentative.documentType,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+  }
 };
 </script>
 
