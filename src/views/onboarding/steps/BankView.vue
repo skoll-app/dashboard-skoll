@@ -49,6 +49,20 @@ const accountTypeList = ref<SelectOption[]>([
     code: "VA",
   },
 ]);
+const initialValues = {
+  fullname: "",
+  bank: "",
+  documentType: "",
+  document: "",
+  type: "",
+  account: "",
+  email: "",
+  phone: "",
+};
+
+// Emit
+const emit = defineEmits(["next-page", "prev-page"]);
+
 // Form
 const validationSchema = yup.object({
   fullname: yup.string().required().onlyLetters(),
@@ -63,11 +77,30 @@ const validationSchema = yup.object({
 const formRef = reactive(
   useForm({
     validationSchema,
+    initialValues,
   })
 );
+
+// Methods
+const nextPage = (values: any) => {
+  emit("next-page", {
+    formData: values,
+    pageIndex: 2,
+  });
+};
+
+const prevPage = () => {
+  emit("prev-page", {
+    pageIndex: 2,
+  });
+};
+
+const saveAccount = formRef.handleSubmit(async (values) => {
+  console.log(values);
+});
 </script>
 <template>
-  <form>
+  <form @submit="nextPage">
     <Card>
       <template v-slot:title>
         {{ t("onboarding.steps.bankAccount") }}
@@ -150,6 +183,23 @@ const formRef = reactive(
               placeholder="(999) 999 9999"
             />
           </div>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <div class="grid grid-nogutter justify-content-between">
+          <Button
+            :label="$t('form.buttons.back')"
+            @click="prevPage()"
+            icon="pi pi-angle-left"
+            iconPos="left"
+            class="p-button-secondary"
+          />
+          <Button
+            type="submit"
+            :label="$t('form.buttons.next')"
+            icon="pi pi-angle-right"
+            iconPos="right"
+          />
         </div>
       </template>
     </Card>
