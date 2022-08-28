@@ -13,7 +13,31 @@
   <div class="py-5">
     <div class="w-full md:w-9 mx-auto">
       <div class="card sticky steps">
-        <Steps :model="stepItems" :readonly="false" />
+        <Steps :model="stepItems" :readonly="false">
+          <template #item="{ item }">
+            <RouterLink
+              :to="item.to!"
+              custom
+              v-slot="{ href, route, navigate, isActive, isExactActive }"
+            >
+              <a
+                class="p-menuitem-link"
+                :class="{
+                  'active-link': isActive,
+                  'exact-active-link': isExactActive,
+                }"
+                :href="href"
+                @click="navigate"
+              >
+                <span class="p-steps-number" :class="{ 'bg-green-500': false }">
+                  <i v-if="false" class="pi pi-check"></i>
+                  <i v-else class="pi" :class="item.icon"></i>
+                </span>
+                {{ item.label }}
+              </a>
+            </RouterLink>
+          </template>
+        </Steps>
       </div>
 
       <router-view
@@ -42,22 +66,27 @@ const stepItems = ref([
   {
     label: t("onboarding.steps.basicData"),
     to: "/onboarding/basic-data",
+    icon: "pi-building",
   },
   {
     label: t("onboarding.steps.customization"),
     to: "/onboarding/customization",
+    icon: "pi-cog",
   },
   {
     label: t("onboarding.steps.bankAccount"),
     to: "/onboarding/bank",
+    icon: "pi-dollar",
   },
   {
     label: t("onboarding.steps.documents"),
     to: "/onboarding/documents",
+    icon: "pi-file",
   },
   {
     label: t("onboarding.steps.summary"),
     to: "/onboarding/documents",
+    icon: "pi-list",
   },
 ]);
 
@@ -111,5 +140,31 @@ const complete = () => {
   background-color: white;
   top: 90px;
   z-index: 2;
+}
+
+.p-menuitem-link {
+  color: var(--text-color) !important;
+
+  &.active-link,
+  &.exact-active-link {
+    color: var(--primary-color) !important;
+    font-weight: bolder;
+  }
+}
+
+::v-deep(.p-steps .p-steps-item.p-highlight .p-steps-number) {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+::v-deep(.p-steps .p-steps-item:before) {
+  content: " ";
+  border-top: 1px solid #dee2e6;
+  width: 90%;
+  top: 60%;
+  left: 0;
+  display: block;
+  position: absolute;
+  margin-top: -1rem;
 }
 </style>
