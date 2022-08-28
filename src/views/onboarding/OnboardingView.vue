@@ -18,7 +18,7 @@
             <RouterLink
               :to="item.to!"
               custom
-              v-slot="{ href, route, navigate, isActive, isExactActive }"
+              v-slot="{ href, navigate, isActive, isExactActive }"
             >
               <a
                 class="p-menuitem-link"
@@ -29,11 +29,24 @@
                 :href="href"
                 @click="navigate"
               >
-                <span class="p-steps-number" :class="{ 'bg-green-500': false }">
-                  <i v-if="false" class="pi pi-check"></i>
+                <span
+                  class="p-steps-number"
+                  :class="{
+                    'bg-green-500': stepsCompleted.includes(item.index),
+                  }"
+                >
+                  <i
+                    v-if="stepsCompleted.includes(item.index)"
+                    class="pi pi-check text-white"
+                  ></i>
                   <i v-else class="pi" :class="item.icon"></i>
                 </span>
-                {{ item.label }}
+                <span
+                  :class="{
+                    'text-green-500': stepsCompleted.includes(item.index),
+                  }"
+                  >{{ item.label }}</span
+                >
               </a>
             </RouterLink>
           </template>
@@ -44,7 +57,7 @@
         v-slot="{ Component }"
         :formData="formObject"
         @nextPage="nextPage($event)"
-        @complete="complete"
+        @stepComplete="complete"
       >
         <keep-alive>
           <component :is="Component" />
@@ -67,26 +80,31 @@ const stepItems = ref([
     label: t("onboarding.steps.basicData"),
     to: "/onboarding/basic-data",
     icon: "pi-building",
+    index: 0,
   },
   {
     label: t("onboarding.steps.customization"),
     to: "/onboarding/customization",
     icon: "pi-cog",
+    index: 1,
   },
   {
     label: t("onboarding.steps.bankAccount"),
     to: "/onboarding/bank",
     icon: "pi-dollar",
+    index: 2,
   },
   {
     label: t("onboarding.steps.documents"),
     to: "/onboarding/documents",
     icon: "pi-file",
+    index: 3,
   },
   {
     label: t("onboarding.steps.summary"),
     to: "/onboarding/documents",
     icon: "pi-list",
+    index: 4,
   },
 ]);
 
@@ -100,6 +118,8 @@ const userOptionsItems = ref([
 ]);
 let formObject: Record<string, unknown> = reactive({});
 
+const stepsCompleted = reactive<number[]>([]);
+
 const nextPage = (event: any) => {
   formObject = { ...event.formData };
   console.log(formObject);
@@ -108,8 +128,8 @@ const nextPage = (event: any) => {
   // }
   router.push(stepItems.value[event.pageIndex + 1].to);
 };
-const complete = () => {
-  console.log("completo");
+const complete = (e: any) => {
+  stepsCompleted.push(e.step);
 };
 </script>
 

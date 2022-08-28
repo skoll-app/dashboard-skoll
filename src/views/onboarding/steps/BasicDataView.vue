@@ -165,7 +165,7 @@ onBeforeMount(() => {
 });
 
 // Emit
-const emit = defineEmits(["next-page"]);
+const emit = defineEmits(["next-page", "step-complete"]);
 
 // Functions
 const getDepartments = async () => {
@@ -230,6 +230,12 @@ const businessDetail = async () => {
         documentType: business.legalRepresentative.documentType,
       },
     });
+    if (businessExists.value) {
+      emit("step-complete", {
+        formData: formRef.values,
+        step: 0,
+      });
+    }
   } catch (error) {
     console.error(error);
   }
