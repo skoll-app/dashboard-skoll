@@ -1,14 +1,24 @@
 <template>
+  <Toolbar class="sticky top-0 bg-white z-5">
+    <template #start> SKOLL </template>
+
+    <template #end>
+      <SplitButton
+        icon="pi pi-user"
+        class="p-button-secondary"
+        :model="userOptionsItems"
+      ></SplitButton>
+    </template>
+  </Toolbar>
   <div class="py-5">
     <div class="w-full md:w-9 mx-auto">
-      <div class="card">
-        <Steps :model="items" :readonly="false" />
+      <div class="card sticky steps">
+        <Steps :model="stepItems" :readonly="false" />
       </div>
 
       <router-view
         v-slot="{ Component }"
         :formData="formObject"
-        @prevPage="prevPage($event)"
         @nextPage="nextPage($event)"
         @complete="complete"
       >
@@ -16,10 +26,6 @@
           <component :is="Component" />
         </keep-alive>
       </router-view>
-
-      <div class="card my-3">
-        <Steps :model="items" :readonly="false" />
-      </div>
     </div>
   </div>
 </template>
@@ -32,7 +38,7 @@ import { useRouter } from "vue-router";
 const { t } = useI18n();
 
 const router = useRouter();
-const items = ref([
+const stepItems = ref([
   {
     label: t("onboarding.steps.basicData"),
     to: "/onboarding/basic-data",
@@ -54,6 +60,15 @@ const items = ref([
     to: "/onboarding/documents",
   },
 ]);
+
+const userOptionsItems = ref([
+  {
+    label: "Cerrar sesión",
+    command: () => {
+      location.href = "/";
+    },
+  },
+]);
 let formObject: Record<string, unknown> = reactive({});
 
 const nextPage = (event: any) => {
@@ -62,10 +77,7 @@ const nextPage = (event: any) => {
   // for (const field in event.formData) {
   //   formObject[field] = event.formData[field];
   // }
-  router.push(items.value[event.pageIndex + 1].to);
-};
-const prevPage = (event: any) => {
-  router.push(items.value[event.pageIndex - 1].to);
+  router.push(stepItems.value[event.pageIndex + 1].to);
 };
 const complete = () => {
   console.log("completo");
@@ -93,5 +105,11 @@ const complete = () => {
       border-top: 0;
     }
   }
+}
+
+.steps {
+  background-color: white;
+  top: 90px;
+  z-index: 2;
 }
 </style>
