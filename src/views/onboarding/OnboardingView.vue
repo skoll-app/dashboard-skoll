@@ -1,8 +1,8 @@
 <template>
-  <div class="pt-5">
+  <div class="py-5">
     <div class="w-full md:w-9 mx-auto">
       <div class="card">
-        <Steps :model="items" readonly />
+        <Steps :model="items" :readonly="false" />
       </div>
 
       <router-view
@@ -16,6 +16,10 @@
           <component :is="Component" />
         </keep-alive>
       </router-view>
+
+      <div class="card my-3">
+        <Steps :model="items" :readonly="false" />
+      </div>
     </div>
   </div>
 </template>
