@@ -11,8 +11,13 @@ import SKSelect from "@/components/ux/SKSelect.vue";
 import SKInputMask from "@/components/ux/SKInputMask.vue";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
+import service from "@/http/services";
+import type { Bank } from "@/interfaces/business";
+// Store
+import { useBusinessStore } from "@/stores/business";
 
 // Data
+const businessStore = useBusinessStore();
 const { t } = useI18n();
 const bankList = ref<SelectOption[]>([
   {
@@ -61,7 +66,7 @@ const initialValues = {
 };
 
 // Emit
-const emit = defineEmits(["next-page", "prev-page"]);
+const emit = defineEmits(["next-page"]);
 
 // Form
 const validationSchema = yup.object({
@@ -82,25 +87,24 @@ const formRef = reactive(
 );
 
 // Methods
-const nextPage = (values: any) => {
+const nextPage = () => {
   emit("next-page", {
-    formData: values,
     pageIndex: 2,
   });
 };
 
-const prevPage = () => {
-  emit("prev-page", {
-    pageIndex: 2,
-  });
-};
-
-const saveAccount = formRef.handleSubmit(async (values) => {
-  console.log(values);
+const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
+  try {
+    await service.business.createBankAccount(bank);
+    businessStore.setBank(bank);
+    nextPage();
+  } catch (error) {
+    console.error(error);
+  }
 });
 </script>
 <template>
-  <form @submit="nextPage">
+  <form @submit="saveAccount">
     <Card>
       <template v-slot:title>
         {{ t("onboarding.steps.bankAccount") }}

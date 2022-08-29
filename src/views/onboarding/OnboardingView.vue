@@ -32,18 +32,22 @@
                 <span
                   class="p-steps-number"
                   :class="{
-                    'bg-green-500': stepsCompleted.includes(item.index),
+                    'bg-green-500': businessStore.stepsCompleted.includes(
+                      item.step
+                    ),
                   }"
                 >
                   <i
-                    v-if="stepsCompleted.includes(item.index)"
+                    v-if="businessStore.stepsCompleted.includes(item.step)"
                     class="pi pi-check text-white"
                   ></i>
                   <i v-else class="pi" :class="item.icon"></i>
                 </span>
                 <span
                   :class="{
-                    'text-green-500': stepsCompleted.includes(item.index),
+                    'text-green-500': businessStore.stepsCompleted.includes(
+                      item.step
+                    ),
                   }"
                   >{{ item.label }}</span
                 >
@@ -53,11 +57,7 @@
         </Steps>
       </div>
 
-      <router-view
-        v-slot="{ Component }"
-        @nextPage="nextPage($event)"
-        @stepComplete="complete"
-      >
+      <router-view v-slot="{ Component }" @nextPage="nextPage($event)">
         <keep-alive>
           <component :is="Component" />
         </keep-alive>
@@ -68,14 +68,14 @@
 
 <script lang="ts" setup>
 // Vue
-import { onBeforeMount, reactive, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
 // Services
 import service from "@/http/services";
 // Interfaces
-import type { Business } from "@/interfaces/business";
+import type { Bank, Business } from "@/interfaces/business";
 // Store
 import { useBusinessStore } from "@/stores/business";
 
@@ -87,31 +87,31 @@ const stepItems = ref([
     label: t("onboarding.steps.basicData"),
     to: "/onboarding/basic-data",
     icon: "pi-building",
-    index: 0,
+    step: "basic-data",
   },
   {
     label: t("onboarding.steps.customization"),
     to: "/onboarding/customization",
     icon: "pi-cog",
-    index: 1,
+    step: "customization",
   },
   {
     label: t("onboarding.steps.bankAccount"),
     to: "/onboarding/bank",
     icon: "pi-dollar",
-    index: 2,
+    step: "bank",
   },
   {
     label: t("onboarding.steps.documents"),
     to: "/onboarding/documents",
     icon: "pi-file",
-    index: 3,
+    step: "documents",
   },
   {
     label: t("onboarding.steps.summary"),
     to: "/onboarding/documents",
     icon: "pi-list",
-    index: 4,
+    step: "summary",
   },
 ]);
 const userOptionsItems = ref([
@@ -122,7 +122,6 @@ const userOptionsItems = ref([
     },
   },
 ]);
-const stepsCompleted = reactive<number[]>([]);
 const businessStore = useBusinessStore();
 
 // Vue lifecycle
@@ -131,11 +130,7 @@ onBeforeMount(() => {
 });
 // Methods
 const nextPage = (event: { pageIndex: number; step: number }) => {
-  stepsCompleted.push(event.step);
   router.push(stepItems.value[event.pageIndex + 1].to);
-};
-const complete = (e: { step: number }) => {
-  stepsCompleted.push(e.step);
 };
 
 const getAssociatedBusiness = async () => {
@@ -155,6 +150,7 @@ const businessLogin = async (apiKey: string, apiLogin: string) => {
     const res = await service.business.login(apiKey, apiLogin);
     localStorage.setItem("token", res.data.data);
     businessDetail();
+    getBank();
   } catch (error) {
     console.error(error);
   }
@@ -184,6 +180,26 @@ const businessDetail = async () => {
       },
     };
     businessStore.setBasicData(formObject);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getBank = async () => {
+  try {
+    const response = await service.business.getBank();
+    const bank = response.data.data.bankAccount[0];
+    const bankSaved: Bank = {
+      fullname: bank.fullName,
+      bank: bank.bank,
+      account: bank.account,
+      document: bank.documentNumber,
+      documentType: bank.documentType,
+      email: bank.email,
+      phone: bank.phone,
+      type: bank.type,
+    };
+    businessStore.setBank(bankSaved);
   } catch (error) {
     console.error(error);
   }

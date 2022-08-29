@@ -1,8 +1,16 @@
+import { defineStore } from "pinia";
 import type {
+  Bank,
   BusinessBasicData,
   LegalRepresentative,
-} from "./../interfaces/business";
-import { defineStore } from "pinia";
+} from "@/interfaces/business";
+import { Steps } from "@/interfaces/business-steps";
+
+type StepsCompleted =
+  | Steps.BASIC_DATA
+  | Steps.BANK
+  | Steps.CUSTOMIZATION
+  | Steps.DOCUMENTS;
 
 export const useBusinessStore = defineStore({
   id: "business",
@@ -25,8 +33,14 @@ export const useBusinessStore = defineStore({
       documentType: "",
     } as LegalRepresentative,
     exists: false,
+    banks: [] as Bank[],
+    stepsCompleted: [] as Array<StepsCompleted>,
   }),
-  getters: {},
+  getters: {
+    getFirstBank(): Bank {
+      return this.banks[0];
+    },
+  },
   actions: {
     setBasicData(business: Partial<BusinessBasicData>) {
       this.name = business.name || "";
@@ -47,6 +61,17 @@ export const useBusinessStore = defineStore({
         documentType: business.legalRepresentative?.documentType || "",
       };
       this.exists = true;
+      this.setStep(Steps.BASIC_DATA);
+    },
+    setBank(bank: Bank) {
+      const index = this.banks.findIndex((item) => item.id === bank.id);
+      if (index < 0) {
+        this.banks.push(bank);
+      }
+      this.setStep(Steps.BANK);
+    },
+    setStep(step: StepsCompleted) {
+      this.stepsCompleted.push(step);
     },
   },
 });
