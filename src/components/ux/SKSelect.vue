@@ -68,9 +68,9 @@ function onChange(e: any) {
         optionLabel="name"
         optionValue="code"
         :placeholder="placeholder"
-        :class="selectClasses"
         :filter="filter"
         :disabled="disabled"
+        :class="[{ 'p-invalid': errorMessage }, selectClasses]"
       />
       <p class="p-error" v-show="errorMessage">
         {{ errorMessage }}

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 // Imports
 // Vue
-import { computed, onBeforeMount, reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onBeforeMount, onMounted, reactive, ref, watch } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
 // Components
@@ -14,7 +13,7 @@ import KindOfPerson from "@/enums/person";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
 import type HttpResponse from "@/interfaces/http-response";
-import type { Business, BusinessBasicData } from "@/interfaces/business";
+import type { BusinessBasicData } from "@/interfaces/business";
 // Enums
 import Taxation from "@/enums/taxation";
 // Utils
@@ -24,9 +23,11 @@ import * as yup from "yup";
 import getError from "@/utils/handle-errors";
 import service from "@/http/services";
 import { useToast } from "primevue/usetoast";
+// Store
+import { useBusinessStore } from "@/stores/business";
 // End imports
 
-const router = useRouter();
+const businessStore = useBusinessStore();
 const { t } = useI18n();
 const toast = useToast();
 // Begin select fields
@@ -55,7 +56,7 @@ const businessDocumentType = ref<SelectOption[]>([
     code: "NIT",
   },
 ]);
-const managerDocumentType = ref<SelectOption[]>([
+const legalRepresentativeDocumentType = ref<SelectOption[]>([
   {
     name: t("form.documentTypeList.CC"),
     code: "CC",
@@ -70,6 +71,7 @@ const managerDocumentType = ref<SelectOption[]>([
   },
 ]);
 // End select fields
+
 // Form
 const validationSchema = yup.object({
   businessName: yup.string().required(),
@@ -83,14 +85,14 @@ const validationSchema = yup.object({
   businessDocumentType: yup.string().required(),
   businessDocument: yup.string().required(),
   companyName: yup.string().required(),
-  manager: yup.object({
+  legalRepresentative: yup.object({
     name: yup.string().required().onlyLetters(),
     lastname: yup.string().required().onlyLetters(),
     documentType: yup.string().required(),
     document: yup.string().required(),
   }),
 });
-const initialValues = {
+const initialValues = reactive({
   businessName: "",
   email: "",
   phone: "",
@@ -101,14 +103,14 @@ const initialValues = {
   businessDocumentType: "",
   businessDocument: "",
   companyName: "",
-  businessCity: 0,
-  manager: {
+  businessCity: "",
+  legalRepresentative: {
     name: "",
     lastname: "",
     document: "",
     documentType: "",
   },
-};
+});
 const formRef = reactive(
   useForm({
     validationSchema,
@@ -116,9 +118,7 @@ const formRef = reactive(
   })
 );
 const cities: SelectOption[] = reactive([]);
-const businessExists = ref(false);
-let businessData: BusinessBasicData = reactive({});
-
+let businessData: Partial<BusinessBasicData> = reactive({});
 // Computed
 const taxation = computed(() => {
   const naturalPerson = [0, 1, 2];
@@ -150,18 +150,69 @@ const taxation = computed(() => {
 });
 
 // watch(
-//   () => formRef.values.kindOfperson,
-//   (newValue, oldValue) => {
-//     if (newValue !== oldValue) {
-//       console.log("por aca");
+//   () => formRef.meta.valid,
+//   (valid) => {
+//     if (valid && businessStore.basicStepCompleted) {
+//       emit("step-complete", {
+//         step: 0,
+//       });
 //     }
-//   },
-//   { deep: true }
+//   }
 // );
 
+watch(
+  () => businessStore,
+  (business) => {
+    formRef.setValues({
+      businessName: business.name,
+      businessType: business.category,
+      email: business.email,
+      phone: business.phone,
+      businessCity: business.city,
+      businessAddress: business.address,
+      kindOfperson: business.kindOfperson,
+      taxation: business.taxation,
+      businessDocumentType: business.documentType,
+      businessDocument: business.documentNumber,
+      companyName: business.companyName,
+      legalRepresentative: {
+        name: business.legalRepresentative.firstName,
+        lastname: business.legalRepresentative.lastName,
+        document: business.legalRepresentative.documentNumber,
+        documentType: business.legalRepresentative.documentType,
+      },
+    });
+  },
+  { deep: true }
+);
+
 onBeforeMount(() => {
-  getAssociatedBusiness();
   getDepartments();
+});
+
+onMounted(() => {
+  if (businessStore.basicStepCompleted) {
+    const { ...business } = businessStore;
+    formRef.setValues({
+      businessName: business.name,
+      businessType: business.category,
+      email: business.email,
+      phone: business.phone,
+      businessCity: business.city,
+      businessAddress: business.address,
+      kindOfperson: business.kindOfperson,
+      taxation: business.taxation,
+      businessDocumentType: business.documentType,
+      businessDocument: business.documentNumber,
+      companyName: business.companyName,
+      legalRepresentative: {
+        name: business.legalRepresentative.firstName,
+        lastname: business.legalRepresentative.lastName,
+        document: business.legalRepresentative.documentNumber,
+        documentType: business.legalRepresentative.documentType,
+      },
+    });
+  }
 });
 
 // Emit
@@ -183,58 +234,6 @@ const getDepartments = async () => {
     console.log(error);
   }
 };
-
-const getAssociatedBusiness = async () => {
-  try {
-    const res = await service.seller.associatedBusinesses();
-    if (res.data.data.merchantAssociated.length > 0) {
-      businessExists.value = true;
-      const merchantAssociated: Business = res.data.data.merchantAssociated[0];
-      businessLogin(merchantAssociated.apiKey, merchantAssociated.apiLogin);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const businessLogin = async (apiKey: string, apiLogin: string) => {
-  try {
-    const res = await service.business.login(apiKey, apiLogin);
-    localStorage.setItem("token", res.data.data);
-    businessDetail();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const businessDetail = async () => {
-  try {
-    const res = await service.business.detail();
-    const business = res.data.data;
-    formRef.setValues({
-      businessName: business.name,
-      businessType: business.merchantCategory,
-      email: business.email,
-      phone: business.cellPhone,
-      businessCity: 20001, // cambiar
-      businessAddress: business.adress,
-      kindOfperson: "NATURAL", // cambiar
-      businessDocumentType: business.documentType,
-      businessDocument: "123456789", // cambiar
-      companyName: "Capachos SAS", // cambiar
-      taxation: "NO_IVA", // cambiar
-      manager: {
-        name: business.legalRepresentative.firstName,
-        lastname: business.legalRepresentative.lastName,
-        document: business.legalRepresentative.documentNumber,
-        documentType: business.legalRepresentative.documentType,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 const registerBusiness = formRef.handleSubmit(async (values) => {
   try {
     businessData = {
@@ -242,26 +241,27 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
       category: values.businessType,
       address: values.businessAddress,
       prefixCellPhone: "+57",
-      cellPhone: values.phone,
+      phone: values.phone,
       email: values.email,
       taxRegime: values.taxation,
       kindOfPerson: values.kindOfperson,
       documentNumber: values.businessDocument,
       documentType: values.businessDocumentType,
-      bussinesName: values.companyName,
-      cityId: values.businessCity,
+      companyName: values.companyName,
+      city: values.businessCity,
       legalRepresentative: {
-        documentNumber: values.manager.document,
-        documentType: values.manager.documentType,
-        firstName: values.manager.name,
-        lastName: values.manager.lastname,
+        documentNumber: values.legalRepresentative.document,
+        documentType: values.legalRepresentative.documentType,
+        firstName: values.legalRepresentative.name,
+        lastName: values.legalRepresentative.lastname,
       },
     };
-    if (!businessExists.value) {
+    if (!businessStore.basicStepCompleted) {
       const response = await service.business.signUp(businessData);
       localStorage.setItem("token", response.data.data);
     }
-    nextPage(businessData);
+    businessStore.setBasicData(businessData);
+    nextPage();
   } catch (error) {
     console.error(error);
     toast.add({
@@ -273,15 +273,11 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
   }
 });
 
-const nextPage = (values: BusinessBasicData) => {
+const nextPage = () => {
   emit("next-page", {
-    formData: values,
     pageIndex: 0,
+    step: 0,
   });
-};
-
-const prevPage = () => {
-  router.push("/");
 };
 </script>
 <template>
@@ -299,7 +295,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessName')"
               inputClasses="w-full"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-4">
@@ -310,7 +306,7 @@ const prevPage = () => {
               :options="businessTypes"
               :label="$t('form.businessType')"
               labelClasses="block mb-2"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -320,7 +316,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.email')"
               inputClasses="w-full"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -331,7 +327,7 @@ const prevPage = () => {
               inputClasses="w-full"
               mask="(999) 999 9999"
               placeholder="(999) 999 9999"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -343,7 +339,7 @@ const prevPage = () => {
               :label="$t('form.city')"
               labelClasses="block mb-2"
               filter
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -353,7 +349,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessAddress')"
               inputClasses="w-full"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -364,7 +360,7 @@ const prevPage = () => {
               :options="kindOfperson"
               :label="$t('form.kindOfperson')"
               labelClasses="block mb-2"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -375,7 +371,7 @@ const prevPage = () => {
               :options="taxation"
               :label="$t('form.taxation')"
               labelClasses="block mb-2"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -386,7 +382,7 @@ const prevPage = () => {
               :options="businessDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -396,7 +392,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -406,7 +402,7 @@ const prevPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.companyName')"
               inputClasses="w-full"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
         </div>
@@ -415,63 +411,56 @@ const prevPage = () => {
         <div class="grid">
           <div class="col-12 md:col-6">
             <SKInputText
-              name="manager.name"
+              name="legalRepresentative.name"
               :label="$t('form.name')"
               labelClasses="block mb-2"
               :placeholder="$t('form.name')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
             <SKInputText
-              name="manager.lastname"
+              name="legalRepresentative.lastname"
               :label="$t('form.lastname')"
               labelClasses="block mb-2"
               :placeholder="$t('form.lastname')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
             <SKSelect
-              name="manager.documentType"
+              name="legalRepresentative.documentType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
-              :options="managerDocumentType"
+              :options="legalRepresentativeDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
             <SKInputText
-              name="manager.document"
+              name="legalRepresentative.document"
               :label="$t('form.document')"
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
-              :disabled="businessExists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
         </div>
       </template>
       <template v-slot:footer>
-        <div class="grid grid-nogutter justify-content-between">
-          <Button
-            :label="$t('form.buttons.back')"
-            @click="prevPage()"
-            icon="pi pi-angle-left"
-            iconPos="left"
-            class="p-button-secondary"
-          />
+        <div class="grid grid-nogutter justify-content-center">
           <Button
             type="submit"
-            :label="$t('form.buttons.next')"
-            icon="pi pi-angle-right"
-            iconPos="right"
+            :label="$t('form.buttons.createBusiness')"
+            class="py-3 px-5 text-xl"
+            :disabled="businessStore.basicStepCompleted"
           />
         </div>
       </template>

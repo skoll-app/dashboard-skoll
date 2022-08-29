@@ -33,6 +33,8 @@ import Card from "primevue/card";
 import InputNumber from "primevue/inputnumber";
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
+import Toolbar from "primevue/toolbar";
+import SplitButton from "primevue/splitbutton";
 
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -63,5 +65,7 @@ app.component("Card", Card);
 app.component("InputNumber", InputNumber);
 app.component("Loading", Loading);
 app.component("Toast", Toast);
+app.component("Toolbar", Toolbar);
+app.component("SplitButton", SplitButton);
 
 app.mount("#app");
