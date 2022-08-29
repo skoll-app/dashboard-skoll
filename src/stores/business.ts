@@ -18,7 +18,13 @@ export const useBusinessStore = defineStore({
     documentNumber: "",
     companyName: "",
     taxation: "",
-    legalRepresentative: {} as LegalRepresentative,
+    legalRepresentative: {
+      firstName: "",
+      lastName: "",
+      documentNumber: "",
+      documentType: "",
+    } as LegalRepresentative,
+    exists: false,
   }),
   getters: {},
   actions: {
@@ -40,6 +46,7 @@ export const useBusinessStore = defineStore({
         documentNumber: business.legalRepresentative?.documentNumber || "",
         documentType: business.legalRepresentative?.documentType || "",
       };
+      this.exists = true;
     },
   },
 });

@@ -55,7 +55,6 @@
 
       <router-view
         v-slot="{ Component }"
-        :formData="formObject"
         @nextPage="nextPage($event)"
         @stepComplete="complete"
       >
@@ -76,7 +75,7 @@ import { useI18n } from "vue-i18n";
 // Services
 import service from "@/http/services";
 // Interfaces
-import type { Business, BusinessBasicData } from "@/interfaces/business";
+import type { Business } from "@/interfaces/business";
 // Store
 import { useBusinessStore } from "@/stores/business";
 
@@ -123,23 +122,19 @@ const userOptionsItems = ref([
     },
   },
 ]);
-let formObject = reactive<Partial<BusinessBasicData>>({});
 const stepsCompleted = reactive<number[]>([]);
-const store = useBusinessStore();
-const { setBasicData } = store;
+const businessStore = useBusinessStore();
 
 // Vue lifecycle
 onBeforeMount(() => {
   getAssociatedBusiness();
 });
 // Methods
-const nextPage = (event: any) => {
-  // for (const field in event.formData) {
-  //   formObject[field] = event.formData[field];
-  // }
+const nextPage = (event: { pageIndex: number; step: number }) => {
+  stepsCompleted.push(event.step);
   router.push(stepItems.value[event.pageIndex + 1].to);
 };
-const complete = (e: any) => {
+const complete = (e: { step: number }) => {
   stepsCompleted.push(e.step);
 };
 
@@ -169,7 +164,7 @@ const businessDetail = async () => {
   try {
     const res = await service.business.detail();
     const business = res.data.data;
-    formObject = {
+    const formObject = {
       name: business.name,
       category: business.merchantCategory,
       email: business.email,
@@ -188,7 +183,7 @@ const businessDetail = async () => {
         documentType: business.legalRepresentative.documentType,
       },
     };
-    setBasicData(formObject);
+    businessStore.setBasicData(formObject);
   } catch (error) {
     console.error(error);
   }
