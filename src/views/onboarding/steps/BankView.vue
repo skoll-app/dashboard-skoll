@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Vue
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
 import * as yup from "yup";
@@ -65,6 +65,21 @@ const initialValues = {
   phone: "",
 };
 
+// Watch
+watch(
+  () => businessStore.getFirstBank,
+  (value) => {
+    formRef.setValues(value);
+  },
+  { deep: true }
+);
+
+onMounted(() => {
+  if (businessStore.getFirstBank) {
+    formRef.setValues(businessStore.getFirstBank);
+  }
+});
+
 // Emit
 const emit = defineEmits(["next-page"]);
 
@@ -118,6 +133,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
               labelClasses="block mb-2"
               :placeholder="$t('form.fullname')"
               inputClasses="w-full"
+              :disabled="businessStore.bankStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -128,6 +144,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
               :options="bankList"
               :label="$t('form.accountBank')"
               labelClasses="block mb-2"
+              :disabled="businessStore.bankStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -138,6 +155,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
               :options="documentTypeList"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
+              :disabled="businessStore.bankStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -147,6 +165,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
+              :disabled="businessStore.bankStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -157,6 +176,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
               :options="accountTypeList"
               :label="$t('form.accountType')"
               labelClasses="block mb-2"
+              :disabled="businessStore.bankStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -166,6 +186,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
               labelClasses="block mb-2"
               :placeholder="$t('form.accountNumber')"
               inputClasses="w-full"
+              :disabled="businessStore.bankStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -175,6 +196,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
               labelClasses="block mb-2"
               :placeholder="$t('form.email')"
               inputClasses="w-full"
+              :disabled="businessStore.bankStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -185,6 +207,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
               inputClasses="w-full"
               mask="(999) 999 9999"
               placeholder="(999) 999 9999"
+              :disabled="businessStore.bankStepCompleted"
             />
           </div>
         </div>
@@ -195,6 +218,7 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
             type="submit"
             :label="$t('form.buttons.continue')"
             class="py-3 px-5 text-xl"
+            :disabled="businessStore.bankStepCompleted"
           />
         </div>
       </template>

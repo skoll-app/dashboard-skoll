@@ -32,13 +32,24 @@ export const useBusinessStore = defineStore({
       documentNumber: "",
       documentType: "",
     } as LegalRepresentative,
-    exists: false,
     banks: [] as Bank[],
     stepsCompleted: [] as Array<StepsCompleted>,
   }),
   getters: {
     getFirstBank(): Bank {
       return this.banks[0];
+    },
+    basicStepCompleted(): boolean {
+      return this.stepsCompleted.includes(Steps.BASIC_DATA);
+    },
+    customizationStepCompleted(): boolean {
+      return this.stepsCompleted.includes(Steps.CUSTOMIZATION);
+    },
+    bankStepCompleted(): boolean {
+      return this.stepsCompleted.includes(Steps.BANK);
+    },
+    documentsStepCompleted(): boolean {
+      return this.stepsCompleted.includes(Steps.DOCUMENTS);
     },
   },
   actions: {
@@ -60,7 +71,6 @@ export const useBusinessStore = defineStore({
         documentNumber: business.legalRepresentative?.documentNumber || "",
         documentType: business.legalRepresentative?.documentType || "",
       };
-      this.exists = true;
       this.setStep(Steps.BASIC_DATA);
     },
     setBank(bank: Bank) {

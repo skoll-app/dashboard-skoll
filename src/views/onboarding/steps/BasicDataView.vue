@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Imports
 // Vue
-import { computed, onBeforeMount, reactive, ref, watch } from "vue";
+import { computed, onBeforeMount, onMounted, reactive, ref, watch } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
 // Components
@@ -149,16 +149,16 @@ const taxation = computed(() => {
   return options;
 });
 
-watch(
-  () => formRef.meta.valid,
-  (valid) => {
-    if (valid && businessStore.exists) {
-      emit("step-complete", {
-        step: 0,
-      });
-    }
-  }
-);
+// watch(
+//   () => formRef.meta.valid,
+//   (valid) => {
+//     if (valid && businessStore.basicStepCompleted) {
+//       emit("step-complete", {
+//         step: 0,
+//       });
+//     }
+//   }
+// );
 
 watch(
   () => businessStore,
@@ -190,8 +190,33 @@ onBeforeMount(() => {
   getDepartments();
 });
 
+onMounted(() => {
+  if (businessStore.basicStepCompleted) {
+    const { ...business } = businessStore;
+    formRef.setValues({
+      businessName: business.name,
+      businessType: business.category,
+      email: business.email,
+      phone: business.phone,
+      businessCity: business.city,
+      businessAddress: business.address,
+      kindOfperson: business.kindOfperson,
+      taxation: business.taxation,
+      businessDocumentType: business.documentType,
+      businessDocument: business.documentNumber,
+      companyName: business.companyName,
+      legalRepresentative: {
+        name: business.legalRepresentative.firstName,
+        lastname: business.legalRepresentative.lastName,
+        document: business.legalRepresentative.documentNumber,
+        documentType: business.legalRepresentative.documentType,
+      },
+    });
+  }
+});
+
 // Emit
-const emit = defineEmits(["next-page", "step-complete"]);
+const emit = defineEmits(["next-page"]);
 
 // Functions
 const getDepartments = async () => {
@@ -231,7 +256,7 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
         lastName: values.legalRepresentative.lastname,
       },
     };
-    if (!businessStore.exists) {
+    if (!businessStore.basicStepCompleted) {
       const response = await service.business.signUp(businessData);
       localStorage.setItem("token", response.data.data);
     }
@@ -270,7 +295,7 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessName')"
               inputClasses="w-full"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-4">
@@ -281,7 +306,7 @@ const nextPage = () => {
               :options="businessTypes"
               :label="$t('form.businessType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -291,7 +316,7 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.email')"
               inputClasses="w-full"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -302,7 +327,7 @@ const nextPage = () => {
               inputClasses="w-full"
               mask="(999) 999 9999"
               placeholder="(999) 999 9999"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -314,7 +339,7 @@ const nextPage = () => {
               :label="$t('form.city')"
               labelClasses="block mb-2"
               filter
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -324,7 +349,7 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessAddress')"
               inputClasses="w-full"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -335,7 +360,7 @@ const nextPage = () => {
               :options="kindOfperson"
               :label="$t('form.kindOfperson')"
               labelClasses="block mb-2"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -346,7 +371,7 @@ const nextPage = () => {
               :options="taxation"
               :label="$t('form.taxation')"
               labelClasses="block mb-2"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -357,7 +382,7 @@ const nextPage = () => {
               :options="businessDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -367,7 +392,7 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -377,7 +402,7 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.companyName')"
               inputClasses="w-full"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
         </div>
@@ -392,7 +417,7 @@ const nextPage = () => {
               :placeholder="$t('form.name')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -403,7 +428,7 @@ const nextPage = () => {
               :placeholder="$t('form.lastname')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -414,7 +439,7 @@ const nextPage = () => {
               :options="legalRepresentativeDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -424,7 +449,7 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
-              :disabled="businessStore.exists"
+              :disabled="businessStore.basicStepCompleted"
             />
           </div>
         </div>
@@ -435,7 +460,7 @@ const nextPage = () => {
             type="submit"
             :label="$t('form.buttons.createBusiness')"
             class="py-3 px-5 text-xl"
-            :disabled="businessStore.exists"
+            :disabled="businessStore.basicStepCompleted"
           />
         </div>
       </template>
