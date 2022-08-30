@@ -44,6 +44,7 @@
                   <i v-else class="pi" :class="item.icon"></i>
                 </span>
                 <span
+                  class="mt-1 p-steps-title"
                   :class="{
                     'text-green-500': businessStore.stepsCompleted.includes(
                       item.step
@@ -258,9 +259,8 @@ const getBank = async () => {
 
 ::v-deep(.p-steps .p-steps-item:before) {
   content: " ";
-  border-top: 1px solid #dee2e6;
   width: 90%;
-  top: 60%;
+  top: 56%;
   left: 0;
   display: block;
   position: absolute;
