@@ -1,11 +1,11 @@
 import axios, { type AxiosInstance } from "axios";
-console.log(import.meta.env.VITE_APP_BASE_URL)
+console.log("process.env.VITE_APP_BASE_URL", process.env.VITE_APP_BASE_URL);
 const api: AxiosInstance = axios.create();
-api.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL;
+api.defaults.baseURL = process.env.VITE_APP_BASE_URL;
 
 // API AUTH
 const apiAuth: AxiosInstance = axios.create();
-apiAuth.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL;
+apiAuth.defaults.baseURL = process.env.VITE_APP_BASE_URL;
 // Interceptor
 apiAuth.interceptors.request.use(
   (config: any) => {
