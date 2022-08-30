@@ -1,0 +1,1 @@
+import{e as r,f as t,q as a,o as n,c,s as l}from"./index.96c57ac8.js";const _=r({__name:"DashboardView",setup(u){const o=t(),s=async()=>{try{const e=await l.business.detail();console.log(e)}catch(e){o.push("/"),console.error(e)}};return a(()=>{s()}),(e,i)=>(n(),c("div",null,"Dashboard"))}});export{_ as default};
