@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
-
+console.log(import.meta.env.VITE_APP_BASE_URL)
 const api: AxiosInstance = axios.create();
 api.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL;
 
