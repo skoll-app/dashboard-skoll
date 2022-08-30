@@ -10,7 +10,8 @@ type StepsCompleted =
   | Steps.BASIC_DATA
   | Steps.BANK
   | Steps.CUSTOMIZATION
-  | Steps.DOCUMENTS;
+  | Steps.DOCUMENTS
+  | Steps.PRODUCTS;
 
 export const useBusinessStore = defineStore({
   id: "business",

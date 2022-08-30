@@ -80,10 +80,11 @@
   },
   "onboarding": {
     "steps": {
-      "basicData": "Información del negocio",
+      "basicData": "Negocio",
       "customization": "Personalización",
-      "bankAccount": "Cuenta bancaria",
-      "documents": "Documentos legales",
+      "products": "Productos",
+      "bankAccount": "Banco",
+      "documents": "Documentos",
       "summary": "Resumen"
     },
     "managerLegalInfo": "Información del representante legal",

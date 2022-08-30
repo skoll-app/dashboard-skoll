@@ -9,6 +9,8 @@ import BasicData from "../views/onboarding/steps/BasicDataView.vue";
 import CustomizationView from "../views/onboarding/steps/CustomizationView.vue";
 import BankView from "@/views/onboarding/steps/BankView.vue";
 import DocumentsView from "@/views/onboarding/steps/DocumentsView.vue";
+import ProductsView from "@/views/onboarding/steps/ProductsView.vue";
+import ResumeView from "@/views/onboarding/steps/ResumeView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -42,6 +44,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { requiresAuth: true },
       },
       {
+        path: "products",
+        name: "products",
+        component: ProductsView,
+        meta: { requiresAuth: true },
+      },
+      {
         path: "customization",
         name: "customization",
         component: CustomizationView,
@@ -57,6 +65,12 @@ const routes: Array<RouteRecordRaw> = [
         path: "documents",
         name: "documents",
         component: DocumentsView,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "summary",
+        name: "summary",
+        component: ResumeView,
         meta: { requiresAuth: true },
       },
     ],

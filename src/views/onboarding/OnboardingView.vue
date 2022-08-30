@@ -96,6 +96,12 @@ const stepItems = ref([
     step: "customization",
   },
   {
+    label: t("onboarding.steps.products"),
+    to: "/onboarding/products",
+    icon: "pi-database",
+    step: "products",
+  },
+  {
     label: t("onboarding.steps.bankAccount"),
     to: "/onboarding/bank",
     icon: "pi-dollar",
