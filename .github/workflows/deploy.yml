@@ -46,7 +46,7 @@ jobs:
         run: cd dist && cp index.html 404.html
         
         env:
-          BASE_URL: ${{ secrets.BASE_URL }}
+          VITE_APP_BASE_URL: ${{ secrets.BASE_URL }}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
