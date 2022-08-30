@@ -10,7 +10,7 @@
       ></SplitButton>
     </template>
   </Toolbar>
-  <div class="py-5">
+  <div class="py-3">
     <div class="w-full md:w-9 mx-auto">
       <div class="card sticky steps">
         <Steps :model="stepItems" :readonly="false">
@@ -44,6 +44,7 @@
                   <i v-else class="pi" :class="item.icon"></i>
                 </span>
                 <span
+                  class="mt-1 p-steps-title"
                   :class="{
                     'text-green-500': businessStore.stepsCompleted.includes(
                       item.step
@@ -96,6 +97,12 @@ const stepItems = ref([
     step: "customization",
   },
   {
+    label: t("onboarding.steps.products"),
+    to: "/onboarding/products",
+    icon: "pi-database",
+    step: "products",
+  },
+  {
     label: t("onboarding.steps.bankAccount"),
     to: "/onboarding/bank",
     icon: "pi-dollar",
@@ -109,7 +116,7 @@ const stepItems = ref([
   },
   {
     label: t("onboarding.steps.summary"),
-    to: "/onboarding/documents",
+    to: "/onboarding/summary",
     icon: "pi-list",
     step: "summary",
   },
@@ -231,7 +238,7 @@ const getBank = async () => {
 
 .steps {
   background-color: white;
-  top: 90px;
+  top: 75px;
   z-index: 2;
 }
 
@@ -252,9 +259,8 @@ const getBank = async () => {
 
 ::v-deep(.p-steps .p-steps-item:before) {
   content: " ";
-  border-top: 1px solid #dee2e6;
   width: 90%;
-  top: 60%;
+  top: 56%;
   left: 0;
   display: block;
   position: absolute;

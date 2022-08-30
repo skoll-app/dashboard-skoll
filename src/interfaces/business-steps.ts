@@ -3,4 +3,5 @@ export enum Steps {
   BANK = "bank",
   CUSTOMIZATION = "customization",
   DOCUMENTS = "documents",
+  PRODUCTS = "products",
 }

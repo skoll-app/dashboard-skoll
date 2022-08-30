@@ -35,6 +35,7 @@ import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
 import Toolbar from "primevue/toolbar";
 import SplitButton from "primevue/splitbutton";
+import FileUpload from "primevue/fileupload";
 
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -67,5 +68,6 @@ app.component("Loading", Loading);
 app.component("Toast", Toast);
 app.component("Toolbar", Toolbar);
 app.component("SplitButton", SplitButton);
+app.component("FileUpload", FileUpload);
 
 app.mount("#app");

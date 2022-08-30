@@ -67,8 +67,12 @@
       "signup": "Registrar",
       "back": "Volver",
       "next": "Siguiente",
-      "continue": "Continuar"
-    }
+      "continue": "Continuar",
+      "select": "Seleccionar",
+      "upload": "Subir",
+      "cancel": "Cancelar"
+    },
+    "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos."
   },
   "signup": {
     "title": "¡ÚNETE AHORA Y HAZ CRECER LAS VENTAS DE TU NEGOCIO!",
@@ -76,14 +80,26 @@
   },
   "onboarding": {
     "steps": {
-      "basicData": "Información del negocio",
+      "basicData": "Negocio",
       "customization": "Personalización",
-      "bankAccount": "Cuenta bancaria",
-      "documents": "Documentos legales",
+      "products": "Productos",
+      "bankAccount": "Banco",
+      "documents": "Documentos",
       "summary": "Resumen"
     },
     "managerLegalInfo": "Información del representante legal",
-    "bookings": "Reservas"
+    "bookings": "Reservas",
+    "bank": {
+      "document": "Documento de identidad del representante legal vigente del cual deben poder observarse ambas caras",
+      "certificate": {
+        "title": "Certificado bancario",
+        "subtitle": "Emitido por la entidad bancaria, debe contener el número de cuenta y nombre del titular, no debe superar 2 meses de vigencia y el producto debe estar activo."
+      },
+      "rut": {
+        "title": "RUT",
+        "subtitle": "Debe contener: <ul> <li>número de NIT</li> <li>nombre de razón social</li> <li>nombre del representante legal</li></ul>"
+      }
+    }
   },
   "errors": {
     "userExists": "El usuario ya se encuentra registrado",
