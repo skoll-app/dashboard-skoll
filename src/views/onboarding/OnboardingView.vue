@@ -10,7 +10,7 @@
       ></SplitButton>
     </template>
   </Toolbar>
-  <div class="py-5">
+  <div class="py-3">
     <div class="w-full md:w-9 mx-auto">
       <div class="card sticky steps">
         <Steps :model="stepItems" :readonly="false">
@@ -109,7 +109,7 @@ const stepItems = ref([
   },
   {
     label: t("onboarding.steps.summary"),
-    to: "/onboarding/documents",
+    to: "/onboarding/summary",
     icon: "pi-list",
     step: "summary",
   },
@@ -231,7 +231,7 @@ const getBank = async () => {
 
 .steps {
   background-color: white;
-  top: 90px;
+  top: 75px;
   z-index: 2;
 }
 
