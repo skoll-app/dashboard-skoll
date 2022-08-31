@@ -54,6 +54,11 @@
       "virtualAccount": "Cuenta virtual"
     },
     "accountNumber": "Número de cuenta",
+    "description": "Descripción",
+    "category": "Categoría",
+    "brand": "Marca",
+    "value": "Valor",
+    "ageRestriction": "Solo mayores de edad pueden comprar este producto",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",
@@ -70,7 +75,9 @@
       "continue": "Continuar",
       "select": "Seleccionar",
       "upload": "Subir",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "createProduct": "Crear producto",
+      "createCategory": "Crear categoría"
     },
     "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos."
   },
