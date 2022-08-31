@@ -10,9 +10,12 @@ export default defineConfig(({ mode, command }) => {
   return {
     base: process.env.NODE_ENV === "production" ? "/dashboard-skoll/" : "",
     define: {
-      "process.env": {
-        VITE_APP_BASE_URL: "https://68f0-181-237-17-152.ngrok.io"
-      }
+      "process.env":
+        command === "serve"
+          ? loadEnv(mode, process.cwd())
+          : {
+              VITE_APP_BASE_URL: "https://68f0-181-237-17-152.ngrok.io",
+            },
     },
     plugins: [
       vue(),
