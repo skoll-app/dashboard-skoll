@@ -57,13 +57,18 @@
     "description": "Descripción",
     "category": "Categoría",
     "brand": "Marca",
-    "value": "Valor",
+    "amount": "Valor",
     "ageRestriction": "Solo mayores de edad pueden comprar este producto",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",
       "onlyLetters": "Solo letras",
-      "min": "Mínimo {min} caracteres",
+      "string": {
+        "min": "Mínimo {min} caracteres"
+      },
+      "number": {
+        "min": "El valor debe ser igual o superior a ${min}"
+      },
       "password": "No cumple con los requisitos"
     },
     "buttons": {

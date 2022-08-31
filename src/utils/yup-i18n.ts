@@ -9,7 +9,10 @@ export default function setGlobalLocale() {
     },
     string: {
       email: t("form.validations.email"),
-      min: ({ min }) => t("form.validations.min", { min: min }),
+      min: ({ min }) => t("form.validations.string.min", { min: min }),
     },
+    number: {
+      min: ({ min }) => t("form.validations.number.min", { min: min }),
+    }
   });
 }
