@@ -1,20 +1,25 @@
 <script setup lang="ts">
 // Vue
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
+import * as yup from "yup";
+import { useForm } from "vee-validate";
 // Components
 import SKInputText from "@/components/ux/SKInputText.vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
 import SKInputNumber from "@/components/ux/SKInputNumber.vue";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
+import type Product from "@/interfaces/product";
+// Services
+import service from "@/http/services";
 
 const { t } = useI18n();
 const display = ref(false);
 const categoryList = ref<SelectOption[]>([
   {
-    code: "00001",
+    code: "Gaseosa",
     name: "Bebidas",
   },
 ]);
@@ -25,10 +30,46 @@ const brandList = ref<SelectOption[]>([
   },
 ]);
 const ageRestriction = ref(false);
+const initialValues = {
+  name: "",
+  description: "",
+  category: "",
+  brandId: "",
+  amount: 0,
+};
+// Form
+const validationSchema = yup.object({
+  name: yup.string().required(),
+  description: yup.string().required(),
+  category: yup.string().required(),
+  brandId: yup.string().required(),
+  amount: yup.number().required().min(100),
+});
+const formRef = reactive(
+  useForm({
+    validationSchema,
+    initialValues,
+  })
+);
+
 // Methods
 const openModal = () => {
   display.value = true;
 };
+
+const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
+  try {
+    const product: Product = {
+      ...values,
+      ageRestriction: ageRestriction.value,
+    };
+    await service.product.create(product);
+    resetForm();
+    display.value = false;
+  } catch (error) {
+    console.error(error);
+  }
+});
 </script>
 <template>
   <Card>
@@ -49,7 +90,7 @@ const openModal = () => {
   <Sidebar v-model:visible="display" position="right" class="p-sidebar-md">
     <div class="px-3">
       <h3>Producto</h3>
-      <form>
+      <form @submit="saveProduct">
         <div class="grid">
           <div class="col-12">
             <SKInputText
@@ -82,7 +123,7 @@ const openModal = () => {
           </div>
           <div class="col-12">
             <SKSelect
-              name="brand"
+              name="brandId"
               placeholder="Seleccione"
               select-classes="w-full p-1"
               :options="brandList"
@@ -94,11 +135,11 @@ const openModal = () => {
           <div class="col-12">
             <SKInputNumber
               labelClasses="block mb-2"
-              :label="t('form.value')"
-              inputId="value"
+              :label="t('form.amount')"
+              inputId="amount"
               mode="currency"
               currency="COP"
-              name="value"
+              name="amount"
               inputClasses="w-full"
               showButtons
               :min="100"
@@ -112,6 +153,7 @@ const openModal = () => {
                 v-model="ageRestriction"
                 :binary="true"
                 class="mr-2"
+                name="ageRestriction"
               ></Checkbox>
               <label for="ageRestriction">{{
                 $t("form.ageRestriction")
@@ -121,8 +163,9 @@ const openModal = () => {
           <div class="col-12">
             <div class="flex justify-content-end">
               <Button
+                :disabled="!formRef.meta.valid"
+                type="submit"
                 :label="$t('form.buttons.createProduct')"
-                @click="openModal"
                 class="mt-3 p-button-success"
               />
             </div>

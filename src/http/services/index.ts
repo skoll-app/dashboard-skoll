@@ -7,6 +7,7 @@ import type User from "@/interfaces/user";
 import type { Bank } from "@/interfaces/business";
 // Axios
 import { api, apiAuth } from "../axios";
+import type Product from "@/interfaces/product";
 
 const service = {
   utils: {
@@ -127,6 +128,21 @@ const service = {
       });
     },
   },
+  product: {
+    create(product: Product): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.post(
+            `${SKOLL_MERCHANT}/product/`,
+            parseProduct(product)
+          );
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+  },
 };
 
 const parseBusiness = (
@@ -161,6 +177,31 @@ const parseBank = (bankData: Bank) => {
     type: bankData.type,
   };
   return bank;
+};
+
+const parseProduct = (product: Product) => {
+  const p = {
+    ageRestriction: product.ageRestriction,
+    amount: product.amount,
+    brandId: 1,
+    description: product.description,
+    name: product.name,
+    productCategory: product.category,
+    sku: 1,
+    toppingGroup: {
+      // "Con cubiertos": {
+      //   required: true,
+      //   topping: [
+      //     {
+      //       amount: 10,
+      //       name: "Tenedor",
+      //       sku: 1,
+      //     },
+      //   ],
+      // },
+    },
+  };
+  return p;
 };
 
 export default service;
