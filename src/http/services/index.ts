@@ -200,12 +200,11 @@ const parseProduct = (product: Product) => {
   const p = {
     ageRestriction: product.ageRestriction,
     amount: product.amount,
-    brandId: 1,
+    brandId: product.brandId,
     description: product.description,
     name: product.name,
     productCategory: product.category,
-    sku: 1,
-    toppingGroup: {},
+    stock: product.stock,
   };
   return p;
 };

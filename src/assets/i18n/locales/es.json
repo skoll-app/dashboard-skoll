@@ -59,6 +59,7 @@
     "brand": "Marca",
     "amount": "Valor",
     "ageRestriction": "Solo mayores de edad pueden comprar este producto",
+    "stock": "Existencias",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",

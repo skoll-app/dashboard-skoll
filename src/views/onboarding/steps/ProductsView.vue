@@ -19,7 +19,7 @@ const { t } = useI18n();
 const display = ref(false);
 const categoryList = ref<SelectOption[]>([
   {
-    code: "Gaseosa",
+    code: "000002",
     name: "Bebidas",
   },
 ]);
@@ -36,6 +36,7 @@ const initialValues = {
   category: "",
   brandId: "",
   amount: 0,
+  stock: 0,
 };
 // Form
 const validationSchema = yup.object({
@@ -44,6 +45,7 @@ const validationSchema = yup.object({
   category: yup.string().required(),
   brandId: yup.string().required(),
   amount: yup.number().required().min(100),
+  stock: yup.number().required().min(1),
 });
 const formRef = reactive(
   useForm({
@@ -189,6 +191,18 @@ const onPage = (event: any) => {
               showButtons
               :min="100"
               :step="100"
+            />
+          </div>
+          <div class="col-12">
+            <SKInputNumber
+              labelClasses="block mb-2"
+              :label="t('form.stock')"
+              inputId="stock"
+              mode="decimal"
+              name="stock"
+              inputClasses="w-full"
+              showButtons
+              :min="1"
             />
           </div>
           <div class="col-12">

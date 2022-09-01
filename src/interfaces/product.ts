@@ -5,4 +5,5 @@ export default interface Product {
   brandId: number;
   amount: number;
   ageRestriction: boolean;
+  stock: number;
 }
