@@ -14,6 +14,11 @@ import type SelectOption from "@/interfaces/select-option";
 import type Product from "@/interfaces/product";
 // Services
 import service from "@/http/services";
+// Store
+import { useBusinessStore } from "@/stores/business";
+import { Steps } from "@/interfaces/business-steps";
+
+const businessStore = useBusinessStore();
 
 const { t } = useI18n();
 const display = ref(false);
@@ -89,6 +94,9 @@ const getProducts = async (page?: number, perPage?: number) => {
     loading.value = false;
     products.value = res.data.data.products;
     totalRecords.value = res.data.data.total;
+    if (totalRecords.value > 0) {
+      businessStore.setStep(Steps.PRODUCTS);
+    }
   } catch (error) {
     console.error(error);
     loading.value = false;
