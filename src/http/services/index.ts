@@ -142,6 +142,23 @@ const service = {
         }
       });
     },
+    get(page = 0, perPage = 5): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.post(
+            `${SKOLL_MERCHANT}/product/associated`,
+            {
+              index: page,
+              limit: perPage,
+              name: "",
+            }
+          );
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
   },
 };
 
@@ -188,18 +205,7 @@ const parseProduct = (product: Product) => {
     name: product.name,
     productCategory: product.category,
     sku: 1,
-    toppingGroup: {
-      // "Con cubiertos": {
-      //   required: true,
-      //   topping: [
-      //     {
-      //       amount: 10,
-      //       name: "Tenedor",
-      //       sku: 1,
-      //     },
-      //   ],
-      // },
-    },
+    toppingGroup: {},
   };
   return p;
 };

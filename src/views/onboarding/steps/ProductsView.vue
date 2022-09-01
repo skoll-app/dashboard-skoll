@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Vue
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
 import * as yup from "yup";
@@ -51,6 +51,15 @@ const formRef = reactive(
     initialValues,
   })
 );
+const products = ref([]);
+const dt = ref();
+const loading = ref(false);
+const totalRecords = ref(0);
+
+// Vue lifecycle
+onMounted(() => {
+  getProducts();
+});
 
 // Methods
 const openModal = () => {
@@ -70,6 +79,23 @@ const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
     console.error(error);
   }
 });
+
+const getProducts = async (page?: number, perPage?: number) => {
+  try {
+    loading.value = true;
+    const res = await service.product.get(page, perPage);
+    loading.value = false;
+    products.value = res.data.data.products;
+    totalRecords.value = res.data.data.total;
+  } catch (error) {
+    console.error(error);
+    loading.value = false;
+  }
+};
+
+const onPage = (event: any) => {
+  getProducts(event.page, event.rows);
+};
 </script>
 <template>
   <Card>
@@ -85,6 +111,25 @@ const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
         @click="openModal"
         class="p-button-secondary"
       />
+      <hr />
+      <DataTable
+        :value="products"
+        paginator
+        class="p-datatable-customers"
+        :rows="5"
+        :lazy="true"
+        ref="dt"
+        dataKey="id"
+        :totalRecords="totalRecords"
+        :loading="loading"
+        @page="onPage($event)"
+      >
+        <Column field="name" header="Nombre"></Column>
+        <Column field="description" header="Descripcion"></Column>
+        <Column field="amount" header="Precio"></Column>
+        <Column field="brand" header="Marca"></Column>
+        <template #empty> Aun no has creado productos </template>
+      </DataTable>
     </template>
   </Card>
   <Sidebar v-model:visible="display" position="right" class="p-sidebar-md">

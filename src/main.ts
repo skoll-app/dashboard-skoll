@@ -37,6 +37,8 @@ import Toolbar from "primevue/toolbar";
 import SplitButton from "primevue/splitbutton";
 import FileUpload from "primevue/fileupload";
 import Sidebar from "primevue/sidebar";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -71,5 +73,7 @@ app.component("Toolbar", Toolbar);
 app.component("SplitButton", SplitButton);
 app.component("FileUpload", FileUpload);
 app.component("Sidebar", Sidebar);
+app.component("DataTable", DataTable);
+app.component("Column", Column);
 
 app.mount("#app");
