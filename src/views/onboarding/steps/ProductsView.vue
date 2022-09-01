@@ -126,11 +126,24 @@ const onPage = (event: any) => {
         :loading="loading"
         @page="onPage($event)"
       >
-        <Column field="name" header="Nombre"></Column>
-        <Column field="description" header="Descripcion"></Column>
-        <Column field="amount" header="Precio"></Column>
-        <Column field="brand" header="Marca"></Column>
-        <template #empty> Aun no has creado productos </template>
+        <Column field="name" :header="t('form.name')"></Column>
+        <Column field="description" :header="t('form.description')"></Column>
+        <Column field="stock" :header="t('form.stock')"></Column>
+        <Column field="amount" :header="t('form.amount')"></Column>
+        <Column field="brand" :header="t('form.brand')"></Column>
+        <Column
+          headerStyle="width: 4rem; text-align: center"
+          bodyStyle="text-align: center; overflow: visible"
+        >
+          <template #body>
+            <Button
+              class="p-button-danger"
+              type="button"
+              icon="pi pi-trash"
+            ></Button>
+          </template>
+        </Column>
+        <template #empty> {{ t("form.empty.products") }} </template>
       </DataTable>
     </template>
   </Card>

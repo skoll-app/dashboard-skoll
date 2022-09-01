@@ -85,7 +85,10 @@
       "createProduct": "Crear producto",
       "createCategory": "Crear categoría"
     },
-    "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos."
+    "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
+    "empty": {
+      "products": "Aun no has creado productos"
+    }
   },
   "signup": {
     "title": "¡ÚNETE AHORA Y HAZ CRECER LAS VENTAS DE TU NEGOCIO!",
