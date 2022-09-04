@@ -4,14 +4,15 @@ on:
   push:
     branches:
       - develop
-
+  permissions:
+    id-token: write
+    contents: write
+      
 jobs:
   ci:
     runs-on: ${{ matrix.os }}
     environment: github-pages
-    permissions:
-      id-token: write
-      contents: write
+
     strategy:
       matrix:
         os: [ubuntu-latest]
