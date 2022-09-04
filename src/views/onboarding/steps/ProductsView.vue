@@ -1,13 +1,10 @@
 <script setup lang="ts">
 // Vue
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
-// Primevue
-import { useConfirm } from "primevue/useconfirm";
-import { useToast } from "primevue/usetoast";
 // Components
 import SKInputText from "@/components/ux/SKInputText.vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
@@ -15,15 +12,10 @@ import SKInputNumber from "@/components/ux/SKInputNumber.vue";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
 import type Product from "@/interfaces/product";
-import { Steps } from "@/interfaces/business-steps";
 // Services
 import service from "@/http/services";
-// Store
-import { useBusinessStore } from "@/stores/business";
+import ProductsTable from "../../../components/tables/products/ProductsTable.vue";
 
-const businessStore = useBusinessStore();
-const confirm = useConfirm();
-const toast = useToast();
 const { t } = useI18n();
 const display = ref(false);
 const categoryList = ref<SelectOption[]>([
@@ -62,15 +54,6 @@ const formRef = reactive(
     initialValues,
   })
 );
-const products = ref([]);
-const dt = ref();
-const loading = ref(false);
-const totalRecords = ref(0);
-
-// Vue lifecycle
-onMounted(() => {
-  getProducts();
-});
 
 // Methods
 const openModal = () => {
@@ -90,56 +73,6 @@ const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
     console.error(error);
   }
 });
-
-const getProducts = async (page?: number, perPage?: number) => {
-  try {
-    loading.value = true;
-    const res = await service.product.get(page, perPage);
-    loading.value = false;
-    products.value = res.data.data.products;
-    totalRecords.value = res.data.data.total;
-    if (totalRecords.value > 0) {
-      businessStore.setStep(Steps.PRODUCTS);
-    }
-  } catch (error) {
-    console.error(error);
-    loading.value = false;
-  }
-};
-
-const onPage = (event: any) => {
-  getProducts(event.page, event.rows);
-};
-
-const deleteProduct = (product: Product) => {
-  confirm.require({
-    message: t("form.dialogs.confirmation.delete.message"),
-    header: t("form.dialogs.confirmation.delete.title"),
-    icon: "pi pi-info-circle",
-    acceptClass: "p-button-danger",
-    acceptLabel: t("form.buttons.yes"),
-    rejectLabel: t("form.buttons.no"),
-    accept: async () => {
-      try {
-        await service.product.delete(product.serialNumber);
-        getProducts();
-        toast.add({
-          severity: "success",
-          summary: t("form.dialogs.confirmation.delete.success.title"),
-          detail: t("form.dialogs.confirmation.delete.success.message"),
-          life: 3000,
-        });
-      } catch (error) {
-        toast.add({
-          severity: "error",
-          summary: t("form.dialogs.confirmation.delete.error.title"),
-          detail: t("form.dialogs.confirmation.delete.error.message"),
-          life: 3000,
-        });
-      }
-    },
-  });
-};
 </script>
 <template>
   <Card>
@@ -156,38 +89,7 @@ const deleteProduct = (product: Product) => {
         class="p-button-secondary"
       />
       <hr />
-      <DataTable
-        :value="products"
-        paginator
-        class="p-datatable-customers"
-        :rows="5"
-        :lazy="true"
-        ref="dt"
-        dataKey="id"
-        :totalRecords="totalRecords"
-        :loading="loading"
-        @page="onPage($event)"
-      >
-        <Column field="name" :header="t('form.name')"></Column>
-        <Column field="description" :header="t('form.description')"></Column>
-        <Column field="stock" :header="t('form.stock')"></Column>
-        <Column field="amount" :header="t('form.amount')"></Column>
-        <Column field="brand" :header="t('form.brand')"></Column>
-        <Column
-          headerStyle="width: 4rem; text-align: center"
-          bodyStyle="text-align: center; overflow: visible"
-        >
-          <template v-slot:body="slotProps">
-            <Button
-              class="p-button-danger"
-              type="button"
-              icon="pi pi-trash"
-              @click="deleteProduct(slotProps.data)"
-            ></Button>
-          </template>
-        </Column>
-        <template #empty> {{ t("form.empty.products") }} </template>
-      </DataTable>
+      <ProductsTable />
     </template>
   </Card>
   <Sidebar v-model:visible="display" position="right" class="p-sidebar-md">

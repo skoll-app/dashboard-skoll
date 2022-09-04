@@ -138,5 +138,15 @@
   "errors": {
     "userExists": "El usuario ya se encuentra registrado",
     "signUp": "Error al registrarse"
+  },
+  "toast": {
+    "products": {
+      "list": {
+        "error": {
+          "title": "Productos",
+          "message": "No se cargaron los productos"
+        }
+      }
+    }
   }
 }
