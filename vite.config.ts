@@ -13,7 +13,7 @@ export default defineConfig(({ mode, command }) => {
         command === "serve"
           ? loadEnv(mode, process.cwd())
           : {
-              VITE_APP_BASE_URL: "https://68f0-181-237-17-152.ngrok.io",
+              VITE_APP_BASE_URL: "https://03f2-181-237-17-152.ngrok.io",
             },
     },
     plugins: [
