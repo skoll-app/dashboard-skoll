@@ -55,6 +55,6 @@ jobs:
 
       - name: Invalidate Cache Cloudfront
         run: |
-          - output=$(aws cloudfront create-invalidation --distribution-id E39LH3XFYQ99JY --paths "/*") 
-          - invalidation_id=$(echo $output | jq -r '.Invalidation.Id')
-          - aws cloudfront wait invalidation-completed --distribution-id E39LH3XFYQ99JY --id $invalidation_id
+          output=$(aws cloudfront create-invalidation --distribution-id E39LH3XFYQ99JY --paths "/*") 
+          invalidation_id=$(echo $output | jq -r '.Invalidation.Id')
+          aws cloudfront wait invalidation-completed --distribution-id E39LH3XFYQ99JY --id $invalidation_id
