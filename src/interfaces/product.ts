@@ -6,4 +6,7 @@ export default interface Product {
   amount: number;
   ageRestriction: boolean;
   stock: number;
+  status: boolean;
+  serialNumber: string;
+  visibility: boolean;
 }

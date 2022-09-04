@@ -5,6 +5,7 @@ import { onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
+import { useConfirm } from "primevue/useconfirm";
 // Components
 import SKInputText from "@/components/ux/SKInputText.vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
@@ -12,13 +13,14 @@ import SKInputNumber from "@/components/ux/SKInputNumber.vue";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
 import type Product from "@/interfaces/product";
+import { Steps } from "@/interfaces/business-steps";
 // Services
 import service from "@/http/services";
 // Store
 import { useBusinessStore } from "@/stores/business";
-import { Steps } from "@/interfaces/business-steps";
 
 const businessStore = useBusinessStore();
+const confirm = useConfirm();
 
 const { t } = useI18n();
 const display = ref(false);
@@ -106,6 +108,27 @@ const getProducts = async (page?: number, perPage?: number) => {
 const onPage = (event: any) => {
   getProducts(event.page, event.rows);
 };
+
+const deleteProduct = (product: Product) => {
+  console.log(product);
+  confirm.require({
+    message: t("form.dialogs.confirmation.delete.message"),
+    header: t("form.dialogs.confirmation.delete.title"),
+    icon: "pi pi-info-circle",
+    acceptClass: "p-button-danger",
+    acceptLabel: t("form.buttons.yes"),
+    rejectLabel: t("form.buttons.no"),
+    accept: () => {
+      // toast.add({
+      //   severity: "info",
+      //   summary: "Confirmed",
+      //   detail: "You have accepted",
+      //   life: 3000,
+      // });
+      console.log("eliminado...");
+    },
+  });
+};
 </script>
 <template>
   <Card>
@@ -143,11 +166,12 @@ const onPage = (event: any) => {
           headerStyle="width: 4rem; text-align: center"
           bodyStyle="text-align: center; overflow: visible"
         >
-          <template #body>
+          <template v-slot:body="slotProps">
             <Button
               class="p-button-danger"
               type="button"
               icon="pi pi-trash"
+              @click="deleteProduct(slotProps.data)"
             ></Button>
           </template>
         </Column>

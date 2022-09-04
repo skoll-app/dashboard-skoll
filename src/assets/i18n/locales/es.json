@@ -83,11 +83,21 @@
       "upload": "Subir",
       "cancel": "Cancelar",
       "createProduct": "Crear producto",
-      "createCategory": "Crear categoría"
+      "createCategory": "Crear categoría",
+      "yes": "Si",
+      "no": "No"
     },
     "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
     "empty": {
       "products": "Aun no has creado productos"
+    },
+    "dialogs": {
+      "confirmation": {
+        "delete": {
+          "title": "Eliminar",
+          "message": "¿Deseas eliminar este item?"
+        }
+      }
     }
   },
   "signup": {
