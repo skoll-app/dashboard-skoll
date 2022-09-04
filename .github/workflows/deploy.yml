@@ -9,7 +9,9 @@ jobs:
   ci:
     runs-on: ${{ matrix.os }}
     environment: github-pages
-
+    permissions:
+      id-token: write
+      contents: read
     strategy:
       matrix:
         os: [ubuntu-latest]
