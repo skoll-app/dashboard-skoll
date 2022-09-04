@@ -5,7 +5,9 @@ import { onMounted, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
+// Primevue
 import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 // Components
 import SKInputText from "@/components/ux/SKInputText.vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
@@ -21,7 +23,7 @@ import { useBusinessStore } from "@/stores/business";
 
 const businessStore = useBusinessStore();
 const confirm = useConfirm();
-
+const toast = useToast();
 const { t } = useI18n();
 const display = ref(false);
 const categoryList = ref<SelectOption[]>([
@@ -110,7 +112,6 @@ const onPage = (event: any) => {
 };
 
 const deleteProduct = (product: Product) => {
-  console.log(product);
   confirm.require({
     message: t("form.dialogs.confirmation.delete.message"),
     header: t("form.dialogs.confirmation.delete.title"),
@@ -118,14 +119,24 @@ const deleteProduct = (product: Product) => {
     acceptClass: "p-button-danger",
     acceptLabel: t("form.buttons.yes"),
     rejectLabel: t("form.buttons.no"),
-    accept: () => {
-      // toast.add({
-      //   severity: "info",
-      //   summary: "Confirmed",
-      //   detail: "You have accepted",
-      //   life: 3000,
-      // });
-      console.log("eliminado...");
+    accept: async () => {
+      try {
+        await service.product.delete(product.serialNumber);
+        getProducts();
+        toast.add({
+          severity: "success",
+          summary: t("form.dialogs.confirmation.delete.success.title"),
+          detail: t("form.dialogs.confirmation.delete.success.message"),
+          life: 3000,
+        });
+      } catch (error) {
+        toast.add({
+          severity: "error",
+          summary: t("form.dialogs.confirmation.delete.error.title"),
+          detail: t("form.dialogs.confirmation.delete.error.message"),
+          life: 3000,
+        });
+      }
     },
   });
 };

@@ -95,7 +95,15 @@
       "confirmation": {
         "delete": {
           "title": "Eliminar",
-          "message": "¿Deseas eliminar este item?"
+          "message": "¿Deseas eliminar este item?",
+          "success": {
+            "title": "Proceso exitoso",
+            "message": "Item eliminado"
+          },
+          "error": {
+            "title": "Error",
+            "message": "No se pudo eliminar el item"
+          }
         }
       }
     }

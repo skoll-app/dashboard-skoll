@@ -159,6 +159,16 @@ const service = {
         }
       });
     },
+    delete(id: string): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.delete(`${SKOLL_MERCHANT}/product/${id}`);
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
   },
 };
 
