@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - develop
-  pull_request:
-    branches:
-      - develop
 
 jobs:
   ci:
@@ -41,15 +38,3 @@ jobs:
 
       - name: Build dashboard
         run: npm run build
-        
-      - name: Copy index.html
-        run: cd dist && cp index.html 404.html
-        
-        env:
-          VITE_APP_BASE_URL: ${{ secrets.BASE_URL }}
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
