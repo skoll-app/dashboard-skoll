@@ -11,7 +11,7 @@ jobs:
     environment: github-pages
     permissions:
       id-token: write
-      contents: read
+      contents: write
     strategy:
       matrix:
         os: [ubuntu-latest]
