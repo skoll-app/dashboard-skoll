@@ -146,6 +146,12 @@
           "title": "Productos",
           "message": "No se cargaron los productos"
         }
+      },
+      "save": {
+        "error": {
+          "title": "Productos",
+          "message": "El producto no ha sido creado"
+        }
       }
     }
   }
