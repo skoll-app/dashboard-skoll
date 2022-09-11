@@ -79,8 +79,11 @@ import service from "@/http/services";
 import type { Bank, Business } from "@/interfaces/business";
 // Store
 import { useBusinessStore } from "@/stores/business";
+import { useProductStore } from "@/stores/product";
+import { useToast } from "primevue/usetoast";
 
 // Data
+const productsStore = useProductStore();
 const { t } = useI18n();
 const router = useRouter();
 const stepItems = ref([
@@ -130,10 +133,21 @@ const userOptionsItems = ref([
   },
 ]);
 const businessStore = useBusinessStore();
+const toast = useToast();
 
 // Vue lifecycle
-onBeforeMount(() => {
+onBeforeMount(async () => {
   getAssociatedBusiness();
+  try {
+    await productsStore.getProducts();
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: t("toast.products.list.error.title"),
+      detail: t("toast.products.list.error.message"),
+      life: 3000,
+    });
+  }
 });
 // Methods
 const nextPage = (event: { pageIndex: number; step: number }) => {
