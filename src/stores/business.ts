@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import type {
-  Bank,
   BusinessBasicData,
   LegalRepresentative,
 } from "@/interfaces/business";
 import { Steps } from "@/interfaces/business-steps";
+import type Bank from "@/interfaces/bank";
 
 type StepsCompleted =
   | Steps.BASIC_DATA
