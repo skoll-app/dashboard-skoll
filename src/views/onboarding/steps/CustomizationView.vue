@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
 
-import VueCropper from "@ballcat/vue-cropper";
-import type { VueCropperInstance } from "@ballcat/vue-cropper";
-import "cropperjs/dist/cropper.css";
-import type Cropper from "cropperjs";
+// import VueCropper from "@ballcat/vue-cropper";
+// import type { VueCropperInstance } from "@ballcat/vue-cropper";
+// import "cropperjs/dist/cropper.css";
+// import type Cropper from "cropperjs";
 
 // Components
 import SKInputNumber from "@/components/ux/SKInputNumber.vue";
@@ -31,66 +31,57 @@ const formRef = reactive(
     },
   })
 );
-// Emit
-const emit = defineEmits(["next-page", "prev-page"]);
-// Functions
-const nextPage = () => {
-  emit("next-page", {
-    formData: formRef.values,
-    pageIndex: 1,
-  });
-};
 
-const imageSrc = ref(
-  new URL("../../../assets/img/paisaje.jpg", import.meta.url).href
-);
+// const imageSrc = ref(
+//   new URL("../../../assets/img/paisaje.jpg", import.meta.url).href
+// );
 
-const vueCropperRef = ref<VueCropperInstance>();
+// const vueCropperRef = ref<VueCropperInstance>();
 
-const cropperOptions: Cropper.Options = reactive({
-  aspectRatio: 16 / 9,
-  viewMode: 1,
-  responsive: true,
-  restore: true,
-  cropBoxMovable: false,
-  cropBoxResizable: false,
-  toggleDragModeOnDblclick: true,
-  dragMode: "move",
-});
+// const cropperOptions: Cropper.Options = reactive({
+//   aspectRatio: 16 / 9,
+//   viewMode: 1,
+//   responsive: true,
+//   restore: true,
+//   cropBoxMovable: false,
+//   cropBoxResizable: false,
+//   toggleDragModeOnDblclick: true,
+//   dragMode: "move",
+// });
 
-const data = ref<Cropper.SetDataOptions>({});
+// const data = ref<Cropper.SetDataOptions>({});
 
-const onCrop = (e: CustomEvent) => {
-  data.value = e.detail;
-};
+// const onCrop = (e: CustomEvent) => {
+//   data.value = e.detail;
+// };
 
-const cropImage = (options: Cropper.GetCroppedCanvasOptions) => {
-  const croppedCanvas = vueCropperRef.value?.getCroppedCanvas(
-    options
-  ) as HTMLCanvasElement;
+// const cropImage = (options: Cropper.GetCroppedCanvasOptions) => {
+//   const croppedCanvas = vueCropperRef.value?.getCroppedCanvas(
+//     options
+//   ) as HTMLCanvasElement;
 
-  croppedCanvas?.toBlob((blob: any) => {
-    const formData = new FormData();
-    formData.append("file", blob, `cover-page-${Date.now()}.png`);
-    formData.append("description", "avatar");
-    submitProfilePic(formData);
-  }, "image/png");
-};
+//   croppedCanvas?.toBlob((blob: any) => {
+//     const formData = new FormData();
+//     formData.append("file", blob, `cover-page-${Date.now()}.png`);
+//     formData.append("description", "avatar");
+//     submitProfilePic(formData);
+//   }, "image/png");
+// };
 
-const submitProfilePic = async (formData: any) => {
-  try {
-    // await service.utils.updateLogo(formData);
-    // location.reload();
-  } catch (error: any) {
-    console.log(error);
-  }
-};
+// const submitProfilePic = async (formData: any) => {
+//   try {
+//     await service.utils.updateLogo(formData);
+//     location.reload();
+//   } catch (error: any) {
+//     console.log(error);
+//   }
+// };
 </script>
 <template>
   <Card>
     <template v-slot:title>{{ t("onboarding.steps.customization") }}</template>
     <template v-slot:content>
-      <VueCropper
+      <!-- <VueCropper
         ref="vueCropperRef"
         class="img-container"
         :src="imageSrc"
@@ -103,7 +94,7 @@ const submitProfilePic = async (formData: any) => {
         class="btn btn-primary mt-2"
         label="Cortar"
         @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
-      ></Button>
+      ></Button> -->
       <Divider />
       <h5 class="p-card-title">{{ t("onboarding.bookings") }}</h5>
       <form>

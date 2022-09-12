@@ -115,7 +115,7 @@
   "onboarding": {
     "steps": {
       "basicData": "Negocio",
-      "customization": "Personalización",
+      "customization": "Configuración",
       "products": "Productos",
       "bankAccount": "Banco",
       "documents": "Documentos",
