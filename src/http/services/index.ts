@@ -21,6 +21,16 @@ const service = {
         }
       });
     },
+    parameters(): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = api.get(`${SKOLL_PARAMETER}/parameter/`);
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }
   },
   seller: {
     signUp(user: Partial<User>, password: string): Promise<any> {

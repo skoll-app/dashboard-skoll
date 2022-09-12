@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Vue
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 // Utils
 import { useI18n } from "vue-i18n";
 import * as yup from "yup";
@@ -23,18 +23,8 @@ const productsStore = useProductStore();
 const toast = useToast();
 const { t } = useI18n();
 const display = ref(false);
-const categoryList = ref<SelectOption[]>([
-  {
-    code: "000002",
-    name: "Bebidas",
-  },
-]);
-const brandList = ref<SelectOption[]>([
-  {
-    code: "00001",
-    name: "Coca Cola",
-  },
-]);
+const categoryList = ref<SelectOption[]>([]);
+const brandList = ref<SelectOption[]>([]);
 const ageRestriction = ref(false);
 const initialValues = {
   name: "",
@@ -59,6 +49,12 @@ const formRef = reactive(
     initialValues,
   })
 );
+
+// Lifecycle
+onMounted(() => {
+  getParameters();
+});
+
 // Methods
 const openModal = () => {
   display.value = true;
@@ -83,6 +79,31 @@ const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
     });
   }
 });
+
+const getParameters = async () => {
+  try {
+    const response = await service.utils.parameters();
+    const { brand, productCategory } = response.data.data.params;
+    setBrands(brand);
+    setProductCategory(productCategory);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const setBrands = (brands: Array<{ id: string; name: string }>) => {
+  brands.map((brand: { id: string; name: string }) => {
+    brandList.value.push({ code: brand.id, name: brand.name });
+  });
+};
+
+const setProductCategory = (
+  categories: Array<{ id: string; name: string }>
+) => {
+  categories.map((brand: { id: string; name: string }) => {
+    categoryList.value.push({ code: brand.id, name: brand.name });
+  });
+};
 </script>
 
 <template>
@@ -94,7 +115,7 @@ const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
   <Sidebar v-model:visible="display" position="right" class="p-sidebar-md">
     <div class="px-3">
       <h3>Producto</h3>
-      <form @submit="saveProduct">
+      <form v-show="display" @submit="saveProduct">
         <div class="grid">
           <div class="col-12">
             <SKInputText
