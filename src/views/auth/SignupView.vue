@@ -44,16 +44,24 @@ const cities: SelectOption[] = reactive([]);
 
 onMounted(async () => {
   cleanSession();
+  getDepartments();
+});
+
+const getDepartments = async () => {
   try {
     const res: HttpResponse = await service.utils.getDepartments();
-    const departments = res.data.data.colombia.departments;
-    departments.map((city: { name: string; id: string }) => {
-      cities.push({ name: city.name, code: city.id });
-    });
+    const response = res.data.data.colombia.departments;
+    response.map(
+      (department: { name: string; id: string; cities: Array<any> }) => {
+        department.cities.map((city) => {
+          cities.push({ code: city.id, name: city.name });
+        });
+      }
+    );
   } catch (error) {
     console.log(error);
   }
-});
+};
 
 // Methods
 const cleanSession = () => {
