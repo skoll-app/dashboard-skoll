@@ -13,7 +13,7 @@
   <div class="py-3">
     <div class="w-full md:w-9 mx-auto">
       <div class="card sticky steps">
-        <Steps :model="stepItems" :readonly="false">
+        <Steps :model="stepItems" :readonly="!basicInfoCompleted">
           <template #item="{ item }">
             <RouterLink
               :to="item.to!"
@@ -69,7 +69,7 @@
 
 <script lang="ts" setup>
 // Vue
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
@@ -148,6 +148,10 @@ onBeforeMount(async () => {
       life: 3000,
     });
   }
+});
+// Computed
+const basicInfoCompleted = computed(() => {
+  return businessStore.basicStepCompleted;
 });
 // Methods
 const nextPage = (event: { pageIndex: number; step: number }) => {
