@@ -30,7 +30,7 @@ const service = {
           reject(error);
         }
       });
-    }
+    },
   },
   seller: {
     signUp(user: Partial<User>, password: string): Promise<any> {

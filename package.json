@@ -1,12 +1,13 @@
 {
   "name": "dashboard-skoll",
-  "version": "0.16.2",
+  "version": "0.17.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "run-p type-check dev-only",
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom",
     "build-only": "vite build",
+    "dev-only": "vite",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "deploy": "cd dist && cp index.html 404.html && cd .. && gh-pages -d dist"

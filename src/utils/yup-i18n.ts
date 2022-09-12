@@ -13,6 +13,6 @@ export default function setGlobalLocale() {
     },
     number: {
       min: ({ min }) => t("form.validations.number.min", { min: min }),
-    }
+    },
   });
 }

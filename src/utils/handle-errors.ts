@@ -6,4 +6,4 @@ const getError = (error: any): string => {
   return message;
 };
 
-export default getError
+export default getError;
