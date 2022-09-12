@@ -9,22 +9,18 @@ export const useProductStore = defineStore({
   state: () => ({
     products: [],
     total: 0,
-    page: 0,
-    perPage: 5,
     loading: false,
   }),
   getters: {},
   actions: {
-    async getProducts() {
+    async getProducts(page = 0, perPage = 5) {
       const businessStore = useBusinessStore();
-
       try {
         this.loading = true;
-        const res = await service.product.get(this.page, this.perPage);
+        const res = await service.product.get(page, perPage);
         this.loading = false;
         this.products = res.data.data.products;
         this.total = res.data.data.total;
-        this.page += 1;
         businessStore.setStep(Steps.PRODUCTS);
       } catch (error: any) {
         throw new Error(error);

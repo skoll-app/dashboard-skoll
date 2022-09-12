@@ -16,7 +16,10 @@ import type Product from "@/interfaces/product";
 import type SelectOption from "@/interfaces/select-option";
 // Services
 import service from "@/http/services";
+// Stores
+import { useProductStore } from "@/stores/product";
 
+const productsStore = useProductStore();
 const toast = useToast();
 const { t } = useI18n();
 const display = ref(false);
@@ -70,6 +73,7 @@ const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
     await service.product.create(product);
     resetForm();
     display.value = false;
+    productsStore.getProducts();
   } catch (error) {
     toast.add({
       severity: "error",

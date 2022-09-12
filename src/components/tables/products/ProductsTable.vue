@@ -1,37 +1,29 @@
 <script setup lang="ts">
 // Vue
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 // Primevue
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 // Interfaces
-// import { Steps } from "@/interfaces/business-steps";
 import type Product from "@/interfaces/product";
 // Store
-// import { useBusinessStore } from "@/stores/business";
+import { storeToRefs } from "pinia";
+import { useProductStore } from "@/stores/product";
 // Utils
 import { useI18n } from "vue-i18n";
 // Services
 import service from "@/http/services";
-import { useProductStore } from "@/stores/product";
-import { storeToRefs } from "pinia";
 
-// const businessStore = useBusinessStore();
 const confirm = useConfirm();
 const toast = useToast();
 const dt = ref();
 const { t } = useI18n();
 const productsStore = useProductStore();
-const { products, loading, total } = storeToRefs(productsStore)
-
-// Vue lifecycle
-onMounted(() => {
-  // getProducts();
-});
+const { products, loading, total } = storeToRefs(productsStore);
 
 // Methods
 const onPage = (event: any) => {
-  // getProducts(event.page, event.rows);
+  productsStore.getProducts(event.page, event.rows);
 };
 
 const deleteProduct = (product: Product) => {
@@ -45,13 +37,13 @@ const deleteProduct = (product: Product) => {
     accept: async () => {
       try {
         await service.product.delete(product.serialNumber);
-        // getProducts();
         toast.add({
           severity: "success",
           summary: t("form.dialogs.confirmation.delete.success.title"),
           detail: t("form.dialogs.confirmation.delete.success.message"),
           life: 3000,
         });
+        productsStore.getProducts();
       } catch (error) {
         toast.add({
           severity: "error",
@@ -63,19 +55,6 @@ const deleteProduct = (product: Product) => {
     },
   });
 };
-
-// const getProducts = async (page?: number, perPage?: number) => {
-//   try {
-//     products.value = res.data.data.products;
-//     total.value = res.data.data.total;
-//     if (total.value > 0) {
-//       businessStore.setStep(Steps.PRODUCTS);
-//     }
-//   } catch (error) {
-//     loading.value = false;
-    
-//   }
-// };
 </script>
 <template>
   <DataTable
