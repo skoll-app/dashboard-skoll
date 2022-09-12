@@ -13,6 +13,8 @@ import { useProductStore } from "@/stores/product";
 import { useI18n } from "vue-i18n";
 // Services
 import service from "@/http/services";
+// Components
+import ProductForm from "@/components/forms/products/ProductForm.vue";
 
 const confirm = useConfirm();
 const toast = useToast();
@@ -57,6 +59,8 @@ const deleteProduct = (product: Product) => {
 };
 </script>
 <template>
+  <ProductForm />
+  <hr />
   <DataTable
     :value="products"
     paginator
@@ -79,12 +83,20 @@ const deleteProduct = (product: Product) => {
       bodyStyle="text-align: center; overflow: visible"
     >
       <template v-slot:body="slotProps">
-        <Button
-          class="p-button-danger"
-          type="button"
-          icon="pi pi-trash"
-          @click="deleteProduct(slotProps.data)"
-        ></Button>
+        <div class="flex">
+          <Button
+            class="p-button-warning mr-2"
+            type="button"
+            icon="pi pi-pencil"
+            @click="deleteProduct(slotProps.data)"
+          ></Button>
+          <Button
+            class="p-button-danger"
+            type="button"
+            icon="pi pi-trash"
+            @click="deleteProduct(slotProps.data)"
+          ></Button>
+        </div>
       </template>
     </Column>
     <template #empty> {{ t("form.empty.products") }} </template>
