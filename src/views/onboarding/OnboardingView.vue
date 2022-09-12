@@ -13,7 +13,7 @@
   <div class="py-3">
     <div class="w-full md:w-9 mx-auto">
       <div class="card sticky steps">
-        <Steps :model="stepItems" :readonly="false">
+        <Steps :model="stepItems" :readonly="!basicInfoCompleted">
           <template #item="{ item }">
             <RouterLink
               :to="item.to!"
@@ -37,11 +37,21 @@
                     ),
                   }"
                 >
-                  <i
+                  <!-- <i
                     v-if="businessStore.stepsCompleted.includes(item.step)"
                     class="pi pi-check text-white"
+                  ></i> -->
+                  <i
+                    class="pi"
+                    :class="[
+                      item.icon,
+                      {
+                        'text-white': businessStore.stepsCompleted.includes(
+                          item.step
+                        ),
+                      },
+                    ]"
                   ></i>
-                  <i v-else class="pi" :class="item.icon"></i>
                 </span>
                 <span
                   class="mt-1 p-steps-title"
@@ -69,18 +79,22 @@
 
 <script lang="ts" setup>
 // Vue
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
 // Services
 import service from "@/http/services";
 // Interfaces
-import type { Bank, Business } from "@/interfaces/business";
+import type { Business } from "@/interfaces/business";
+import type Bank from "@/interfaces/bank";
 // Store
 import { useBusinessStore } from "@/stores/business";
+import { useProductStore } from "@/stores/product";
+import { useToast } from "primevue/usetoast";
 
 // Data
+const productsStore = useProductStore();
 const { t } = useI18n();
 const router = useRouter();
 const stepItems = ref([
@@ -130,10 +144,25 @@ const userOptionsItems = ref([
   },
 ]);
 const businessStore = useBusinessStore();
+const toast = useToast();
 
 // Vue lifecycle
-onBeforeMount(() => {
+onBeforeMount(async () => {
   getAssociatedBusiness();
+  try {
+    await productsStore.getProducts();
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: t("toast.products.list.error.title"),
+      detail: t("toast.products.list.error.message"),
+      life: 3000,
+    });
+  }
+});
+// Computed
+const basicInfoCompleted = computed(() => {
+  return businessStore.basicStepCompleted;
 });
 // Methods
 const nextPage = (event: { pageIndex: number; step: number }) => {

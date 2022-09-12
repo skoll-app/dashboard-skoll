@@ -36,6 +36,11 @@ import Toast from "primevue/toast";
 import Toolbar from "primevue/toolbar";
 import SplitButton from "primevue/splitbutton";
 import FileUpload from "primevue/fileupload";
+import Sidebar from "primevue/sidebar";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import ConfirmationService from "primevue/confirmationservice";
+import ConfirmDialog from "primevue/confirmdialog";
 
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -51,6 +56,7 @@ app.use(router);
 app.use(VueAxios, { $api: api, $apiAuth: apiAuth });
 app.use(i18n);
 app.use(ToastService);
+app.use(ConfirmationService);
 
 // eslint-disable-next-line vue/no-reserved-component-names
 app.component("Button", Button);
@@ -69,5 +75,9 @@ app.component("Toast", Toast);
 app.component("Toolbar", Toolbar);
 app.component("SplitButton", SplitButton);
 app.component("FileUpload", FileUpload);
+app.component("Sidebar", Sidebar);
+app.component("DataTable", DataTable);
+app.component("Column", Column);
+app.component("ConfirmDialog", ConfirmDialog);
 
 app.mount("#app");

@@ -4,7 +4,8 @@ import { SKOLL_MERCHANT, SKOLL_PARAMETER, SKOLL_SECURITY } from "@/constants";
 import type HttpResponse from "@/interfaces/http-response";
 import type { BusinessBasicData } from "@/interfaces/business";
 import type User from "@/interfaces/user";
-import type { Bank } from "@/interfaces/business";
+import type Bank from "@/interfaces/bank";
+import type Product from "@/interfaces/product";
 // Axios
 import { api, apiAuth } from "../axios";
 
@@ -20,6 +21,16 @@ const service = {
         }
       });
     },
+    parameters(): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = api.get(`${SKOLL_PARAMETER}/parameter/`);
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }
   },
   seller: {
     signUp(user: Partial<User>, password: string): Promise<any> {
@@ -127,6 +138,48 @@ const service = {
       });
     },
   },
+  product: {
+    create(product: Product): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.post(
+            `${SKOLL_MERCHANT}/product/`,
+            parseProduct(product)
+          );
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    get(page = 0, perPage = 5): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.post(
+            `${SKOLL_MERCHANT}/product/associated`,
+            {
+              index: page,
+              limit: perPage,
+              name: "",
+            }
+          );
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    delete(id: string): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.delete(`${SKOLL_MERCHANT}/product/${id}`);
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+  },
 };
 
 const parseBusiness = (
@@ -161,6 +214,19 @@ const parseBank = (bankData: Bank) => {
     type: bankData.type,
   };
   return bank;
+};
+
+const parseProduct = (product: Product) => {
+  const p = {
+    ageRestriction: product.ageRestriction,
+    amount: product.amount,
+    brandId: product.brandId,
+    description: product.description,
+    name: product.name,
+    productCategory: product.category,
+    stock: product.stock,
+  };
+  return p;
 };
 
 export default service;

@@ -83,6 +83,7 @@ onMounted(() => {
   </header> -->
   <Loading v-model:active="isLoading" :can-cancel="false" is-full-page />
   <Toast position="bottom-right" />
+  <ConfirmDialog></ConfirmDialog>
   <RouterView />
 </template>
 

@@ -54,11 +54,22 @@
       "virtualAccount": "Cuenta virtual"
     },
     "accountNumber": "Número de cuenta",
+    "description": "Descripción",
+    "category": "Categoría",
+    "brand": "Marca",
+    "amount": "Valor",
+    "ageRestriction": "Solo mayores de edad pueden comprar este producto",
+    "stock": "Existencias",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",
       "onlyLetters": "Solo letras",
-      "min": "Mínimo {min} caracteres",
+      "string": {
+        "min": "Mínimo {min} caracteres"
+      },
+      "number": {
+        "min": "El valor debe ser igual o superior a ${min}"
+      },
       "password": "No cumple con los requisitos"
     },
     "buttons": {
@@ -70,9 +81,32 @@
       "continue": "Continuar",
       "select": "Seleccionar",
       "upload": "Subir",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "createProduct": "Crear producto",
+      "createCategory": "Crear categoría",
+      "yes": "Si",
+      "no": "No"
     },
-    "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos."
+    "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
+    "empty": {
+      "products": "Aun no has creado productos"
+    },
+    "dialogs": {
+      "confirmation": {
+        "delete": {
+          "title": "Eliminar",
+          "message": "¿Deseas eliminar este item?",
+          "success": {
+            "title": "Proceso exitoso",
+            "message": "Item eliminado"
+          },
+          "error": {
+            "title": "Error",
+            "message": "No se pudo eliminar el item"
+          }
+        }
+      }
+    }
   },
   "signup": {
     "title": "¡ÚNETE AHORA Y HAZ CRECER LAS VENTAS DE TU NEGOCIO!",
@@ -104,5 +138,21 @@
   "errors": {
     "userExists": "El usuario ya se encuentra registrado",
     "signUp": "Error al registrarse"
+  },
+  "toast": {
+    "products": {
+      "list": {
+        "error": {
+          "title": "Productos",
+          "message": "No se cargaron los productos"
+        }
+      },
+      "save": {
+        "error": {
+          "title": "Productos",
+          "message": "El producto no ha sido creado"
+        }
+      }
+    }
   }
 }

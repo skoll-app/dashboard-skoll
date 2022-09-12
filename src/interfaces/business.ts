@@ -30,15 +30,3 @@ export interface LegalRepresentative {
   lastName: string;
   firstName: string;
 }
-
-export interface Bank {
-  id?: string;
-  fullname: string;
-  bank: string;
-  documentType: string;
-  document: string;
-  type: string;
-  account: string;
-  email: string;
-  phone: string;
-}

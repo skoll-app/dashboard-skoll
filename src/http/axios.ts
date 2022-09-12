@@ -25,8 +25,11 @@ apiAuth.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 401 || error.response.status === 500) {
+    if (error.response.status === 401) {
       location.href = "/";
+    }
+    if (error.response.status === 500) {
+      console.log("server error");
     }
     return Promise.reject({ error });
   }
