@@ -12,7 +12,7 @@ import SKInputMask from "@/components/ux/SKInputMask.vue";
 // Interfaces
 import type SelectOption from "@/interfaces/select-option";
 import service from "@/http/services";
-import type { Bank } from "@/interfaces/business";
+import type Bank from "@/interfaces/bank";
 // Store
 import { useBusinessStore } from "@/stores/business";
 
