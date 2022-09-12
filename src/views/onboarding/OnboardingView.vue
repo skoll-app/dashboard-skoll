@@ -37,11 +37,21 @@
                     ),
                   }"
                 >
-                  <i
+                  <!-- <i
                     v-if="businessStore.stepsCompleted.includes(item.step)"
                     class="pi pi-check text-white"
+                  ></i> -->
+                  <i
+                    class="pi"
+                    :class="[
+                      item.icon,
+                      {
+                        'text-white': businessStore.stepsCompleted.includes(
+                          item.step
+                        ),
+                      },
+                    ]"
                   ></i>
-                  <i v-else class="pi" :class="item.icon"></i>
                 </span>
                 <span
                   class="mt-1 p-steps-title"

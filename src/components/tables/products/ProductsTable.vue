@@ -85,6 +85,7 @@ const deleteProduct = (product: Product) => {
       <template v-slot:body="slotProps">
         <div class="flex">
           <Button
+            v-if="false"
             class="p-button-warning mr-2"
             type="button"
             icon="pi pi-pencil"
