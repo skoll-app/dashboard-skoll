@@ -76,7 +76,8 @@ import { useI18n } from "vue-i18n";
 // Services
 import service from "@/http/services";
 // Interfaces
-import type { Bank, Business } from "@/interfaces/business";
+import type { Business } from "@/interfaces/business";
+import type Bank from "@/interfaces/bank";
 // Store
 import { useBusinessStore } from "@/stores/business";
 import { useProductStore } from "@/stores/product";

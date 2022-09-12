@@ -4,10 +4,10 @@ import { SKOLL_MERCHANT, SKOLL_PARAMETER, SKOLL_SECURITY } from "@/constants";
 import type HttpResponse from "@/interfaces/http-response";
 import type { BusinessBasicData } from "@/interfaces/business";
 import type User from "@/interfaces/user";
-import type { Bank } from "@/interfaces/business";
+import type Bank from "@/interfaces/bank";
+import type Product from "@/interfaces/product";
 // Axios
 import { api, apiAuth } from "../axios";
-import type Product from "@/interfaces/product";
 
 const service = {
   utils: {
