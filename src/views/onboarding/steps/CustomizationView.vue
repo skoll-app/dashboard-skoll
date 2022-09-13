@@ -73,8 +73,20 @@ const scheduleFormRef = reactive(
   })
 );
 
-const resetHour = (day: string) => {
-  console.log(day);
+const resetHour = (
+  day:
+    | "monday"
+    | "tuesday"
+    | "wednesday"
+    | "thursday"
+    | "friday"
+    | "saturday"
+    | "sunday"
+) => {
+  scheduleFormRef.setFieldValue(day, {
+    opening: "",
+    closing: "",
+  });
 };
 
 const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
