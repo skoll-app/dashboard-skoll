@@ -85,7 +85,8 @@
       "createProduct": "Crear producto",
       "createCategory": "Crear categoría",
       "yes": "Si",
-      "no": "No"
+      "no": "No",
+      "save": "Guardar"
     },
     "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
     "empty": {
@@ -132,6 +133,21 @@
       "rut": {
         "title": "RUT",
         "subtitle": "Debe contener: <ul> <li>número de NIT</li> <li>nombre de razón social</li> <li>nombre del representante legal</li></ul>"
+      }
+    },
+    "schedule": {
+      "title": "Horarios",
+      "day": "Día",
+      "opening": "Apertura",
+      "closing": "Cierre",
+      "weekDays": {
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
       }
     }
   },
