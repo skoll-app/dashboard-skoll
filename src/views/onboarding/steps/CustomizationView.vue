@@ -13,6 +13,7 @@ import SKSelect from "@/components/ux/SKSelect.vue";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useI18n } from "vue-i18n";
+import moment from "moment";
 // Services
 import service from "@/http/services";
 // Constants
@@ -65,13 +66,6 @@ const scheduleFormRef = reactive(
     initialValues: scheduleValues,
   })
 );
-
-const resetHour = (day: Days) => {
-  scheduleFormRef.setFieldValue(day, {
-    opening: "",
-    closing: "",
-  });
-};
 // Form
 // const validationSchema = yup.object({
 //   allowedReservations: yup.number().min(1).required(),
@@ -111,6 +105,27 @@ const saturdayEnabled = computed(() => {
 const sundayEnabled = computed(() => {
   return editableDaysList.includes("sunday");
 });
+
+// Methods
+const getHours = (day: Days) => {
+  return getHoursDiff(
+    scheduleFormRef.values[day].opening,
+    scheduleFormRef.values[day].closing
+  );
+};
+
+const getHoursDiff = (start: string, end: string) => {
+  const startTime = moment(start, "hh:mm");
+  const endTime = moment(end, "hh:mm");
+  return endTime.diff(startTime, "hours");
+};
+
+const resetHour = (day: Days) => {
+  scheduleFormRef.setFieldValue(day, {
+    opening: "00:00",
+    closing: "00:00",
+  });
+};
 
 const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
   console.log(values);
@@ -262,7 +277,7 @@ const addToEditList = (day: Days) => {
             />
           </div>
           <div class="col-12 md:col-6">
-            <div class="flex">
+            <div class="flex align-items-center">
               <Button
                 class="p-button-info mr-2"
                 type="button"
@@ -270,11 +285,18 @@ const addToEditList = (day: Days) => {
                 @click="addToEditList('monday')"
               ></Button>
               <Button
-                class="p-button-danger"
+                class="p-button-danger mr-2"
                 type="button"
                 icon="pi pi-trash"
                 @click="resetHour('monday')"
               ></Button>
+              <div>
+                <Tag
+                  :value="getHours('monday') + ' Horas'"
+                  icon="pi pi-clock"
+                  rounded
+                ></Tag>
+              </div>
             </div>
           </div>
         </div>
@@ -299,7 +321,7 @@ const addToEditList = (day: Days) => {
             />
           </div>
           <div class="col-12 md:col-6">
-            <div class="flex">
+            <div class="flex align-items-center">
               <Button
                 class="p-button-info mr-2"
                 type="button"
@@ -307,11 +329,18 @@ const addToEditList = (day: Days) => {
                 @click="addToEditList('tuesday')"
               ></Button>
               <Button
-                class="p-button-danger"
+                class="p-button-danger mr-2"
                 type="button"
                 icon="pi pi-trash"
                 @click="resetHour('tuesday')"
               ></Button>
+              <div>
+                <Tag
+                  :value="getHours('tuesday') + ' Horas'"
+                  icon="pi pi-clock"
+                  rounded
+                ></Tag>
+              </div>
             </div>
           </div>
         </div>
@@ -336,7 +365,7 @@ const addToEditList = (day: Days) => {
             />
           </div>
           <div class="col-12 md:col-6">
-            <div class="flex">
+            <div class="flex align-items-center">
               <Button
                 class="p-button-info mr-2"
                 type="button"
@@ -344,11 +373,18 @@ const addToEditList = (day: Days) => {
                 @click="addToEditList('wednesday')"
               ></Button>
               <Button
-                class="p-button-danger"
+                class="p-button-danger mr-2"
                 type="button"
                 icon="pi pi-trash"
                 @click="resetHour('wednesday')"
               ></Button>
+              <div>
+                <Tag
+                  :value="getHours('wednesday') + ' Horas'"
+                  icon="pi pi-clock"
+                  rounded
+                ></Tag>
+              </div>
             </div>
           </div>
         </div>
@@ -373,7 +409,7 @@ const addToEditList = (day: Days) => {
             />
           </div>
           <div class="col-12 md:col-6">
-            <div class="flex">
+            <div class="flex align-items-center">
               <Button
                 class="p-button-info mr-2"
                 type="button"
@@ -381,11 +417,18 @@ const addToEditList = (day: Days) => {
                 @click="addToEditList('thursday')"
               ></Button>
               <Button
-                class="p-button-danger"
+                class="p-button-danger mr-2"
                 type="button"
                 icon="pi pi-trash"
                 @click="resetHour('thursday')"
               ></Button>
+              <div>
+                <Tag
+                  :value="getHours('thursday') + ' Horas'"
+                  icon="pi pi-clock"
+                  rounded
+                ></Tag>
+              </div>
             </div>
           </div>
         </div>
@@ -410,7 +453,7 @@ const addToEditList = (day: Days) => {
             />
           </div>
           <div class="col-12 md:col-6">
-            <div class="flex">
+            <div class="flex align-items-center">
               <Button
                 class="p-button-info mr-2"
                 type="button"
@@ -418,11 +461,18 @@ const addToEditList = (day: Days) => {
                 @click="addToEditList('friday')"
               ></Button>
               <Button
-                class="p-button-danger"
+                class="p-button-danger mr-2"
                 type="button"
                 icon="pi pi-trash"
                 @click="resetHour('friday')"
               ></Button>
+              <div>
+                <Tag
+                  :value="getHours('friday') + ' Horas'"
+                  icon="pi pi-clock"
+                  rounded
+                ></Tag>
+              </div>
             </div>
           </div>
         </div>
@@ -447,7 +497,7 @@ const addToEditList = (day: Days) => {
             />
           </div>
           <div class="col-12 md:col-6">
-            <div class="flex">
+            <div class="flex align-items-center">
               <Button
                 class="p-button-info mr-2"
                 type="button"
@@ -455,11 +505,18 @@ const addToEditList = (day: Days) => {
                 @click="addToEditList('saturday')"
               ></Button>
               <Button
-                class="p-button-danger"
+                class="p-button-danger mr-2"
                 type="button"
                 icon="pi pi-trash"
                 @click="resetHour('saturday')"
               ></Button>
+              <div>
+                <Tag
+                  :value="getHours('saturday') + ' Horas'"
+                  icon="pi pi-clock"
+                  rounded
+                ></Tag>
+              </div>
             </div>
           </div>
         </div>
@@ -484,7 +541,7 @@ const addToEditList = (day: Days) => {
             />
           </div>
           <div class="col-12 md:col-6">
-            <div class="flex">
+            <div class="flex align-items-center">
               <Button
                 class="p-button-info mr-2"
                 type="button"
@@ -492,11 +549,18 @@ const addToEditList = (day: Days) => {
                 @click="addToEditList('sunday')"
               ></Button>
               <Button
-                class="p-button-danger"
+                class="p-button-danger mr-2"
                 type="button"
                 icon="pi pi-trash"
                 @click="resetHour('sunday')"
               ></Button>
+              <div>
+                <Tag
+                  :value="getHours('sunday') + ' Horas'"
+                  icon="pi pi-clock"
+                  rounded
+                ></Tag>
+              </div>
             </div>
           </div>
         </div>
