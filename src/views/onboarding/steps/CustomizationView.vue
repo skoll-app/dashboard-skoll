@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Vue
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 // import VueCropper from "@ballcat/vue-cropper";
 // import type { VueCropperInstance } from "@ballcat/vue-cropper";
 // import "cropperjs/dist/cropper.css";
@@ -18,8 +18,60 @@ import service from "@/http/services";
 // Constants
 import { SCHEDULE_OPTIONS } from "@/constants";
 
+type Days =
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";
+
 const { t } = useI18n();
 const hours = ref(SCHEDULE_OPTIONS);
+const scheduleValues = reactive({
+  monday: {
+    opening: "09:00",
+    closing: "18:00",
+  },
+  tuesday: {
+    opening: "09:00",
+    closing: "18:00",
+  },
+  wednesday: {
+    opening: "09:00",
+    closing: "18:00",
+  },
+  thursday: {
+    opening: "09:00",
+    closing: "18:00",
+  },
+  friday: {
+    opening: "09:00",
+    closing: "18:00",
+  },
+  saturday: {
+    opening: "09:00",
+    closing: "18:00",
+  },
+  sunday: {
+    opening: "09:00",
+    closing: "18:00",
+  },
+});
+
+const scheduleFormRef = reactive(
+  useForm({
+    initialValues: scheduleValues,
+  })
+);
+
+const resetHour = (day: Days) => {
+  scheduleFormRef.setFieldValue(day, {
+    opening: "",
+    closing: "",
+  });
+};
 // Form
 // const validationSchema = yup.object({
 //   allowedReservations: yup.number().min(1).required(),
@@ -36,62 +88,37 @@ const hours = ref(SCHEDULE_OPTIONS);
 //   })
 // );
 
-const scheduleValues = reactive({
-  monday: {
-    opening: "",
-    closing: "",
-  },
-  tuesday: {
-    opening: "",
-    closing: "",
-  },
-  wednesday: {
-    opening: "",
-    closing: "",
-  },
-  thursday: {
-    opening: "",
-    closing: "",
-  },
-  friday: {
-    opening: "",
-    closing: "",
-  },
-  saturday: {
-    opening: "",
-    closing: "",
-  },
-  sunday: {
-    opening: "",
-    closing: "",
-  },
+const editableDaysList = reactive<Days[]>([]);
+// Computed
+const mondayEnabled = computed(() => {
+  return editableDaysList.includes("monday");
 });
-
-const scheduleFormRef = reactive(
-  useForm({
-    initialValues: scheduleValues,
-  })
-);
-
-const resetHour = (
-  day:
-    | "monday"
-    | "tuesday"
-    | "wednesday"
-    | "thursday"
-    | "friday"
-    | "saturday"
-    | "sunday"
-) => {
-  scheduleFormRef.setFieldValue(day, {
-    opening: "",
-    closing: "",
-  });
-};
+const tuesdayEnabled = computed(() => {
+  return editableDaysList.includes("tuesday");
+});
+const wednesdayEnabled = computed(() => {
+  return editableDaysList.includes("wednesday");
+});
+const thursdayEnabled = computed(() => {
+  return editableDaysList.includes("thursday");
+});
+const fridayEnabled = computed(() => {
+  return editableDaysList.includes("friday");
+});
+const saturdayEnabled = computed(() => {
+  return editableDaysList.includes("saturday");
+});
+const sundayEnabled = computed(() => {
+  return editableDaysList.includes("sunday");
+});
 
 const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
   console.log(values);
 });
+
+const addToEditList = (day: Days) => {
+  editableDaysList.push(day);
+};
 
 // const imageSrc = ref(
 //   new URL("../../../assets/img/paisaje.jpg", import.meta.url).href
@@ -223,6 +250,7 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="monday.opening"
               :options="hours"
               placeholder="08:00"
+              :disabled="!mondayEnabled"
             />
           </div>
           <div class="col-6 md:col-2">
@@ -230,15 +258,24 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="monday.closing"
               :options="hours"
               placeholder="17:00"
+              :disabled="!mondayEnabled"
             />
           </div>
           <div class="col-12 md:col-6">
-            <Button
-              class="p-button-danger"
-              type="button"
-              icon="pi pi-trash"
-              @click="resetHour('monday')"
-            ></Button>
+            <div class="flex">
+              <Button
+                class="p-button-info mr-2"
+                type="button"
+                icon="pi pi-pencil"
+                @click="addToEditList('monday')"
+              ></Button>
+              <Button
+                class="p-button-danger"
+                type="button"
+                icon="pi pi-trash"
+                @click="resetHour('monday')"
+              ></Button>
+            </div>
           </div>
         </div>
         <div class="grid">
@@ -250,6 +287,7 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="tuesday.opening"
               :options="hours"
               placeholder="08:00"
+              :disabled="!tuesdayEnabled"
             />
           </div>
           <div class="col-6 md:col-2">
@@ -257,15 +295,24 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="tuesday.closing"
               :options="hours"
               placeholder="17:00"
+              :disabled="!tuesdayEnabled"
             />
           </div>
           <div class="col-12 md:col-6">
-            <Button
-              class="p-button-danger"
-              type="button"
-              icon="pi pi-trash"
-              @click="resetHour('tuesday')"
-            ></Button>
+            <div class="flex">
+              <Button
+                class="p-button-info mr-2"
+                type="button"
+                icon="pi pi-pencil"
+                @click="addToEditList('tuesday')"
+              ></Button>
+              <Button
+                class="p-button-danger"
+                type="button"
+                icon="pi pi-trash"
+                @click="resetHour('tuesday')"
+              ></Button>
+            </div>
           </div>
         </div>
         <div class="grid">
@@ -277,6 +324,7 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="wednesday.opening"
               :options="hours"
               placeholder="08:00"
+              :disabled="!wednesdayEnabled"
             />
           </div>
           <div class="col-6 md:col-2">
@@ -284,15 +332,24 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="wednesday.closing"
               :options="hours"
               placeholder="17:00"
+              :disabled="!wednesdayEnabled"
             />
           </div>
           <div class="col-12 md:col-6">
-            <Button
-              class="p-button-danger"
-              type="button"
-              icon="pi pi-trash"
-              @click="resetHour('wednesday')"
-            ></Button>
+            <div class="flex">
+              <Button
+                class="p-button-info mr-2"
+                type="button"
+                icon="pi pi-pencil"
+                @click="addToEditList('wednesday')"
+              ></Button>
+              <Button
+                class="p-button-danger"
+                type="button"
+                icon="pi pi-trash"
+                @click="resetHour('wednesday')"
+              ></Button>
+            </div>
           </div>
         </div>
         <div class="grid">
@@ -304,6 +361,7 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="thursday.opening"
               :options="hours"
               placeholder="08:00"
+              :disabled="!thursdayEnabled"
             />
           </div>
           <div class="col-6 md:col-2">
@@ -311,15 +369,24 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="thursday.closing"
               :options="hours"
               placeholder="17:00"
+              :disabled="!thursdayEnabled"
             />
           </div>
           <div class="col-12 md:col-6">
-            <Button
-              class="p-button-danger"
-              type="button"
-              icon="pi pi-trash"
-              @click="resetHour('thursday')"
-            ></Button>
+            <div class="flex">
+              <Button
+                class="p-button-info mr-2"
+                type="button"
+                icon="pi pi-pencil"
+                @click="addToEditList('thursday')"
+              ></Button>
+              <Button
+                class="p-button-danger"
+                type="button"
+                icon="pi pi-trash"
+                @click="resetHour('thursday')"
+              ></Button>
+            </div>
           </div>
         </div>
         <div class="grid">
@@ -331,6 +398,7 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="friday.opening"
               :options="hours"
               placeholder="08:00"
+              :disabled="!fridayEnabled"
             />
           </div>
           <div class="col-6 md:col-2">
@@ -338,15 +406,24 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="friday.closing"
               :options="hours"
               placeholder="17:00"
+              :disabled="!fridayEnabled"
             />
           </div>
           <div class="col-12 md:col-6">
-            <Button
-              class="p-button-danger"
-              type="button"
-              icon="pi pi-trash"
-              @click="resetHour('friday')"
-            ></Button>
+            <div class="flex">
+              <Button
+                class="p-button-info mr-2"
+                type="button"
+                icon="pi pi-pencil"
+                @click="addToEditList('friday')"
+              ></Button>
+              <Button
+                class="p-button-danger"
+                type="button"
+                icon="pi pi-trash"
+                @click="resetHour('friday')"
+              ></Button>
+            </div>
           </div>
         </div>
         <div class="grid">
@@ -358,6 +435,7 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="saturday.opening"
               :options="hours"
               placeholder="08:00"
+              :disabled="!saturdayEnabled"
             />
           </div>
           <div class="col-6 md:col-2">
@@ -365,15 +443,24 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="saturday.closing"
               :options="hours"
               placeholder="17:00"
+              :disabled="!saturdayEnabled"
             />
           </div>
           <div class="col-12 md:col-6">
-            <Button
-              class="p-button-danger"
-              type="button"
-              icon="pi pi-trash"
-              @click="resetHour('saturday')"
-            ></Button>
+            <div class="flex">
+              <Button
+                class="p-button-info mr-2"
+                type="button"
+                icon="pi pi-pencil"
+                @click="addToEditList('saturday')"
+              ></Button>
+              <Button
+                class="p-button-danger"
+                type="button"
+                icon="pi pi-trash"
+                @click="resetHour('saturday')"
+              ></Button>
+            </div>
           </div>
         </div>
         <div class="grid">
@@ -385,6 +472,7 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="sunday.opening"
               :options="hours"
               placeholder="08:00"
+              :disabled="!sundayEnabled"
             />
           </div>
           <div class="col-6 md:col-2">
@@ -392,10 +480,17 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
               name="sunday.closing"
               :options="hours"
               placeholder="17:00"
+              :disabled="!sundayEnabled"
             />
           </div>
           <div class="col-12 md:col-6">
             <div class="flex">
+              <Button
+                class="p-button-info mr-2"
+                type="button"
+                icon="pi pi-pencil"
+                @click="addToEditList('sunday')"
+              ></Button>
               <Button
                 class="p-button-danger"
                 type="button"
