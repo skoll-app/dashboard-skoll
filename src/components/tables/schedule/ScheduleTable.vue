@@ -10,6 +10,7 @@ import { useI18n } from "vue-i18n";
 import { SCHEDULE_OPTIONS } from "@/constants";
 import { useForm } from "vee-validate";
 import ScheduleRowButtons from "./ScheduleRowButtons.vue";
+import { useToast } from "primevue/usetoast";
 
 type Days =
   | "monday"
@@ -52,6 +53,7 @@ const scheduleValues = reactive({
     closing: "18:00",
   },
 });
+const toast = useToast();
 
 const scheduleFormRef = reactive(
   useForm({
@@ -59,6 +61,15 @@ const scheduleFormRef = reactive(
   })
 );
 const editableDaysList = reactive<Days[]>([]);
+const activeDays = reactive<Days[]>([
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+]);
 
 // Computed
 const mondayEnabled = computed(() => {
@@ -98,18 +109,61 @@ const getHoursDiff = (start: string, end: string): string => {
 };
 
 const resetHour = (day: Days) => {
+  if (activeDays.length <= 1) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Debes tener activo por lo menos un dia",
+      life: 5000,
+    });
+    return;
+  }
   scheduleFormRef.setFieldValue(day, {
     opening: "00:00",
     closing: "00:00",
   });
+  removeDayFromActiveList(day);
 };
 
 const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
   console.log(values);
+  console.log(activeDays);
 });
 
 const addToEditList = (day: Days) => {
   editableDaysList.push(day);
+};
+
+const removeFromEditList = (day: Days) => {
+  const index = editableDaysList.findIndex((item) => item === day);
+  editableDaysList.splice(index, 1);
+};
+
+const addDayToActiveList = (day: Days) => {
+  const currentDay = scheduleFormRef.values[day];
+  if (currentDay.opening === currentDay.closing) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail:
+        "Debes escoger hora de apertura diferente a la de cierre ó no se tendrá en cuenta dentro del horario",
+      life: 10000,
+    });
+    removeDayFromActiveList(day);
+    removeFromEditList(day);
+    return;
+  }
+  const index = activeDays.findIndex((item) => item === day);
+  if (index < 0) {
+    activeDays.push(day);
+  }
+  removeFromEditList(day);
+};
+
+const removeDayFromActiveList = (day: Days) => {
+  const index = activeDays.findIndex((item) => item === day);
+  activeDays.splice(index, 1);
+  console.log(activeDays);
 };
 </script>
 
@@ -154,6 +208,7 @@ const addToEditList = (day: Days) => {
             :totalHours="getHours('monday')"
             @allow-edit="addToEditList"
             @reset-hour="resetHour"
+            @save-hour="addDayToActiveList"
           />
         </div>
         <div class="grid">
@@ -181,6 +236,7 @@ const addToEditList = (day: Days) => {
             :totalHours="getHours('tuesday')"
             @allow-edit="addToEditList"
             @reset-hour="resetHour"
+            @save-hour="addDayToActiveList"
           />
         </div>
         <div class="grid">
@@ -208,6 +264,7 @@ const addToEditList = (day: Days) => {
             :totalHours="getHours('wednesday')"
             @allow-edit="addToEditList"
             @reset-hour="resetHour"
+            @save-hour="addDayToActiveList"
           />
         </div>
         <div class="grid">
@@ -235,6 +292,7 @@ const addToEditList = (day: Days) => {
             :totalHours="getHours('thursday')"
             @allow-edit="addToEditList"
             @reset-hour="resetHour"
+            @save-hour="addDayToActiveList"
           />
         </div>
         <div class="grid">
@@ -262,6 +320,7 @@ const addToEditList = (day: Days) => {
             :totalHours="getHours('friday')"
             @allow-edit="addToEditList"
             @reset-hour="resetHour"
+            @save-hour="addDayToActiveList"
           />
         </div>
         <div class="grid">
@@ -289,6 +348,7 @@ const addToEditList = (day: Days) => {
             :totalHours="getHours('saturday')"
             @allow-edit="addToEditList"
             @reset-hour="resetHour"
+            @save-hour="addDayToActiveList"
           />
         </div>
         <div class="grid">
@@ -316,6 +376,7 @@ const addToEditList = (day: Days) => {
             :totalHours="getHours('sunday')"
             @allow-edit="addToEditList"
             @reset-hour="resetHour"
+            @save-hour="addDayToActiveList"
           />
         </div>
       </template>
