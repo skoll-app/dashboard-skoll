@@ -180,6 +180,20 @@ const service = {
       });
     },
   },
+  schedule: {
+    save(schedule: any): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.post(`${SKOLL_MERCHANT}/horary/`, {
+            horary: schedule,
+          });
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+  },
 };
 
 const parseBusiness = (

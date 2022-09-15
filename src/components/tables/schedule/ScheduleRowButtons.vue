@@ -7,7 +7,7 @@ const props = defineProps({
     required: true,
   },
   totalHours: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
@@ -45,7 +45,7 @@ const saveHour = () => {
       ></Button>
       <Button
         v-else
-        class="p-button-info mr-2"
+        class="p-button-warning mr-2"
         type="button"
         icon="pi pi-pencil"
         @click="allowEdit"
@@ -57,7 +57,12 @@ const saveHour = () => {
         @click="resetHour"
       ></Button>
       <div>
-        <Tag :value="totalHours" icon="pi pi-clock" rounded></Tag>
+        <Tag
+          :value="totalHours + ' Horas'"
+          icon="pi pi-clock"
+          rounded
+          :severity="totalHours > 0 ? 'info' : 'danger'"
+        ></Tag>
       </div>
     </div>
   </div>

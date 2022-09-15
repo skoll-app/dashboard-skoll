@@ -11,6 +11,8 @@ import { SCHEDULE_OPTIONS } from "@/constants";
 import { useForm } from "vee-validate";
 import ScheduleRowButtons from "./ScheduleRowButtons.vue";
 import { useToast } from "primevue/usetoast";
+// Services
+import service from "@/http/services";
 
 type Days =
   | "monday"
@@ -95,21 +97,21 @@ const sundayEnabled = computed(() => {
 });
 
 // Methods
-const getHours = (day: Days): string => {
+const getHours = (day: Days): number => {
   return getHoursDiff(
     scheduleFormRef.values[day].opening,
     scheduleFormRef.values[day].closing
   );
 };
 
-const getHoursDiff = (start: string, end: string): string => {
+const getHoursDiff = (start: string, end: string): number => {
   const startTime = moment(start, "hh:mm");
   const endTime = moment(end, "hh:mm");
   let diff = endTime.diff(startTime, "hours");
   if (diff < 0) {
     diff = diff + 24;
   }
-  return diff + " Horas";
+  return diff;
 };
 
 const resetHour = (day: Days) => {
@@ -130,8 +132,19 @@ const resetHour = (day: Days) => {
 };
 
 const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
-  console.log(values);
-  console.log(activeDays);
+  const schedule: any = {};
+  for (let index = 0; index < activeDays.length; index++) {
+    const element = activeDays[index];
+    schedule[element] = {
+      startDate: values[element].opening,
+      endDate: values[element].closing,
+    };
+  }
+  try {
+    await service.schedule.save(schedule);
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 const addToEditList = (day: Days) => {
