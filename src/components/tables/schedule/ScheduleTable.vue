@@ -117,7 +117,7 @@ const resetHour = (day: Days) => {
     toast.add({
       severity: "error",
       summary: "Error",
-      detail: "Debes tener activo por lo menos un dia",
+      detail: t("onboarding.schedule.messages.error.minimumDays"),
       life: 5000,
     });
     return;
@@ -149,8 +149,7 @@ const addDayToActiveList = (day: Days) => {
     toast.add({
       severity: "error",
       summary: "Error",
-      detail:
-        "Debes escoger hora de apertura diferente a la de cierre ó no se tendrá en cuenta dentro del horario",
+      detail: t("onboarding.schedule.messages.error.differentHours"),
       life: 10000,
     });
     removeDayFromActiveList(day);
