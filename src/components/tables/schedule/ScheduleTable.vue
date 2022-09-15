@@ -9,6 +9,7 @@ import { useI18n } from "vue-i18n";
 // Constants
 import { SCHEDULE_OPTIONS } from "@/constants";
 import { useForm } from "vee-validate";
+import ScheduleRowButtons from "./ScheduleRowButtons.vue";
 
 type Days =
   | "monday"
@@ -83,17 +84,17 @@ const sundayEnabled = computed(() => {
 });
 
 // Methods
-const getHours = (day: Days) => {
+const getHours = (day: Days): string => {
   return getHoursDiff(
     scheduleFormRef.values[day].opening,
     scheduleFormRef.values[day].closing
   );
 };
 
-const getHoursDiff = (start: string, end: string) => {
+const getHoursDiff = (start: string, end: string): string => {
   const startTime = moment(start, "hh:mm");
   const endTime = moment(end, "hh:mm");
-  return endTime.diff(startTime, "hours");
+  return endTime.diff(startTime, "hours") + " Horas";
 };
 
 const resetHour = (day: Days) => {
@@ -148,29 +149,12 @@ const addToEditList = (day: Days) => {
               :disabled="!mondayEnabled"
             />
           </div>
-          <div class="col-12 md:col-6">
-            <div class="flex align-items-center">
-              <Button
-                class="p-button-info mr-2"
-                type="button"
-                icon="pi pi-pencil"
-                @click="addToEditList('monday')"
-              ></Button>
-              <Button
-                class="p-button-danger mr-2"
-                type="button"
-                icon="pi pi-trash"
-                @click="resetHour('monday')"
-              ></Button>
-              <div>
-                <Tag
-                  :value="getHours('monday') + ' Horas'"
-                  icon="pi pi-clock"
-                  rounded
-                ></Tag>
-              </div>
-            </div>
-          </div>
+          <ScheduleRowButtons
+            day="monday"
+            :totalHours="getHours('monday')"
+            @allow-edit="addToEditList"
+            @reset-hour="resetHour"
+          />
         </div>
         <div class="grid">
           <div class="col-12 md:col-2">
@@ -192,29 +176,12 @@ const addToEditList = (day: Days) => {
               :disabled="!tuesdayEnabled"
             />
           </div>
-          <div class="col-12 md:col-6">
-            <div class="flex align-items-center">
-              <Button
-                class="p-button-info mr-2"
-                type="button"
-                icon="pi pi-pencil"
-                @click="addToEditList('tuesday')"
-              ></Button>
-              <Button
-                class="p-button-danger mr-2"
-                type="button"
-                icon="pi pi-trash"
-                @click="resetHour('tuesday')"
-              ></Button>
-              <div>
-                <Tag
-                  :value="getHours('tuesday') + ' Horas'"
-                  icon="pi pi-clock"
-                  rounded
-                ></Tag>
-              </div>
-            </div>
-          </div>
+          <ScheduleRowButtons
+            day="tuesday"
+            :totalHours="getHours('tuesday')"
+            @allow-edit="addToEditList"
+            @reset-hour="resetHour"
+          />
         </div>
         <div class="grid">
           <div class="col-12 md:col-2">
@@ -236,29 +203,12 @@ const addToEditList = (day: Days) => {
               :disabled="!wednesdayEnabled"
             />
           </div>
-          <div class="col-12 md:col-6">
-            <div class="flex align-items-center">
-              <Button
-                class="p-button-info mr-2"
-                type="button"
-                icon="pi pi-pencil"
-                @click="addToEditList('wednesday')"
-              ></Button>
-              <Button
-                class="p-button-danger mr-2"
-                type="button"
-                icon="pi pi-trash"
-                @click="resetHour('wednesday')"
-              ></Button>
-              <div>
-                <Tag
-                  :value="getHours('wednesday') + ' Horas'"
-                  icon="pi pi-clock"
-                  rounded
-                ></Tag>
-              </div>
-            </div>
-          </div>
+          <ScheduleRowButtons
+            day="wednesday"
+            :totalHours="getHours('wednesday')"
+            @allow-edit="addToEditList"
+            @reset-hour="resetHour"
+          />
         </div>
         <div class="grid">
           <div class="col-12 md:col-2">
@@ -280,29 +230,12 @@ const addToEditList = (day: Days) => {
               :disabled="!thursdayEnabled"
             />
           </div>
-          <div class="col-12 md:col-6">
-            <div class="flex align-items-center">
-              <Button
-                class="p-button-info mr-2"
-                type="button"
-                icon="pi pi-pencil"
-                @click="addToEditList('thursday')"
-              ></Button>
-              <Button
-                class="p-button-danger mr-2"
-                type="button"
-                icon="pi pi-trash"
-                @click="resetHour('thursday')"
-              ></Button>
-              <div>
-                <Tag
-                  :value="getHours('thursday') + ' Horas'"
-                  icon="pi pi-clock"
-                  rounded
-                ></Tag>
-              </div>
-            </div>
-          </div>
+          <ScheduleRowButtons
+            day="thursday"
+            :totalHours="getHours('thursday')"
+            @allow-edit="addToEditList"
+            @reset-hour="resetHour"
+          />
         </div>
         <div class="grid">
           <div class="col-12 md:col-2">
@@ -324,29 +257,12 @@ const addToEditList = (day: Days) => {
               :disabled="!fridayEnabled"
             />
           </div>
-          <div class="col-12 md:col-6">
-            <div class="flex align-items-center">
-              <Button
-                class="p-button-info mr-2"
-                type="button"
-                icon="pi pi-pencil"
-                @click="addToEditList('friday')"
-              ></Button>
-              <Button
-                class="p-button-danger mr-2"
-                type="button"
-                icon="pi pi-trash"
-                @click="resetHour('friday')"
-              ></Button>
-              <div>
-                <Tag
-                  :value="getHours('friday') + ' Horas'"
-                  icon="pi pi-clock"
-                  rounded
-                ></Tag>
-              </div>
-            </div>
-          </div>
+          <ScheduleRowButtons
+            day="friday"
+            :totalHours="getHours('friday')"
+            @allow-edit="addToEditList"
+            @reset-hour="resetHour"
+          />
         </div>
         <div class="grid">
           <div class="col-12 md:col-2">
@@ -368,29 +284,12 @@ const addToEditList = (day: Days) => {
               :disabled="!saturdayEnabled"
             />
           </div>
-          <div class="col-12 md:col-6">
-            <div class="flex align-items-center">
-              <Button
-                class="p-button-info mr-2"
-                type="button"
-                icon="pi pi-pencil"
-                @click="addToEditList('saturday')"
-              ></Button>
-              <Button
-                class="p-button-danger mr-2"
-                type="button"
-                icon="pi pi-trash"
-                @click="resetHour('saturday')"
-              ></Button>
-              <div>
-                <Tag
-                  :value="getHours('saturday') + ' Horas'"
-                  icon="pi pi-clock"
-                  rounded
-                ></Tag>
-              </div>
-            </div>
-          </div>
+          <ScheduleRowButtons
+            day="saturday"
+            :totalHours="getHours('saturday')"
+            @allow-edit="addToEditList"
+            @reset-hour="resetHour"
+          />
         </div>
         <div class="grid">
           <div class="col-12 md:col-2">
@@ -412,29 +311,12 @@ const addToEditList = (day: Days) => {
               :disabled="!sundayEnabled"
             />
           </div>
-          <div class="col-12 md:col-6">
-            <div class="flex align-items-center">
-              <Button
-                class="p-button-info mr-2"
-                type="button"
-                icon="pi pi-pencil"
-                @click="addToEditList('sunday')"
-              ></Button>
-              <Button
-                class="p-button-danger mr-2"
-                type="button"
-                icon="pi pi-trash"
-                @click="resetHour('sunday')"
-              ></Button>
-              <div>
-                <Tag
-                  :value="getHours('sunday') + ' Horas'"
-                  icon="pi pi-clock"
-                  rounded
-                ></Tag>
-              </div>
-            </div>
-          </div>
+          <ScheduleRowButtons
+            day="sunday"
+            :totalHours="getHours('sunday')"
+            @allow-edit="addToEditList"
+            @reset-hour="resetHour"
+          />
         </div>
       </template>
       <template v-slot:footer>
