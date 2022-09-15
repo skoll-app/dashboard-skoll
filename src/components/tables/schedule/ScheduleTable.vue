@@ -165,8 +165,9 @@ const addDayToActiveList = (day: Days) => {
 
 const removeDayFromActiveList = (day: Days) => {
   const index = activeDays.findIndex((item) => item === day);
-  activeDays.splice(index, 1);
-  console.log(activeDays);
+  if (index > -1) {
+    activeDays.splice(index, 1);
+  }
 };
 </script>
 
