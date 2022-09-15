@@ -105,7 +105,11 @@ const getHours = (day: Days): string => {
 const getHoursDiff = (start: string, end: string): string => {
   const startTime = moment(start, "hh:mm");
   const endTime = moment(end, "hh:mm");
-  return endTime.diff(startTime, "hours") + " Horas";
+  let diff = endTime.diff(startTime, "hours");
+  if (diff < 0) {
+    diff = diff + 24;
+  }
+  return diff + " Horas";
 };
 
 const resetHour = (day: Days) => {
