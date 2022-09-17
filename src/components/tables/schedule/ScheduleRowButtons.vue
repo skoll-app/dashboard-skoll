@@ -51,17 +51,17 @@ const saveHour = () => {
         @click="allowEdit"
       ></Button>
       <Button
-        class="p-button-danger mr-2"
+        class="p-button-secondary mr-2"
         type="button"
         icon="pi pi-trash"
         @click="resetHour"
       ></Button>
       <div>
         <Tag
-          :value="totalHours + ' Horas'"
+          :value="totalHours > 0 ? totalHours + ' Horas' : 'Sin asignar'"
           icon="pi pi-clock"
           rounded
-          :severity="totalHours > 0 ? 'info' : 'danger'"
+          :severity="totalHours > 0 ? 'success' : 'danger'"
         ></Tag>
       </div>
     </div>
