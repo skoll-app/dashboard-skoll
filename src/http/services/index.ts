@@ -193,6 +193,16 @@ const service = {
         }
       });
     },
+    get(): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.get(`${SKOLL_MERCHANT}/horary/`);
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
   },
 };
 
