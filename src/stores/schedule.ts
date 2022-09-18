@@ -1,3 +1,4 @@
+import service from "@/http/services";
 import { defineStore } from "pinia";
 // Utils
 import moment from "moment";
@@ -93,6 +94,18 @@ export const useScheduleStore = defineStore({
     removeFromEditList(day: Day) {
       const index = this.editableDaysList.findIndex((item) => item === day);
       this.editableDaysList.splice(index, 1);
+    },
+    async save() {
+      try {
+        const schedule: any = {}
+        for (let index = 0; index < this.activeDays.length; index++) {
+          const day = this.activeDays[index];
+          schedule[day] = this[day];
+        }
+        await service.schedule.save(schedule);
+      } catch (error: any) {
+        throw Error(error);
+      }
     },
   },
   getters: {

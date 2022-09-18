@@ -90,22 +90,9 @@ const resetHour = (day: Day) => {
   removeDayFromActiveList(day);
 };
 
-const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
-  const schedule: any = {};
-  for (let index = 0; index < scheduleStore.activeDays.length; index++) {
-    const element = scheduleStore.activeDays[index];
-    schedule[element] = {
-      startDate: values[element].opening,
-      endDate: values[element].closing,
-    };
-    scheduleStore.setHours(
-      element,
-      values[element].opening,
-      values[element].closing
-    );
-  }
+const saveSchedule = scheduleFormRef.handleSubmit(async () => {
   try {
-    await service.schedule.save(schedule);
+    scheduleStore.save();
   } catch (error) {
     toast.add({
       severity: "error",
