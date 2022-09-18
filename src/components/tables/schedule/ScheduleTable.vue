@@ -45,15 +45,6 @@ const scheduleFormRef = reactive(
   })
 );
 const editableDaysList = reactive<Days[]>([]);
-const activeDays = reactive<Days[]>([
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-  "sunday",
-]);
 
 // Computed
 const mondayEnabled = computed(() => {
@@ -97,7 +88,7 @@ const getHoursDiff = (start: string, end: string): number => {
 };
 
 const resetHour = (day: Days) => {
-  if (activeDays.length <= 1) {
+  if (scheduleStore.activeDays.length <= 1) {
     toast.add({
       severity: "error",
       summary: "Error",
@@ -110,17 +101,23 @@ const resetHour = (day: Days) => {
     opening: "00:00",
     closing: "00:00",
   });
+  scheduleStore.resetHours(day);
   removeDayFromActiveList(day);
 };
 
 const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
   const schedule: any = {};
-  for (let index = 0; index < activeDays.length; index++) {
-    const element = activeDays[index];
+  for (let index = 0; index < scheduleStore.activeDays.length; index++) {
+    const element = scheduleStore.activeDays[index];
     schedule[element] = {
       startDate: values[element].opening,
       endDate: values[element].closing,
     };
+    scheduleStore.setHours(
+      element,
+      values[element].opening,
+      values[element].closing
+    );
   }
   try {
     await service.schedule.save(schedule);
@@ -151,18 +148,12 @@ const addDayToActiveList = (day: Days) => {
     removeFromEditList(day);
     return;
   }
-  const index = activeDays.findIndex((item) => item === day);
-  if (index < 0) {
-    activeDays.push(day);
-  }
+  scheduleStore.addDayToActiveList(day, currentDay.opening, currentDay.closing);
   removeFromEditList(day);
 };
 
 const removeDayFromActiveList = (day: Days) => {
-  const index = activeDays.findIndex((item) => item === day);
-  if (index > -1) {
-    activeDays.splice(index, 1);
-  }
+  scheduleStore.removeDayFromActiveList(day);
 };
 </script>
 
