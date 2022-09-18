@@ -16,7 +16,7 @@ import service from "@/http/services";
 import { useScheduleStore } from "@/stores/schedule";
 
 const scheduleStore = useScheduleStore();
-type Days =
+type Day =
   | "monday"
   | "tuesday"
   | "wednesday"
@@ -43,37 +43,36 @@ const scheduleFormRef = reactive(
     initialValues: scheduleValues,
   })
 );
-const editableDaysList = reactive<Days[]>([]);
 
 // Computed
 const mondayEnabled = computed(() => {
-  return editableDaysList.includes("monday");
+  return scheduleStore.mondayEnabled;
 });
 const tuesdayEnabled = computed(() => {
-  return editableDaysList.includes("tuesday");
+  return scheduleStore.tuesdayEnabled;
 });
 const wednesdayEnabled = computed(() => {
-  return editableDaysList.includes("wednesday");
+  return scheduleStore.wednesdayEnabled;
 });
 const thursdayEnabled = computed(() => {
-  return editableDaysList.includes("thursday");
+  return scheduleStore.thursdayEnabled;
 });
 const fridayEnabled = computed(() => {
-  return editableDaysList.includes("friday");
+  return scheduleStore.fridayEnabled;
 });
 const saturdayEnabled = computed(() => {
-  return editableDaysList.includes("saturday");
+  return scheduleStore.saturdayEnabled;
 });
 const sundayEnabled = computed(() => {
-  return editableDaysList.includes("sunday");
+  return scheduleStore.sundayEnabled;
 });
 
 // Methods
-const getHours = (day: Days): number => {
+const getHours = (day: Day): number => {
   return scheduleStore.getHours(day);
 };
 
-const resetHour = (day: Days) => {
+const resetHour = (day: Day) => {
   if (scheduleStore.activeDays.length <= 1) {
     toast.add({
       severity: "error",
@@ -112,16 +111,15 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
   }
 });
 
-const addToEditList = (day: Days) => {
-  editableDaysList.push(day);
+const addToEditList = (day: Day) => {
+  scheduleStore.addToEditList(day);
 };
 
-const removeFromEditList = (day: Days) => {
-  const index = editableDaysList.findIndex((item) => item === day);
-  editableDaysList.splice(index, 1);
+const removeFromEditList = (day: Day) => {
+  scheduleStore.removeFromEditList(day);
 };
 
-const addDayToActiveList = (day: Days) => {
+const addDayToActiveList = (day: Day) => {
   const currentDay = scheduleFormRef.values[day];
   if (currentDay.opening === currentDay.closing) {
     toast.add({
@@ -138,7 +136,7 @@ const addDayToActiveList = (day: Days) => {
   removeFromEditList(day);
 };
 
-const removeDayFromActiveList = (day: Days) => {
+const removeDayFromActiveList = (day: Day) => {
   scheduleStore.removeDayFromActiveList(day);
 };
 </script>

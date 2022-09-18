@@ -51,6 +51,7 @@ export const useScheduleStore = defineStore({
       "saturday",
       "sunday",
     ] as Day[],
+    editableDaysList: [] as Day[],
   }),
   actions: {
     addDayToActiveList(day: Day, start: string, end: string): void {
@@ -85,6 +86,36 @@ export const useScheduleStore = defineStore({
         diff = diff + 24;
       }
       return diff;
+    },
+    addToEditList(day: Day) {
+      this.editableDaysList.push(day);
+    },
+    removeFromEditList(day: Day) {
+      const index = this.editableDaysList.findIndex((item) => item === day);
+      this.editableDaysList.splice(index, 1);
+    },
+  },
+  getters: {
+    mondayEnabled(): boolean {
+      return this.editableDaysList.includes("monday");
+    },
+    tuesdayEnabled(): boolean {
+      return this.editableDaysList.includes("tuesday");
+    },
+    wednesdayEnabled(): boolean {
+      return this.editableDaysList.includes("wednesday");
+    },
+    thursdayEnabled(): boolean {
+      return this.editableDaysList.includes("thursday");
+    },
+    fridayEnabled(): boolean {
+      return this.editableDaysList.includes("friday");
+    },
+    saturdayEnabled(): boolean {
+      return this.editableDaysList.includes("saturday");
+    },
+    sundayEnabled(): boolean {
+      return this.editableDaysList.includes("sunday");
     },
   },
 });
