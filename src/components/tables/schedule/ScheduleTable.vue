@@ -13,7 +13,10 @@ import { useToast } from "primevue/usetoast";
 import { SCHEDULE_OPTIONS } from "@/constants";
 // Services
 import service from "@/http/services";
+// Store
+import { useScheduleStore } from "@/stores/schedule";
 
+const scheduleStore = useScheduleStore();
 type Days =
   | "monday"
   | "tuesday"
@@ -25,35 +28,14 @@ type Days =
 
 const hours = ref(SCHEDULE_OPTIONS);
 const { t } = useI18n();
-const scheduleValues = reactive({
-  monday: {
-    opening: "09:00",
-    closing: "18:00",
-  },
-  tuesday: {
-    opening: "09:00",
-    closing: "18:00",
-  },
-  wednesday: {
-    opening: "09:00",
-    closing: "18:00",
-  },
-  thursday: {
-    opening: "09:00",
-    closing: "18:00",
-  },
-  friday: {
-    opening: "09:00",
-    closing: "18:00",
-  },
-  saturday: {
-    opening: "09:00",
-    closing: "18:00",
-  },
-  sunday: {
-    opening: "09:00",
-    closing: "18:00",
-  },
+const scheduleValues = ref({
+  monday: scheduleStore.monday,
+  tuesday: scheduleStore.tuesday,
+  wednesday: scheduleStore.wednesday,
+  thursday: scheduleStore.thursday,
+  friday: scheduleStore.friday,
+  saturday: scheduleStore.saturday,
+  sunday: scheduleStore.sunday,
 });
 const toast = useToast();
 
