@@ -83,6 +83,7 @@ import { computed, onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
+import { useToast } from "primevue/usetoast";
 // Services
 import service from "@/http/services";
 // Interfaces
@@ -91,7 +92,7 @@ import type Bank from "@/interfaces/bank";
 // Store
 import { useBusinessStore } from "@/stores/business";
 import { useProductStore } from "@/stores/product";
-import { useToast } from "primevue/usetoast";
+import { useScheduleStore } from "@/stores/schedule";
 
 // Data
 const productsStore = useProductStore();
@@ -145,20 +146,13 @@ const userOptionsItems = ref([
 ]);
 const businessStore = useBusinessStore();
 const toast = useToast();
+const scheduleStore = useScheduleStore();
 
 // Vue lifecycle
 onBeforeMount(async () => {
   getAssociatedBusiness();
-  try {
-    await productsStore.getProducts();
-  } catch (error) {
-    toast.add({
-      severity: "error",
-      summary: t("toast.products.list.error.title"),
-      detail: t("toast.products.list.error.message"),
-      life: 3000,
-    });
-  }
+  getProducts();
+  getSchedule();
 });
 // Computed
 const basicInfoCompleted = computed(() => {
@@ -238,6 +232,27 @@ const getBank = async () => {
     businessStore.setBank(bankSaved);
   } catch (error) {
     console.error(error);
+  }
+};
+
+const getProducts = async () => {
+  try {
+    await productsStore.getProducts();
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: t("toast.products.list.error.title"),
+      detail: t("toast.products.list.error.message"),
+      life: 3000,
+    });
+  }
+};
+
+const getSchedule = () => {
+  try {
+    scheduleStore.getSchedule();
+  } catch (error) {
+    console.log(error);
   }
 };
 </script>
