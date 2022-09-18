@@ -10,8 +10,6 @@ import { useForm } from "vee-validate";
 import { useToast } from "primevue/usetoast";
 // Constants
 import { SCHEDULE_OPTIONS } from "@/constants";
-// Services
-import service from "@/http/services";
 // Store
 import { useScheduleStore } from "@/stores/schedule";
 
