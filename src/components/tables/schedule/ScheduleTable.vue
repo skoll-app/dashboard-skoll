@@ -107,7 +107,12 @@ const saveSchedule = scheduleFormRef.handleSubmit(async (values) => {
   try {
     await service.schedule.save(schedule);
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t("onboarding.schedule.messages.error.couldntSave"),
+      life: 5000,
+    });
   }
 });
 

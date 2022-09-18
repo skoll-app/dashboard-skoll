@@ -152,7 +152,8 @@
       "messages": {
         "error": {
           "differentHours": "Debes escoger hora de apertura diferente a la de cierre ó este día no se tendrá en cuenta dentro del horario.",
-          "minimumDays": "Debes tener activo por lo menos un día."
+          "minimumDays": "Debes tener activo por lo menos un día.",
+          "couldntSave": "No se pudo guardar el horario"
         }
       }
     }
