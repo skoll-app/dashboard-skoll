@@ -58,8 +58,8 @@ export const useScheduleStore = defineStore({
       const index = this.activeDays.findIndex((item) => item === day);
       if (index < 0) {
         this.activeDays.push(day);
-        this.setHours(day, start, end);
       }
+      this.setHours(day, start, end);
     },
     removeDayFromActiveList(day: Day) {
       const index = this.activeDays.findIndex((item) => item === day);
