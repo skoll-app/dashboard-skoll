@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+// Utils
+import moment from "moment";
 
 type Day =
   | "monday"
@@ -71,6 +73,18 @@ export const useScheduleStore = defineStore({
     resetHours(day: Day) {
       this[day].opening = "00:00";
       this[day].closing = "00:00";
-    }
+    },
+    getHours(day: Day): number {
+      return this.getHoursDiff(this[day].opening, this[day].closing);
+    },
+    getHoursDiff(start: string, end: string): number {
+      const startTime = moment(start, "hh:mm");
+      const endTime = moment(end, "hh:mm");
+      let diff = endTime.diff(startTime, "hours");
+      if (diff < 0) {
+        diff = diff + 24;
+      }
+      return diff;
+    },
   },
 });

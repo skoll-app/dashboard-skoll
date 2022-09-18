@@ -5,7 +5,6 @@ import { computed, reactive, ref } from "vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
 import ScheduleRowButtons from "./ScheduleRowButtons.vue";
 // Utils
-import moment from "moment";
 import { useI18n } from "vue-i18n";
 import { useForm } from "vee-validate";
 import { useToast } from "primevue/usetoast";
@@ -71,20 +70,7 @@ const sundayEnabled = computed(() => {
 
 // Methods
 const getHours = (day: Days): number => {
-  return getHoursDiff(
-    scheduleFormRef.values[day].opening,
-    scheduleFormRef.values[day].closing
-  );
-};
-
-const getHoursDiff = (start: string, end: string): number => {
-  const startTime = moment(start, "hh:mm");
-  const endTime = moment(end, "hh:mm");
-  let diff = endTime.diff(startTime, "hours");
-  if (diff < 0) {
-    diff = diff + 24;
-  }
-  return diff;
+  return scheduleStore.getHours(day);
 };
 
 const resetHour = (day: Days) => {
