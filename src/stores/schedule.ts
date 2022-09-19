@@ -1,57 +1,23 @@
-import service from "@/http/services";
 import { defineStore } from "pinia";
 // Utils
 import moment from "moment";
-
-type Day =
-  | "monday"
-  | "tuesday"
-  | "wednesday"
-  | "thursday"
-  | "friday"
-  | "saturday"
-  | "sunday";
+// Service
+import service from "@/http/services";
+// Enums
+import type { Day } from "@/enums/day";
+import type ScheduleDay from "@/interfaces/schedule-day";
 
 export const useScheduleStore = defineStore({
   id: "schedule",
   state: () => ({
-    monday: {
-      opening: "09:00",
-      closing: "18:00",
-    },
-    tuesday: {
-      opening: "09:00",
-      closing: "18:00",
-    },
-    wednesday: {
-      opening: "09:00",
-      closing: "18:00",
-    },
-    thursday: {
-      opening: "09:00",
-      closing: "18:00",
-    },
-    friday: {
-      opening: "09:00",
-      closing: "18:00",
-    },
-    saturday: {
-      opening: "09:00",
-      closing: "18:00",
-    },
-    sunday: {
-      opening: "09:00",
-      closing: "18:00",
-    },
-    activeDays: [
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-      "sunday",
-    ] as Day[],
+    monday: {} as ScheduleDay,
+    tuesday: {} as ScheduleDay,
+    wednesday: {} as ScheduleDay,
+    thursday: {} as ScheduleDay,
+    friday: {} as ScheduleDay,
+    saturday: {} as ScheduleDay,
+    sunday: {} as ScheduleDay,
+    activeDays: [] as Day[],
     editableDaysList: [] as Day[],
   }),
   actions: {
@@ -73,20 +39,7 @@ export const useScheduleStore = defineStore({
       this[day].closing = end;
     },
     resetHours(day: Day) {
-      this[day].opening = "00:00";
-      this[day].closing = "00:00";
-    },
-    getHours(day: Day): number {
-      return this.getHoursDiff(this[day].opening, this[day].closing);
-    },
-    getHoursDiff(start: string, end: string): number {
-      const startTime = moment(start, "hh:mm");
-      const endTime = moment(end, "hh:mm");
-      let diff = endTime.diff(startTime, "hours");
-      if (diff < 0) {
-        diff = diff + 24;
-      }
-      return diff;
+      this[day] = {};
     },
     addToEditList(day: Day) {
       this.editableDaysList.push(day);
@@ -97,12 +50,38 @@ export const useScheduleStore = defineStore({
     },
     async save() {
       try {
-        const schedule: any = {}
+        const schedule: any = {
+          monday: {} as ScheduleDay,
+          tuesday: {} as ScheduleDay,
+          wednesday: {} as ScheduleDay,
+          thursday: {} as ScheduleDay,
+          friday: {} as ScheduleDay,
+          saturday: {} as ScheduleDay,
+          sunday: {} as ScheduleDay,
+        };
         for (let index = 0; index < this.activeDays.length; index++) {
           const day = this.activeDays[index];
-          schedule[day] = this[day];
+          schedule[day] = {
+            startDate: this[day].opening,
+            endDate: this[day].closing,
+          };
         }
         await service.schedule.save(schedule);
+        this.getSchedule();
+      } catch (error: any) {
+        throw Error(error);
+      }
+    },
+    async getSchedule() {
+      try {
+        const res = await service.schedule.get();
+        const days: any = res.data.data;
+        const daysKeys = Object.keys(days);
+        for (let index = 0; index < daysKeys.length; index++) {
+          const day: Day = daysKeys[index] as Day;
+          this.setHours(day, days[day].startDate, days[day].endDate);
+          this.activeDays.push(day);
+        }
       } catch (error: any) {
         throw Error(error);
       }
@@ -129,6 +108,20 @@ export const useScheduleStore = defineStore({
     },
     sundayEnabled(): boolean {
       return this.editableDaysList.includes("sunday");
+    },
+    getHours: (state) => {
+      return (day: Day) => {
+        const startTime = moment(state[day].opening, "hh:mm");
+        const endTime = moment(state[day].closing, "hh:mm");
+        let diff = endTime.diff(startTime, "hours");
+        if (diff < 0) {
+          diff = diff + 24;
+        }
+        return diff;
+      };
+    },
+    allowSave(): boolean {
+      return this.activeDays.length > 0;
     },
   },
 });

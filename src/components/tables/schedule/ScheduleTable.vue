@@ -12,16 +12,10 @@ import { useToast } from "primevue/usetoast";
 import { SCHEDULE_OPTIONS } from "@/constants";
 // Store
 import { useScheduleStore } from "@/stores/schedule";
+// Enums
+import type { Day } from "@/enums/day";
 
 const scheduleStore = useScheduleStore();
-type Day =
-  | "monday"
-  | "tuesday"
-  | "wednesday"
-  | "thursday"
-  | "friday"
-  | "saturday"
-  | "sunday";
 
 const hours = ref(SCHEDULE_OPTIONS);
 const { t } = useI18n();
@@ -63,6 +57,9 @@ const saturdayEnabled = computed(() => {
 });
 const sundayEnabled = computed(() => {
   return scheduleStore.sundayEnabled;
+});
+const disabledButton = computed(() => {
+  return !scheduleStore.allowSave;
 });
 
 // Methods
@@ -122,7 +119,11 @@ const addDayToActiveList = (day: Day) => {
     removeFromEditList(day);
     return;
   }
-  scheduleStore.addDayToActiveList(day, currentDay.opening, currentDay.closing);
+  scheduleStore.addDayToActiveList(
+    day,
+    currentDay.opening as string,
+    currentDay.closing as string
+  );
   removeFromEditList(day);
 };
 
@@ -347,6 +348,7 @@ const removeDayFromActiveList = (day: Day) => {
       <template v-slot:footer>
         <div class="grid grid-nogutter justify-content-end">
           <Button
+            :disabled="disabledButton"
             type="submit"
             :label="$t('form.buttons.save')"
             class="py-3 px-5 text-xl"
