@@ -41,6 +41,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
+import Tag from "primevue/tag";
 
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -79,5 +80,6 @@ app.component("Sidebar", Sidebar);
 app.component("DataTable", DataTable);
 app.component("Column", Column);
 app.component("ConfirmDialog", ConfirmDialog);
+app.component("Tag", Tag);
 
 app.mount("#app");

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import { useForm } from "vee-validate";
-import { useI18n } from "vue-i18n";
-
 // import VueCropper from "@ballcat/vue-cropper";
 // import type { VueCropperInstance } from "@ballcat/vue-cropper";
 // import "cropperjs/dist/cropper.css";
@@ -10,27 +6,31 @@ import { useI18n } from "vue-i18n";
 
 // Components
 import SKInputNumber from "@/components/ux/SKInputNumber.vue";
-
+// Utils
 import * as yup from "yup";
+import { useForm } from "vee-validate";
+import { useI18n } from "vue-i18n";
+// Services
 import service from "@/http/services";
+import ScheduleTable from "../../../components/tables/schedule/ScheduleTable.vue";
 
 const { t } = useI18n();
 
 // Form
-const validationSchema = yup.object({
-  allowedReservations: yup.number().min(1).required(),
-  minimumValue: yup.number().min(1000).required(),
-});
+// const validationSchema = yup.object({
+//   allowedReservations: yup.number().min(1).required(),
+//   minimumValue: yup.number().min(1000).required(),
+// });
 
-const formRef = reactive(
-  useForm({
-    validationSchema,
-    initialValues: {
-      allowedReservations: 1,
-      minimumValue: 1000,
-    },
-  })
-);
+// const formRef = reactive(
+//   useForm({
+//     validationSchema,
+//     initialValues: {
+//       allowedReservations: 1,
+//       minimumValue: 1000,
+//     },
+//   })
+// );
 
 // const imageSrc = ref(
 //   new URL("../../../assets/img/paisaje.jpg", import.meta.url).href
@@ -78,7 +78,7 @@ const formRef = reactive(
 // };
 </script>
 <template>
-  <Card>
+  <Card class="mb-3">
     <template v-slot:title>{{ t("onboarding.steps.customization") }}</template>
     <template v-slot:content>
       <!-- <VueCropper
@@ -138,5 +138,6 @@ const formRef = reactive(
       </div>
     </template>
   </Card>
+  <ScheduleTable />
 </template>
 <style scoped></style>

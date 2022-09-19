@@ -1,6 +1,6 @@
 {
   "name": "dashboard-skoll",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "scripts": {
     "dev": "run-p type-check dev-only",
     "build": "run-p type-check build-only",
@@ -16,6 +16,7 @@
     "@ballcat/vue-cropper": "^1.0.4",
     "axios": "^0.27.2",
     "gh-pages": "^4.0.0",
+    "moment": "^2.29.4",
     "pinia": "^2.0.16",
     "primeflex": "^3.2.1",
     "primeicons": "^5.0.0",
