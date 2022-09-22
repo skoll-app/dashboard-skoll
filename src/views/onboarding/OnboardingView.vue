@@ -151,8 +151,6 @@ const scheduleStore = useScheduleStore();
 // Vue lifecycle
 onBeforeMount(async () => {
   getAssociatedBusiness();
-  getProducts();
-  getSchedule();
 });
 // Computed
 const basicInfoCompleted = computed(() => {
@@ -181,6 +179,8 @@ const businessLogin = async (apiKey: string, apiLogin: string) => {
     localStorage.setItem("token", res.data.data);
     businessDetail();
     getBank();
+    getProducts();
+    getSchedule();
   } catch (error) {
     console.error(error);
   }
