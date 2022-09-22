@@ -42,6 +42,7 @@ import Column from "primevue/column";
 import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
 import Tag from "primevue/tag";
+import Dialog from "primevue/dialog";
 
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -80,6 +81,8 @@ app.component("Sidebar", Sidebar);
 app.component("DataTable", DataTable);
 app.component("Column", Column);
 app.component("ConfirmDialog", ConfirmDialog);
+// eslint-disable-next-line vue/no-reserved-component-names
+app.component("Dialog", Dialog);
 app.component("Tag", Tag);
 
 app.mount("#app");

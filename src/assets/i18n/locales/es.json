@@ -156,6 +156,24 @@
           "couldntSave": "No se pudo guardar el horario"
         }
       }
+    },
+    "documents": {
+      "important": {
+        "title": "Importante",
+        "first": "Los documentos deben ser claros, legibles, vigentes y completos (Ej. ambas caras).",
+        "second": "Todos los documentos deben coincidir con el titular o razón social.",
+        "third": "Formato permitido: <strong>PNG</strong>, <strong>JPG</strong>, <strong>PDF</strong>.",
+        "fourth": "Peso máximo: <strong>1MB.</strong>"
+      },
+      "messages": {
+        "success": {
+          "title": "Guardado",
+          "saved": "Tu archivo fure guardado"
+        },
+        "error": {
+          "couldntSave": "No se pudo guardar el archivo"
+        }
+      }
     }
   },
   "errors": {
