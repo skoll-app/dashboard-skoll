@@ -25,7 +25,8 @@ const myUploader = async (event: FileUploadRemoveEvent, id: string) => {
   const formData = new FormData();
   formData.append("file", event.files[0]);
   try {
-    await service.multimedia.upload(formData);
+    const res = await service.multimedia.upload(formData);
+    console.log(res);
     toast.add({
       severity: "success",
       summary: t("onboarding.documents.messages.success.title"),
@@ -83,9 +84,9 @@ const openHelpModal = (img: string) => {
     </template>
     <template v-slot:content>
       <FileUpload
-        :name="document.id"
+        :name="document.id.toString()"
         customUpload
-        accept="image/*"
+        accept=".pdf,image/*"
         :maxFileSize="1000000"
         :upload-label="t('form.buttons.upload')"
         :cancel-label="t('form.buttons.cancel')"
