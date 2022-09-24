@@ -7,13 +7,15 @@ import type { FileUploadRemoveEvent } from "primevue/fileupload";
 // Utils
 import { useI18n } from "vue-i18n";
 import { useToast } from "primevue/usetoast";
+// Store
+import { useDocumentsStore } from "@/stores/documents";
 
 const { t } = useI18n();
 const requiredDocuments = ref<any>([]);
 const display = ref(false);
 const imgExample = ref("");
 const toast = useToast();
-const documentsAdded = ref<string[]>([]);
+const documentsStore = useDocumentsStore();
 
 onMounted(() => {
   getParameters();
@@ -23,8 +25,7 @@ onMounted(() => {
 // Methods
 const getDocuments = async () => {
   try {
-    const response = await service.documents.get();
-    documentsAdded.value = Object.keys(response.data.data);
+    documentsStore.getDocuments();
   } catch (error) {
     console.error(error);
   }
@@ -94,7 +95,9 @@ const openHelpModal = (img: string) => {
       {{ document.description }}
     </template>
     <template v-slot:content>
-      <div v-if="!documentsAdded.includes(document.id.toString())">
+      <div
+        v-if="!documentsStore.documentsAdded.includes(document.id.toString())"
+      >
         <FileUpload
           :name="document.id"
           customUpload
