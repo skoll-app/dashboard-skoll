@@ -219,6 +219,31 @@ const service = {
       });
     },
   },
+  documents: {
+    get(): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.get(`${SKOLL_MERCHANT}/legal/document`);
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+    save(documents: any): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.post(
+            `${SKOLL_MERCHANT}/legal/document`,
+            documents
+          );
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+  },
 };
 
 const parseBusiness = (

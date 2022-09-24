@@ -13,20 +13,31 @@ const requiredDocuments = ref<any>([]);
 const display = ref(false);
 const imgExample = ref("");
 const toast = useToast();
+const documentsAdded = ref<string[]>([]);
 
 onMounted(() => {
   getParameters();
+  getDocuments();
 });
 
 // Methods
+const getDocuments = async () => {
+  try {
+    const response = await service.documents.get();
+    documentsAdded.value = Object.keys(response.data.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 const myUploader = async (event: FileUploadRemoveEvent, id: string) => {
-  console.log(event.files);
-  console.log(id);
+  const dataFiles: any = {};
   const formData = new FormData();
   formData.append("file", event.files[0]);
   try {
     const res = await service.multimedia.upload(formData);
-    console.log(res);
+    dataFiles[id] = res.data.location;
+    await service.documents.save(dataFiles);
+    getDocuments();
     toast.add({
       severity: "success",
       summary: t("onboarding.documents.messages.success.title"),
@@ -83,28 +94,38 @@ const openHelpModal = (img: string) => {
       {{ document.description }}
     </template>
     <template v-slot:content>
-      <FileUpload
-        :name="document.id.toString()"
-        customUpload
-        accept=".pdf,image/*"
-        :maxFileSize="1000000"
-        :upload-label="t('form.buttons.upload')"
-        :cancel-label="t('form.buttons.cancel')"
-        :choose-label="t('form.buttons.select')"
-        :multiple="false"
-        :fileLimit="1"
-        @uploader="myUploader($event, document.id)"
-      >
-        <template #empty>
-          <p>{{ t("form.dragAndDrop") }}</p>
-        </template>
-      </FileUpload>
-      <Button
-        label="Ver ejemplo"
-        icon="pi pi-question-circle"
-        class="p-button-info mt-2"
-        @click="openHelpModal(document.example)"
-      />
+      <div v-if="!documentsAdded.includes(document.id.toString())">
+        <FileUpload
+          :name="document.id"
+          customUpload
+          accept=".pdf,image/*"
+          :maxFileSize="1000000"
+          :upload-label="t('form.buttons.upload')"
+          :cancel-label="t('form.buttons.cancel')"
+          :choose-label="t('form.buttons.select')"
+          :multiple="false"
+          :fileLimit="1"
+          @uploader="myUploader($event, document.id)"
+        >
+          <template #empty>
+            <p>{{ t("form.dragAndDrop") }}</p>
+          </template>
+        </FileUpload>
+        <Button
+          label="Ver ejemplo"
+          icon="pi pi-question-circle"
+          class="p-button-info mt-2"
+          @click="openHelpModal(document.example)"
+        />
+      </div>
+      <template v-else>
+        <Tag
+          class="mr-2"
+          icon="pi pi-info-circle"
+          severity="warning"
+          value="El documento esta en revisión"
+        ></Tag>
+      </template>
     </template>
   </Card>
   <Dialog v-model:visible="display" modal>
