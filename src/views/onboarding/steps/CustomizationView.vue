@@ -129,12 +129,8 @@ const { t } = useI18n();
       </form>
     </template>
     <template v-slot:footer>
-      <div class="grid grid-nogutter justify-content-center">
-        <Button
-          type="submit"
-          :label="$t('form.buttons.continue')"
-          class="py-3 px-5 text-xl"
-        />
+      <div class="grid grid-nogutter justify-content-end">
+        <Button type="submit" :label="$t('form.buttons.save')" />
       </div>
     </template>
   </Card>

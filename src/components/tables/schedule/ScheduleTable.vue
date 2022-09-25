@@ -351,7 +351,6 @@ const removeDayFromActiveList = (day: Day) => {
             :disabled="disabledButton"
             type="submit"
             :label="$t('form.buttons.save')"
-            class="py-3 px-5 text-xl"
           />
         </div>
       </template>

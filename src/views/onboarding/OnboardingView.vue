@@ -307,13 +307,13 @@ const getDocuments = async () => {
 
   &.active-link,
   &.exact-active-link {
-    color: var(--primary-color) !important;
+    color: var(--blue-400) !important;
     font-weight: bolder;
   }
 }
 
 ::v-deep(.p-steps .p-steps-item.p-highlight .p-steps-number) {
-  background-color: var(--primary-color);
+  background-color: var(--blue-400);
   color: white;
 }
 
