@@ -11,14 +11,12 @@ import { useToast } from "primevue/usetoast";
 import { useDocumentsStore } from "@/stores/documents";
 
 const { t } = useI18n();
-const requiredDocuments = ref<any>([]);
 const display = ref(false);
 const imgExample = ref("");
 const toast = useToast();
 const documentsStore = useDocumentsStore();
 
 onMounted(() => {
-  getParameters();
   getDocuments();
 });
 
@@ -27,7 +25,12 @@ const getDocuments = async () => {
   try {
     documentsStore.getDocuments();
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t("onboarding.documents.messages.error.load"),
+      life: 3000,
+    });
   }
 };
 const myUploader = async (event: FileUploadRemoveEvent, id: string) => {
@@ -55,15 +58,6 @@ const myUploader = async (event: FileUploadRemoveEvent, id: string) => {
   }
 };
 
-const getParameters = async () => {
-  try {
-    const response = await service.utils.parameters();
-    requiredDocuments.value = response.data.data.documentsRequiredForMerchant;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 const openHelpModal = (img: string) => {
   display.value = true;
   imgExample.value = img;
@@ -87,7 +81,11 @@ const openHelpModal = (img: string) => {
       </ul>
     </template>
   </Card>
-  <Card v-for="document in requiredDocuments" :key="document.name" class="mb-4">
+  <Card
+    v-for="document in documentsStore.requiredDocuments"
+    :key="document.name"
+    class="mb-4"
+  >
     <template v-slot:title>
       {{ document.name }}
     </template>

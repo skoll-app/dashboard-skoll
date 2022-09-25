@@ -171,7 +171,8 @@
           "saved": "Tu archivo fure guardado"
         },
         "error": {
-          "couldntSave": "No se pudo guardar el archivo"
+          "couldntSave": "No se pudo guardar el archivo",
+          "load": "No se pudieron cargar los documentos"
         }
       }
     }
