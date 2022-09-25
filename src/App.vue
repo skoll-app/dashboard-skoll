@@ -34,24 +34,29 @@ function enableInterceptor() {
 }
 
 function enableAuthInterceptor() {
+  let requested = 0;
   apiAuth.interceptors.request.use(
     (config) => {
+      requested++;
       isLoading.value = true;
       return config;
     },
     (error) => {
-      isLoading.value = false;
+      requested--;
+      if (requested === 0) isLoading.value = false;
       return Promise.reject(error);
     }
   );
 
   apiAuth.interceptors.response.use(
     (response) => {
-      isLoading.value = false;
+      requested--;
+      if (requested === 0) isLoading.value = false;
       return response;
     },
     function (error) {
-      isLoading.value = false;
+      requested--;
+      if (requested === 0) isLoading.value = false;
       return Promise.reject(error);
     }
   );

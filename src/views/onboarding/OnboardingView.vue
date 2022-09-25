@@ -93,6 +93,7 @@ import type Bank from "@/interfaces/bank";
 import { useBusinessStore } from "@/stores/business";
 import { useProductStore } from "@/stores/product";
 import { useScheduleStore } from "@/stores/schedule";
+import { useDocumentsStore } from "@/stores/documents";
 
 // Data
 const productsStore = useProductStore();
@@ -147,12 +148,11 @@ const userOptionsItems = ref([
 const businessStore = useBusinessStore();
 const toast = useToast();
 const scheduleStore = useScheduleStore();
+const documentsStore = useDocumentsStore();
 
 // Vue lifecycle
 onBeforeMount(async () => {
   getAssociatedBusiness();
-  getProducts();
-  getSchedule();
 });
 // Computed
 const basicInfoCompleted = computed(() => {
@@ -181,6 +181,9 @@ const businessLogin = async (apiKey: string, apiLogin: string) => {
     localStorage.setItem("token", res.data.data);
     businessDetail();
     getBank();
+    getProducts();
+    getSchedule();
+    getDocuments();
   } catch (error) {
     console.error(error);
   }
@@ -253,6 +256,19 @@ const getSchedule = () => {
     scheduleStore.getSchedule();
   } catch (error) {
     console.log(error);
+  }
+};
+
+const getDocuments = async () => {
+  try {
+    documentsStore.getDocuments();
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t("onboarding.documents.messages.error.load"),
+      life: 3000,
+    });
   }
 };
 </script>
