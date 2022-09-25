@@ -455,11 +455,10 @@ const nextPage = () => {
         </div>
       </template>
       <template v-slot:footer>
-        <div class="grid grid-nogutter justify-content-center">
+        <div class="grid grid-nogutter justify-content-end">
           <Button
             type="submit"
             :label="$t('form.buttons.createBusiness')"
-            class="py-3 px-5 text-xl"
             :disabled="businessStore.basicStepCompleted"
           />
         </div>

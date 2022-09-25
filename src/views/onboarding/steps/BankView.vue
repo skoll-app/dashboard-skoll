@@ -213,11 +213,10 @@ const saveAccount = formRef.handleSubmit(async (bank: Bank) => {
         </div>
       </template>
       <template v-slot:footer>
-        <div class="grid grid-nogutter justify-content-center">
+        <div class="grid grid-nogutter justify-content-end">
           <Button
             type="submit"
-            :label="$t('form.buttons.continue')"
-            class="py-3 px-5 text-xl"
+            :label="$t('form.buttons.save')"
             :disabled="businessStore.bankStepCompleted"
           />
         </div>
