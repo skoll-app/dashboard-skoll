@@ -4,17 +4,8 @@
 // import "cropperjs/dist/cropper.css";
 // import type Cropper from "cropperjs";
 
-// Components
-import SKInputNumber from "@/components/ux/SKInputNumber.vue";
-// Utils
-import * as yup from "yup";
-import { useForm } from "vee-validate";
-import { useI18n } from "vue-i18n";
 // Services
-import service from "@/http/services";
-import ScheduleTable from "../../../components/tables/schedule/ScheduleTable.vue";
-
-const { t } = useI18n();
+import ScheduleTable from "@/components/tables/schedule/ScheduleTable.vue";
 
 // Form
 // const validationSchema = yup.object({
@@ -78,62 +69,6 @@ const { t } = useI18n();
 // };
 </script>
 <template>
-  <Card class="mb-3">
-    <template v-slot:title>{{ t("onboarding.steps.customization") }}</template>
-    <template v-slot:content>
-      <!-- <VueCropper
-        ref="vueCropperRef"
-        class="img-container"
-        :src="imageSrc"
-        preview=".img-preview"
-        v-bind="cropperOptions"
-        @crop="onCrop"
-        :imgStyle="{ maxHeight: '300px', width: 'auto' }"
-      />
-      <Button
-        class="btn btn-primary mt-2"
-        label="Cortar"
-        @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
-      ></Button> -->
-      <Divider />
-      <h5 class="p-card-title">{{ t("onboarding.bookings") }}</h5>
-      <form>
-        <div class="grid">
-          <div class="col-12 md:col-6">
-            <SKInputNumber
-              labelClasses="block mb-2"
-              :label="t('form.allowedReservations')"
-              inputId="allowedReservations"
-              name="allowedReservations"
-              mode="decimal"
-              showButtons
-              :min="1"
-              inputClasses="w-full"
-            />
-          </div>
-          <div class="col-12 md:col-6">
-            <SKInputNumber
-              labelClasses="block mb-2"
-              :label="t('form.minimumBookingValue')"
-              inputId="minimumBookingValue"
-              mode="currency"
-              currency="COP"
-              name="minimumValue"
-              inputClasses="w-full"
-              showButtons
-              :min="1000"
-              :step="1000"
-            />
-          </div>
-        </div>
-      </form>
-    </template>
-    <template v-slot:footer>
-      <div class="grid grid-nogutter justify-content-end">
-        <Button type="submit" :label="$t('form.buttons.save')" />
-      </div>
-    </template>
-  </Card>
   <ScheduleTable />
 </template>
 <style scoped></style>

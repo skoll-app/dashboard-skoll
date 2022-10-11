@@ -86,7 +86,8 @@
       "createCategory": "Crear categoría",
       "yes": "Si",
       "no": "No",
-      "save": "Guardar"
+      "save": "Guardar",
+      "edit": "Editar"
     },
     "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
     "empty": {

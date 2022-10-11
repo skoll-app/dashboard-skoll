@@ -137,6 +137,19 @@ const service = {
         }
       });
     },
+    update(businessData: Partial<BusinessBasicData>): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.put(
+            `${SKOLL_MERCHANT}/merchant/`,
+            parseBusiness(businessData)
+          );
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
   },
   product: {
     create(product: Product): Promise<any> {
@@ -249,6 +262,7 @@ const service = {
 const parseBusiness = (
   businessData: Partial<BusinessBasicData>
 ): Partial<BusinessBasicData> => {
+  console.log(businessData)
   const business = {
     address: businessData.address,
     bussinesName: businessData.companyName,
@@ -262,6 +276,8 @@ const parseBusiness = (
     category: businessData.category,
     name: businessData.name,
     taxRegime: businessData.taxRegime,
+    numberOfReservation: businessData.allowedReservations,
+    minimumReserve: businessData.minimumValue,
   };
   return business;
 };

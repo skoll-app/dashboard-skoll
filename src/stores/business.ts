@@ -35,6 +35,8 @@ export const useBusinessStore = defineStore({
     } as LegalRepresentative,
     banks: [] as Bank[],
     stepsCompleted: [] as Array<StepsCompleted>,
+    allowedReservations: 1,
+    minimumValue: 1000,
   }),
   getters: {
     getFirstBank(): Bank {
@@ -72,6 +74,8 @@ export const useBusinessStore = defineStore({
         documentNumber: business.legalRepresentative?.documentNumber || "",
         documentType: business.legalRepresentative?.documentType || "",
       };
+      this.allowedReservations = 1;
+      this.minimumValue = 1000;
       this.setStep(Steps.BASIC_DATA);
     },
     setBank(bank: Bank) {

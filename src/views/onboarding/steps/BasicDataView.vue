@@ -8,6 +8,7 @@ import { useI18n } from "vue-i18n";
 import SKInputText from "@/components/ux/SKInputText.vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
 import SKInputMask from "@/components/ux/SKInputMask.vue";
+import SKInputNumber from "@/components/ux/SKInputNumber.vue";
 // Enums
 import KindOfPerson from "@/enums/person";
 // Interfaces
@@ -91,6 +92,8 @@ const validationSchema = yup.object({
     documentType: yup.string().required(),
     document: yup.string().required(),
   }),
+  allowedReservations: yup.number().min(1).required(),
+  minimumValue: yup.number().min(1000).required(),
 });
 const initialValues = reactive({
   businessName: "",
@@ -110,6 +113,8 @@ const initialValues = reactive({
     document: "",
     documentType: "",
   },
+  allowedReservations: 1,
+  minimumValue: 1000,
 });
 const formRef = reactive(
   useForm({
@@ -149,6 +154,8 @@ const taxation = computed(() => {
   return options;
 });
 
+const stepCompleted = computed(() => businessStore.basicStepCompleted);
+
 // watch(
 //   () => formRef.meta.valid,
 //   (valid) => {
@@ -181,6 +188,8 @@ watch(
         document: business.legalRepresentative.documentNumber,
         documentType: business.legalRepresentative.documentType,
       },
+      allowedReservations: business.allowedReservations,
+      minimumValue: business.minimumValue,
     });
   },
   { deep: true }
@@ -211,6 +220,8 @@ onMounted(() => {
         document: business.legalRepresentative.documentNumber,
         documentType: business.legalRepresentative.documentType,
       },
+      allowedReservations: business.allowedReservations,
+      minimumValue: business.minimumValue,
     });
   }
 });
@@ -255,8 +266,12 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
         firstName: values.legalRepresentative.name,
         lastName: values.legalRepresentative.lastname,
       },
+      allowedReservations: values.allowedReservations,
+      minimumValue: values.minimumValue,
     };
-    if (!businessStore.basicStepCompleted) {
+    if (businessStore.basicStepCompleted) {
+      await service.business.update(businessData);
+    } else {
       const response = await service.business.signUp(businessData);
       localStorage.setItem("token", response.data.data);
     }
@@ -295,7 +310,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessName')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-4">
@@ -306,7 +320,6 @@ const nextPage = () => {
               :options="businessTypes"
               :label="$t('form.businessType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -316,7 +329,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.email')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -327,7 +339,6 @@ const nextPage = () => {
               inputClasses="w-full"
               mask="(999) 999 9999"
               placeholder="(999) 999 9999"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -339,7 +350,6 @@ const nextPage = () => {
               :label="$t('form.city')"
               labelClasses="block mb-2"
               filter
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -349,7 +359,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessAddress')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -360,7 +369,6 @@ const nextPage = () => {
               :options="kindOfperson"
               :label="$t('form.kindOfperson')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -371,7 +379,6 @@ const nextPage = () => {
               :options="taxation"
               :label="$t('form.taxation')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -382,7 +389,6 @@ const nextPage = () => {
               :options="businessDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -392,7 +398,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -402,7 +407,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.companyName')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
         </div>
@@ -417,7 +421,6 @@ const nextPage = () => {
               :placeholder="$t('form.name')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -428,7 +431,6 @@ const nextPage = () => {
               :placeholder="$t('form.lastname')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -439,7 +441,6 @@ const nextPage = () => {
               :options="legalRepresentativeDocumentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -449,7 +450,36 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
+            />
+          </div>
+        </div>
+
+        <h5 class="p-card-title">{{ t("onboarding.bookings") }}</h5>
+        <div class="grid">
+          <div class="col-12 md:col-6">
+            <SKInputNumber
+              labelClasses="block mb-2"
+              :label="t('form.allowedReservations')"
+              inputId="allowedReservations"
+              name="allowedReservations"
+              mode="decimal"
+              showButtons
+              :min="1"
+              inputClasses="w-full"
+            />
+          </div>
+          <div class="col-12 md:col-6">
+            <SKInputNumber
+              labelClasses="block mb-2"
+              :label="t('form.minimumBookingValue')"
+              inputId="minimumBookingValue"
+              mode="currency"
+              currency="COP"
+              name="minimumValue"
+              inputClasses="w-full"
+              showButtons
+              :min="1000"
+              :step="1000"
             />
           </div>
         </div>
@@ -458,8 +488,12 @@ const nextPage = () => {
         <div class="grid grid-nogutter justify-content-end">
           <Button
             type="submit"
-            :label="$t('form.buttons.createBusiness')"
-            :disabled="businessStore.basicStepCompleted"
+            :label="
+              stepCompleted
+                ? t('form.buttons.edit')
+                : t('form.buttons.createBusiness')
+            "
+            :disabled="!stepCompleted || !formRef.meta.valid"
           />
         </div>
       </template>

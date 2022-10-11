@@ -193,26 +193,30 @@ const businessDetail = async () => {
   try {
     const res = await service.business.detail();
     const business = res.data.data;
-    const formObject = {
-      name: business.name,
-      category: business.merchantCategory,
-      email: business.email,
-      phone: business.cellPhone,
-      city: business.cityId,
-      address: business.adress,
-      kindOfPerson: business.kindOfPerson,
-      documentType: business.documentType,
-      documentNumber: business.documentNumber,
-      companyName: business.bussinesName,
-      taxRegime: business.taxRegime,
-      legalRepresentative: {
-        firstName: business.legalRepresentative.firstName,
-        lastName: business.legalRepresentative.lastName,
-        documentNumber: business.legalRepresentative.documentNumber,
-        documentType: business.legalRepresentative.documentType,
-      },
-    };
-    businessStore.setBasicData(formObject);
+    if (business) {
+      const formObject = {
+        name: business.name,
+        category: business.merchantCategory,
+        email: business.email,
+        phone: business.cellPhone,
+        city: business.cityId,
+        address: business.adress,
+        kindOfPerson: business.kindOfPerson,
+        documentType: business.documentType,
+        documentNumber: business.documentNumber,
+        companyName: business.bussinesName,
+        taxRegime: business.taxRegime,
+        legalRepresentative: {
+          firstName: business.legalRepresentative.firstName,
+          lastName: business.legalRepresentative.lastName,
+          documentNumber: business.legalRepresentative.documentNumber,
+          documentType: business.legalRepresentative.documentType,
+        },
+        allowedReservations: business.numberOfReservation,
+        minimumValue: business.minimumReserve,
+      };
+      businessStore.setBasicData(formObject);
+    }
   } catch (error) {
     console.error(error);
   }
