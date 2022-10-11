@@ -74,8 +74,8 @@ export const useBusinessStore = defineStore({
         documentNumber: business.legalRepresentative?.documentNumber || "",
         documentType: business.legalRepresentative?.documentType || "",
       };
-      this.allowedReservations = 1;
-      this.minimumValue = 1000;
+      this.allowedReservations = business.allowedReservations || 1;
+      this.minimumValue = business.minimumValue || 1000;
       this.setStep(Steps.BASIC_DATA);
     },
     setBank(bank: Bank) {

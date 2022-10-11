@@ -140,7 +140,7 @@ const service = {
     update(businessData: Partial<BusinessBasicData>): Promise<any> {
       return new Promise((resolve, reject) => {
         try {
-          const response = apiAuth.patch(
+          const response = apiAuth.put(
             `${SKOLL_MERCHANT}/merchant/`,
             parseBusiness(businessData)
           );
