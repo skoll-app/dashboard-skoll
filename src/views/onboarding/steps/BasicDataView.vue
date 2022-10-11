@@ -32,11 +32,7 @@ const businessStore = useBusinessStore();
 const { t } = useI18n();
 const toast = useToast();
 // Begin select fields
-const businessTypes = ref<SelectOption[]>([
-  { name: "Bar", code: "Bar" },
-  { name: "Discoteca", code: "Discoteca" },
-  { name: "Restaurante", code: "Restaurante" },
-]);
+const businessTypes = ref<SelectOption[]>([]);
 const kindOfperson = ref<SelectOption[]>([
   {
     name: KindOfPerson.NATURAL.toLowerCase(),
@@ -47,30 +43,7 @@ const kindOfperson = ref<SelectOption[]>([
     code: KindOfPerson.JURIDICAL,
   },
 ]);
-const businessDocumentType = ref<SelectOption[]>([
-  {
-    name: t("form.documentTypeList.CC"),
-    code: "CC",
-  },
-  {
-    name: t("form.documentTypeList.NIT"),
-    code: "NIT",
-  },
-]);
-const legalRepresentativeDocumentType = ref<SelectOption[]>([
-  {
-    name: t("form.documentTypeList.CC"),
-    code: "CC",
-  },
-  {
-    name: t("form.documentTypeList.NIT"),
-    code: "NIT",
-  },
-  {
-    name: t("form.documentTypeList.CE"),
-    code: "CE",
-  },
-]);
+const documentType = ref<SelectOption[]>([]);
 // End select fields
 
 // Form
@@ -197,6 +170,7 @@ watch(
 
 onBeforeMount(() => {
   getDepartments();
+  getParameters();
 });
 
 onMounted(() => {
@@ -294,6 +268,35 @@ const nextPage = () => {
     step: 0,
   });
 };
+
+const getParameters = async () => {
+  try {
+    const response = await service.utils.parameters();
+    const { merchantCategory, documentType } = response.data.data.params;
+    setMerchantCategory(merchantCategory);
+    setDocumentsType(documentType);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const setMerchantCategory = (
+  categories: Array<{ id: string; name: string }>
+) => {
+  categories.map((cat: { id: string; name: string }) => {
+    businessTypes.value.push({ code: cat.id, name: cat.name });
+  });
+};
+
+const setDocumentsType = (documents: Array<{ id: string; name: string }>) => {
+  documents.map((doc: { id: string; name: string }) => {
+    if (doc.name !== "TI") {
+      documentType.value.push({
+        code: doc.id,
+        name: t("form.documentTypeList." + doc.name),
+      });
+    }
+  });
+};
 </script>
 <template>
   <form @submit="registerBusiness">
@@ -386,7 +389,7 @@ const nextPage = () => {
               name="businessDocumentType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
-              :options="businessDocumentType"
+              :options="documentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
             />
@@ -438,7 +441,7 @@ const nextPage = () => {
               name="legalRepresentative.documentType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
-              :options="legalRepresentativeDocumentType"
+              :options="documentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
             />
