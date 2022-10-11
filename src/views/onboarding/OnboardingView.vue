@@ -94,6 +94,7 @@ import { useBusinessStore } from "@/stores/business";
 import { useProductStore } from "@/stores/product";
 import { useScheduleStore } from "@/stores/schedule";
 import { useDocumentsStore } from "@/stores/documents";
+import getError from "@/utils/handle-errors";
 
 // Data
 const productsStore = useProductStore();
@@ -171,7 +172,12 @@ const getAssociatedBusiness = async () => {
       businessLogin(merchantAssociated.apiKey, merchantAssociated.apiLogin);
     }
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
@@ -185,7 +191,12 @@ const businessLogin = async (apiKey: string, apiLogin: string) => {
     getSchedule();
     getDocuments();
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
@@ -218,7 +229,12 @@ const businessDetail = async () => {
       businessStore.setBasicData(formObject);
     }
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
@@ -238,7 +254,12 @@ const getBank = async () => {
     };
     businessStore.setBank(bankSaved);
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
@@ -259,7 +280,12 @@ const getSchedule = () => {
   try {
     scheduleStore.getSchedule();
   } catch (error) {
-    console.log(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
