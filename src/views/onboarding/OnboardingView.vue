@@ -242,17 +242,19 @@ const getBank = async () => {
   try {
     const response = await service.business.getBank();
     const bank = response.data.data.bankAccount[0];
-    const bankSaved: Bank = {
-      fullname: bank.fullName,
-      bank: bank.bank,
-      account: bank.account,
-      document: bank.documentNumber,
-      documentType: bank.documentType,
-      email: bank.email,
-      phone: bank.phone,
-      type: bank.type,
-    };
-    businessStore.setBank(bankSaved);
+    if (bank) {
+      const bankSaved: Bank = {
+        fullname: bank.fullName,
+        bank: bank.bank,
+        account: bank.account,
+        document: bank.documentNumber,
+        documentType: bank.documentType,
+        email: bank.email,
+        phone: bank.phone,
+        type: bank.type,
+      };
+      businessStore.setBank(bankSaved);
+    }
   } catch (error) {
     toast.add({
       severity: "error",
