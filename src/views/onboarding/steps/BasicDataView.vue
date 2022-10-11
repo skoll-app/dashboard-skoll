@@ -251,8 +251,7 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
     }
     businessStore.setBasicData(businessData);
     nextPage();
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
     toast.add({
       severity: "error",
       summary: "Error",
@@ -283,7 +282,7 @@ const setMerchantCategory = (
   categories: Array<{ id: string; name: string }>
 ) => {
   categories.map((cat: { id: string; name: string }) => {
-    businessTypes.value.push({ code: cat.id, name: cat.name });
+    businessTypes.value.push({ code: cat.name, name: cat.name });
   });
 };
 
@@ -291,7 +290,7 @@ const setDocumentsType = (documents: Array<{ id: string; name: string }>) => {
   documents.map((doc: { id: string; name: string }) => {
     if (doc.name !== "TI") {
       documentType.value.push({
-        code: doc.id,
+        code: doc.name,
         name: t("form.documentTypeList." + doc.name),
       });
     }
@@ -496,7 +495,7 @@ const setDocumentsType = (documents: Array<{ id: string; name: string }>) => {
                 ? t('form.buttons.edit')
                 : t('form.buttons.createBusiness')
             "
-            :disabled="!stepCompleted || !formRef.meta.valid"
+            :disabled="!formRef.meta.valid"
           />
         </div>
       </template>
