@@ -5,6 +5,7 @@ import moment from "moment";
 import service from "@/http/services";
 // Enums
 import type { Day } from "@/enums/day";
+// Interfaces
 import type ScheduleDay from "@/interfaces/schedule-day";
 
 export const useScheduleStore = defineStore({
@@ -66,6 +67,7 @@ export const useScheduleStore = defineStore({
             endDate: this[day].closing,
           };
         }
+        console.log(schedule);
         await service.schedule.save(schedule);
         this.getSchedule();
       } catch (error: any) {
@@ -79,6 +81,8 @@ export const useScheduleStore = defineStore({
         const daysKeys = Object.keys(days);
         for (let index = 0; index < daysKeys.length; index++) {
           const day: Day = daysKeys[index] as Day;
+          if (days[day].startDate === "00:00" && days[day].endDate === "00:00")
+            return;
           this.setHours(day, days[day].startDate, days[day].endDate);
           this.activeDays.push(day);
         }

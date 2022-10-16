@@ -156,7 +156,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="monday.opening"
               :options="hours"
-              placeholder="08:00"
+              placeholder="00:00"
               :disabled="!mondayEnabled"
             />
           </div>
@@ -164,7 +164,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="monday.closing"
               :options="hours"
-              placeholder="17:00"
+              placeholder="00:00"
               :disabled="!mondayEnabled"
             />
           </div>
@@ -184,7 +184,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="tuesday.opening"
               :options="hours"
-              placeholder="08:00"
+              placeholder="00:00"
               :disabled="!tuesdayEnabled"
             />
           </div>
@@ -192,7 +192,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="tuesday.closing"
               :options="hours"
-              placeholder="17:00"
+              placeholder="00:00"
               :disabled="!tuesdayEnabled"
             />
           </div>
@@ -212,7 +212,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="wednesday.opening"
               :options="hours"
-              placeholder="08:00"
+              placeholder="00:00"
               :disabled="!wednesdayEnabled"
             />
           </div>
@@ -220,7 +220,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="wednesday.closing"
               :options="hours"
-              placeholder="17:00"
+              placeholder="00:00"
               :disabled="!wednesdayEnabled"
             />
           </div>
@@ -240,7 +240,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="thursday.opening"
               :options="hours"
-              placeholder="08:00"
+              placeholder="00:00"
               :disabled="!thursdayEnabled"
             />
           </div>
@@ -248,7 +248,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="thursday.closing"
               :options="hours"
-              placeholder="17:00"
+              placeholder="00:00"
               :disabled="!thursdayEnabled"
             />
           </div>
@@ -268,7 +268,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="friday.opening"
               :options="hours"
-              placeholder="08:00"
+              placeholder="00:00"
               :disabled="!fridayEnabled"
             />
           </div>
@@ -276,7 +276,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="friday.closing"
               :options="hours"
-              placeholder="17:00"
+              placeholder="00:00"
               :disabled="!fridayEnabled"
             />
           </div>
@@ -296,7 +296,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="saturday.opening"
               :options="hours"
-              placeholder="08:00"
+              placeholder="00:00"
               :disabled="!saturdayEnabled"
             />
           </div>
@@ -304,7 +304,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="saturday.closing"
               :options="hours"
-              placeholder="17:00"
+              placeholder="00:00"
               :disabled="!saturdayEnabled"
             />
           </div>
@@ -324,7 +324,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="sunday.opening"
               :options="hours"
-              placeholder="08:00"
+              placeholder="00:00"
               :disabled="!sundayEnabled"
             />
           </div>
@@ -332,7 +332,7 @@ const removeDayFromActiveList = (day: Day) => {
             <SKSelect
               name="sunday.closing"
               :options="hours"
-              placeholder="17:00"
+              placeholder="00:00"
               :disabled="!sundayEnabled"
             />
           </div>
