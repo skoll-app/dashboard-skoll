@@ -8,6 +8,7 @@ import { useI18n } from "vue-i18n";
 import SKInputText from "@/components/ux/SKInputText.vue";
 import SKSelect from "@/components/ux/SKSelect.vue";
 import SKInputMask from "@/components/ux/SKInputMask.vue";
+import SKInputNumber from "@/components/ux/SKInputNumber.vue";
 // Enums
 import KindOfPerson from "@/enums/person";
 // Interfaces
@@ -31,11 +32,7 @@ const businessStore = useBusinessStore();
 const { t } = useI18n();
 const toast = useToast();
 // Begin select fields
-const businessTypes = ref<SelectOption[]>([
-  { name: "Bar", code: "Bar" },
-  { name: "Discoteca", code: "Discoteca" },
-  { name: "Restaurante", code: "Restaurante" },
-]);
+const businessTypes = ref<SelectOption[]>([]);
 const kindOfperson = ref<SelectOption[]>([
   {
     name: KindOfPerson.NATURAL.toLowerCase(),
@@ -46,30 +43,7 @@ const kindOfperson = ref<SelectOption[]>([
     code: KindOfPerson.JURIDICAL,
   },
 ]);
-const businessDocumentType = ref<SelectOption[]>([
-  {
-    name: t("form.documentTypeList.CC"),
-    code: "CC",
-  },
-  {
-    name: t("form.documentTypeList.NIT"),
-    code: "NIT",
-  },
-]);
-const legalRepresentativeDocumentType = ref<SelectOption[]>([
-  {
-    name: t("form.documentTypeList.CC"),
-    code: "CC",
-  },
-  {
-    name: t("form.documentTypeList.NIT"),
-    code: "NIT",
-  },
-  {
-    name: t("form.documentTypeList.CE"),
-    code: "CE",
-  },
-]);
+const documentType = ref<SelectOption[]>([]);
 // End select fields
 
 // Form
@@ -91,6 +65,8 @@ const validationSchema = yup.object({
     documentType: yup.string().required(),
     document: yup.string().required(),
   }),
+  allowedReservations: yup.number().min(1).required(),
+  minimumValue: yup.number().min(1000).required(),
 });
 const initialValues = reactive({
   businessName: "",
@@ -110,6 +86,8 @@ const initialValues = reactive({
     document: "",
     documentType: "",
   },
+  allowedReservations: 1,
+  minimumValue: 1000,
 });
 const formRef = reactive(
   useForm({
@@ -149,6 +127,8 @@ const taxation = computed(() => {
   return options;
 });
 
+const stepCompleted = computed(() => businessStore.basicStepCompleted);
+
 // watch(
 //   () => formRef.meta.valid,
 //   (valid) => {
@@ -181,6 +161,8 @@ watch(
         document: business.legalRepresentative.documentNumber,
         documentType: business.legalRepresentative.documentType,
       },
+      allowedReservations: business.allowedReservations,
+      minimumValue: business.minimumValue,
     });
   },
   { deep: true }
@@ -188,6 +170,7 @@ watch(
 
 onBeforeMount(() => {
   getDepartments();
+  getParameters();
 });
 
 onMounted(() => {
@@ -211,6 +194,8 @@ onMounted(() => {
         document: business.legalRepresentative.documentNumber,
         documentType: business.legalRepresentative.documentType,
       },
+      allowedReservations: business.allowedReservations,
+      minimumValue: business.minimumValue,
     });
   }
 });
@@ -255,15 +240,18 @@ const registerBusiness = formRef.handleSubmit(async (values) => {
         firstName: values.legalRepresentative.name,
         lastName: values.legalRepresentative.lastname,
       },
+      allowedReservations: values.allowedReservations,
+      minimumValue: values.minimumValue,
     };
-    if (!businessStore.basicStepCompleted) {
+    if (businessStore.basicStepCompleted) {
+      await service.business.update(businessData);
+    } else {
       const response = await service.business.signUp(businessData);
       localStorage.setItem("token", response.data.data);
     }
     businessStore.setBasicData(businessData);
     nextPage();
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
     toast.add({
       severity: "error",
       summary: "Error",
@@ -277,6 +265,35 @@ const nextPage = () => {
   emit("next-page", {
     pageIndex: 0,
     step: 0,
+  });
+};
+
+const getParameters = async () => {
+  try {
+    const response = await service.utils.parameters();
+    const { merchantCategory, documentType } = response.data.data.params;
+    setMerchantCategory(merchantCategory);
+    setDocumentsType(documentType);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const setMerchantCategory = (
+  categories: Array<{ id: string; name: string }>
+) => {
+  categories.map((cat: { id: string; name: string }) => {
+    businessTypes.value.push({ code: cat.name, name: cat.name });
+  });
+};
+
+const setDocumentsType = (documents: Array<{ id: string; name: string }>) => {
+  documents.map((doc: { id: string; name: string }) => {
+    if (doc.name !== "TI") {
+      documentType.value.push({
+        code: doc.name,
+        name: t("form.documentTypeList." + doc.name),
+      });
+    }
   });
 };
 </script>
@@ -295,7 +312,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessName')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-4">
@@ -306,7 +322,6 @@ const nextPage = () => {
               :options="businessTypes"
               :label="$t('form.businessType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -316,7 +331,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.email')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -327,7 +341,6 @@ const nextPage = () => {
               inputClasses="w-full"
               mask="(999) 999 9999"
               placeholder="(999) 999 9999"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -339,7 +352,6 @@ const nextPage = () => {
               :label="$t('form.city')"
               labelClasses="block mb-2"
               filter
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-3">
@@ -349,7 +361,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.businessAddress')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -360,7 +371,6 @@ const nextPage = () => {
               :options="kindOfperson"
               :label="$t('form.kindOfperson')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -371,7 +381,6 @@ const nextPage = () => {
               :options="taxation"
               :label="$t('form.taxation')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -379,10 +388,9 @@ const nextPage = () => {
               name="businessDocumentType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
-              :options="businessDocumentType"
+              :options="documentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -392,7 +400,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -402,7 +409,6 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.companyName')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
         </div>
@@ -417,7 +423,6 @@ const nextPage = () => {
               :placeholder="$t('form.name')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -428,7 +433,6 @@ const nextPage = () => {
               :placeholder="$t('form.lastname')"
               inputClasses="w-full"
               inputStyle="padding: 1rem"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -436,10 +440,9 @@ const nextPage = () => {
               name="legalRepresentative.documentType"
               placeholder="Seleccione"
               select-classes="w-full p-1"
-              :options="legalRepresentativeDocumentType"
+              :options="documentType"
               :label="$t('form.documentType')"
               labelClasses="block mb-2"
-              :disabled="businessStore.basicStepCompleted"
             />
           </div>
           <div class="col-12 md:col-6">
@@ -449,7 +452,36 @@ const nextPage = () => {
               labelClasses="block mb-2"
               :placeholder="$t('form.document')"
               inputClasses="w-full"
-              :disabled="businessStore.basicStepCompleted"
+            />
+          </div>
+        </div>
+
+        <h5 class="p-card-title">{{ t("onboarding.bookings") }}</h5>
+        <div class="grid">
+          <div class="col-12 md:col-6">
+            <SKInputNumber
+              labelClasses="block mb-2"
+              :label="t('form.allowedReservations')"
+              inputId="allowedReservations"
+              name="allowedReservations"
+              mode="decimal"
+              showButtons
+              :min="1"
+              inputClasses="w-full"
+            />
+          </div>
+          <div class="col-12 md:col-6">
+            <SKInputNumber
+              labelClasses="block mb-2"
+              :label="t('form.minimumBookingValue')"
+              inputId="minimumBookingValue"
+              mode="currency"
+              currency="COP"
+              name="minimumValue"
+              inputClasses="w-full"
+              showButtons
+              :min="1000"
+              :step="1000"
             />
           </div>
         </div>
@@ -458,8 +490,12 @@ const nextPage = () => {
         <div class="grid grid-nogutter justify-content-end">
           <Button
             type="submit"
-            :label="$t('form.buttons.createBusiness')"
-            :disabled="businessStore.basicStepCompleted"
+            :label="
+              stepCompleted
+                ? t('form.buttons.edit')
+                : t('form.buttons.createBusiness')
+            "
+            :disabled="!formRef.meta.valid"
           />
         </div>
       </template>

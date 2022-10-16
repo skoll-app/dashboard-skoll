@@ -21,7 +21,7 @@ export const useProductStore = defineStore({
         this.loading = false;
         this.products = res.data.data.products;
         this.total = res.data.data.total;
-        businessStore.setStep(Steps.PRODUCTS);
+        this.total > 0 && businessStore.setStep(Steps.PRODUCTS);
       } catch (error: any) {
         throw new Error(error);
       }

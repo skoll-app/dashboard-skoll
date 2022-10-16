@@ -22,6 +22,8 @@ export interface BusinessBasicData extends Business {
   companyName: string;
   city: string;
   legalRepresentative: LegalRepresentative;
+  allowedReservations: number;
+  minimumValue: number;
 }
 
 export interface LegalRepresentative {

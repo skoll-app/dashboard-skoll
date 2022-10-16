@@ -94,6 +94,7 @@ import { useBusinessStore } from "@/stores/business";
 import { useProductStore } from "@/stores/product";
 import { useScheduleStore } from "@/stores/schedule";
 import { useDocumentsStore } from "@/stores/documents";
+import getError from "@/utils/handle-errors";
 
 // Data
 const productsStore = useProductStore();
@@ -171,7 +172,12 @@ const getAssociatedBusiness = async () => {
       businessLogin(merchantAssociated.apiKey, merchantAssociated.apiLogin);
     }
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
@@ -185,7 +191,12 @@ const businessLogin = async (apiKey: string, apiLogin: string) => {
     getSchedule();
     getDocuments();
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
@@ -193,28 +204,37 @@ const businessDetail = async () => {
   try {
     const res = await service.business.detail();
     const business = res.data.data;
-    const formObject = {
-      name: business.name,
-      category: business.merchantCategory,
-      email: business.email,
-      phone: business.cellPhone,
-      city: business.cityId,
-      address: business.adress,
-      kindOfPerson: business.kindOfPerson,
-      documentType: business.documentType,
-      documentNumber: business.documentNumber,
-      companyName: business.bussinesName,
-      taxRegime: business.taxRegime,
-      legalRepresentative: {
-        firstName: business.legalRepresentative.firstName,
-        lastName: business.legalRepresentative.lastName,
-        documentNumber: business.legalRepresentative.documentNumber,
-        documentType: business.legalRepresentative.documentType,
-      },
-    };
-    businessStore.setBasicData(formObject);
+    if (business) {
+      const formObject = {
+        name: business.name,
+        category: business.merchantCategory,
+        email: business.email,
+        phone: business.cellPhone,
+        city: business.cityId,
+        address: business.adress,
+        kindOfPerson: business.kindOfPerson,
+        documentType: business.documentType,
+        documentNumber: business.documentNumber,
+        companyName: business.bussinesName,
+        taxRegime: business.taxRegime,
+        legalRepresentative: {
+          firstName: business.legalRepresentative.firstName,
+          lastName: business.legalRepresentative.lastName,
+          documentNumber: business.legalRepresentative.documentNumber,
+          documentType: business.legalRepresentative.documentType,
+        },
+        allowedReservations: business.numberOfReservation,
+        minimumValue: business.minimumReserve,
+      };
+      businessStore.setBasicData(formObject);
+    }
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
@@ -222,19 +242,26 @@ const getBank = async () => {
   try {
     const response = await service.business.getBank();
     const bank = response.data.data.bankAccount[0];
-    const bankSaved: Bank = {
-      fullname: bank.fullName,
-      bank: bank.bank,
-      account: bank.account,
-      document: bank.documentNumber,
-      documentType: bank.documentType,
-      email: bank.email,
-      phone: bank.phone,
-      type: bank.type,
-    };
-    businessStore.setBank(bankSaved);
+    if (bank) {
+      const bankSaved: Bank = {
+        fullname: bank.fullName,
+        bank: bank.bank,
+        account: bank.account,
+        document: bank.documentNumber,
+        documentType: bank.documentType,
+        email: bank.email,
+        phone: bank.phone,
+        type: bank.type,
+      };
+      businessStore.setBank(bankSaved);
+    }
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
@@ -255,7 +282,12 @@ const getSchedule = () => {
   try {
     scheduleStore.getSchedule();
   } catch (error) {
-    console.log(error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: t(getError(error)),
+      life: 3000,
+    });
   }
 };
 
