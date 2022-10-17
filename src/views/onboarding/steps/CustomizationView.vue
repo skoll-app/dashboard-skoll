@@ -124,7 +124,7 @@ const cancelUpload = () => {
           </template>
         </section>
         <section v-if="showCropper && !cover" class="preview-area">
-          <p>Previsualización</p>
+          <p>{{ t("customization.preview") }}</p>
           <div class="preview" />
         </section>
       </div>
@@ -139,7 +139,7 @@ const cancelUpload = () => {
         />
         <Button
           class="mt-2 mr-2"
-          label="Guardar imagen"
+          :label="t('form.buttons.saveImage')"
           @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
         ></Button>
       </template>
@@ -148,7 +148,7 @@ const cancelUpload = () => {
       </template>
       <Button
         class="p-button-info mt-2"
-        label="Cambiar foto portada"
+        :label="t('form.buttons.changeCover')"
         @click.prevent="showFileChooser"
       ></Button>
 
@@ -184,8 +184,5 @@ const cancelUpload = () => {
   font-size: 1.25rem;
   margin: 0;
   margin-bottom: 1rem;
-}
-.preview-area p:last-of-type {
-  margin-top: 1rem;
 }
 </style>
