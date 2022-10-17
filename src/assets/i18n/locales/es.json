@@ -183,6 +183,12 @@
     "signUp": "Error al registrarse"
   },
   "toast": {
+    "errorTitle": "Error",
+    "login": {
+      "error": {
+        "message": "Error de usuario y/o contraseña"
+      }
+    },
     "products": {
       "list": {
         "error": {
