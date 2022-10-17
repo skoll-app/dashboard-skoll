@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 // VueCropper
 import VueCropper from "@ballcat/vue-cropper";
 import type { VueCropperInstance } from "@ballcat/vue-cropper";
@@ -32,16 +32,19 @@ const cropperOptions: Cropper.Options = reactive({
 const data = ref<Cropper.SetDataOptions>({});
 const inputFile = ref<HTMLInputElement>();
 const showCropper = ref(false);
-const cover = computed({
-  get: () => {
-    return businessStore.cover;
-  },
-  set: (value: string) => {
-    businessStore.cover = value;
-  },
-});
 const imageSrc = ref();
+const cover = ref();
 
+// Watch
+watch(
+  () => businessStore.cover,
+  (value) => {
+    cover.value = value;
+  },
+  { deep: true }
+);
+
+// Methods
 const onCrop = (e: CustomEvent) => {
   data.value = e.detail;
 };
@@ -101,6 +104,7 @@ const showFileChooser = () => {
 };
 
 const cancelUpload = () => {
+  cover.value = businessStore.cover;
   showCropper.value = false;
   imageSrc.value = null;
 };
