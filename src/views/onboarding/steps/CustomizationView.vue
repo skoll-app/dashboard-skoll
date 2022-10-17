@@ -13,15 +13,10 @@ import ScheduleTable from "@/components/tables/schedule/ScheduleTable.vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
-const imageSrc = ref(
-  new URL("../../../assets/img/paisaje.jpg", import.meta.url).href
-);
-
 const vueCropperRef = ref<VueCropperInstance>();
 
 const cropperOptions: Cropper.Options = reactive({
-  aspectRatio: 16 / 9,
+  aspectRatio: 16 / 5,
   viewMode: 1,
   responsive: true,
   restore: true,
@@ -35,6 +30,9 @@ const data = ref<Cropper.SetDataOptions>({});
 const inputFile = ref<HTMLInputElement>();
 const showCropper = ref(false);
 const logo = ref("");
+const imageSrc = ref(
+  new URL("../../../assets/img/default-cover.jpeg", import.meta.url).href
+);
 
 const onCrop = (e: CustomEvent) => {
   data.value = e.detail;
@@ -53,10 +51,11 @@ const cropImage = (options: Cropper.GetCroppedCanvasOptions) => {
   }, "image/png");
 };
 
-const submitProfilePic = async (formData: any) => {
+const submitProfilePic = async (formData: FormData) => {
   try {
     const res = await service.multimedia.uploadLogo(formData);
     console.log(res);
+    showCropper.value = false;
     logo.value = res.data.location;
   } catch (error: any) {
     console.log(error);
@@ -92,45 +91,89 @@ const showFileChooser = () => {
   <Card class="mb-3">
     <template v-slot:title>{{ t("onboarding.steps.customization") }}</template>
     <template v-slot:content>
-      <div v-show="showCropper">
-        <VueCropper
-          ref="vueCropperRef"
-          class="img-container"
-          :src="imageSrc"
-          preview=".img-preview"
-          v-bind="cropperOptions"
-          @crop="onCrop"
-          :imgStyle="{ maxHeight: '300px', width: 'auto' }"
-        />
-        <Button
-          class="btn btn-primary mt-2"
-          label="Cortar"
-          @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
-        ></Button>
+      <div v-if="showCropper && !logo" class="flex">
+        <section class="cropper-area mr-3">
+          <div class="img-cropper">
+            <VueCropper
+              ref="vueCropperRef"
+              :src="imageSrc"
+              v-bind="cropperOptions"
+              preview=".preview"
+              @crop="onCrop"
+            />
+          </div>
+          <Button
+            class="mt-2"
+            label="Subir imagen"
+            @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
+          ></Button>
+        </section>
+        <section class="preview-area">
+          <p>Previsualización</p>
+          <div class="preview" />
+        </section>
       </div>
 
-      <Button
-        class="btn btn-primary mt-2"
-        label="Subir imagen"
-        @click.prevent="showFileChooser"
-      ></Button>
+      <template v-if="!showCropper && !logo">
+        <Button
+          class="p-button-info mt-2"
+          label="Agregar foto portada"
+          @click.prevent="showFileChooser"
+        ></Button>
 
-      <input
-        class="hidden"
-        ref="inputFile"
-        type="file"
-        name="image"
-        accept="image/*"
-        @change="setImage"
-      />
+        <input
+          class="hidden"
+          ref="inputFile"
+          type="file"
+          name="image"
+          accept="image/*"
+          @change="setImage"
+        />
+      </template>
+      <template v-if="!showCropper && logo">
+        <img class="w-full mt-2" style="border: 1px solid #000" :src="logo" />
+      </template>
     </template>
     <template v-slot:footer>
       <div class="grid grid-nogutter justify-content-end">
-        <Button type="submit" :label="$t('form.buttons.save')" />
+        <Button
+          :disabled="!showCropper"
+          class="p-button-danger mr-2"
+          type="button"
+          :label="$t('form.buttons.cancel')"
+        />
+        <Button
+          :disabled="!logo"
+          type="submit"
+          :label="$t('form.buttons.save')"
+        />
       </div>
     </template>
   </Card>
 
   <ScheduleTable />
 </template>
-<style scoped></style>
+<style scoped>
+.cropper-area {
+  width: 500px;
+}
+
+.preview {
+  width: 100%;
+  height: calc(372px * (5 / 16));
+  overflow: hidden;
+  border: 1px solid #000;
+}
+
+.preview-area {
+  width: 421px;
+}
+.preview-area p {
+  font-size: 1.25rem;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+.preview-area p:last-of-type {
+  margin-top: 1rem;
+}
+</style>
