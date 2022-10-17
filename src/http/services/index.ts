@@ -76,6 +76,19 @@ const service = {
         }
       });
     },
+    uploadCoverOrLogo(cover: string, logo: string): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.put(`${SKOLL_MERCHANT}/merchant/logo`, {
+            frontLogo: cover,
+            logo,
+          });
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
   },
   business: {
     login(apiKey: string, apiLogin: string): Promise<any> {
@@ -219,19 +232,6 @@ const service = {
   },
   multimedia: {
     upload(formdata: FormData): Promise<any> {
-      return new Promise((resolve, reject) => {
-        try {
-          const headers = { "Content-Type": "multipart/form-data" };
-          const response = apiAuth.post(`/multimedia/posts`, formdata, {
-            headers,
-          });
-          resolve(response);
-        } catch (error) {
-          reject(error);
-        }
-      });
-    },
-    uploadLogo(formdata: FormData): Promise<any> {
       return new Promise((resolve, reject) => {
         try {
           const headers = { "Content-Type": "multipart/form-data" };

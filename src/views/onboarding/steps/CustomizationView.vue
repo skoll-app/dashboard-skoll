@@ -29,10 +29,8 @@ const cropperOptions: Cropper.Options = reactive({
 const data = ref<Cropper.SetDataOptions>({});
 const inputFile = ref<HTMLInputElement>();
 const showCropper = ref(false);
-const logo = ref("");
-const imageSrc = ref(
-  new URL("../../../assets/img/default-cover.jpeg", import.meta.url).href
-);
+const cover = ref("");
+const imageSrc = ref();
 
 const onCrop = (e: CustomEvent) => {
   data.value = e.detail;
@@ -53,10 +51,14 @@ const cropImage = (options: Cropper.GetCroppedCanvasOptions) => {
 
 const submitProfilePic = async (formData: FormData) => {
   try {
-    const res = await service.multimedia.uploadLogo(formData);
-    console.log(res);
+    const res = await service.multimedia.upload(formData);
     showCropper.value = false;
-    logo.value = res.data.location;
+    cover.value = res.data.location;
+    const response = await service.seller.uploadCoverOrLogo(
+      cover.value,
+      "logo"
+    );
+    console.log(response);
   } catch (error: any) {
     console.log(error);
   }
@@ -86,68 +88,67 @@ const setImage = (e: any) => {
 const showFileChooser = () => {
   inputFile.value?.click();
 };
+
+const cancelUpload = () => {
+  showCropper.value = false;
+  imageSrc.value = null;
+};
 </script>
 <template>
   <Card class="mb-3">
     <template v-slot:title>{{ t("onboarding.steps.customization") }}</template>
     <template v-slot:content>
-      <div v-if="showCropper && !logo" class="flex">
+      <div class="flex">
         <section class="cropper-area mr-3">
-          <div class="img-cropper">
-            <VueCropper
-              ref="vueCropperRef"
-              :src="imageSrc"
-              v-bind="cropperOptions"
-              preview=".preview"
-              @crop="onCrop"
-            />
-          </div>
-          <Button
-            class="mt-2"
-            label="Subir imagen"
-            @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
-          ></Button>
+          <template v-if="showCropper && !cover">
+            <div class="img-cropper">
+              <VueCropper
+                ref="vueCropperRef"
+                :src="imageSrc"
+                v-bind="cropperOptions"
+                preview=".preview"
+                @crop="onCrop"
+              />
+            </div>
+          </template>
         </section>
-        <section class="preview-area">
+        <section v-if="showCropper && !cover" class="preview-area">
           <p>Previsualización</p>
           <div class="preview" />
         </section>
       </div>
 
-      <template v-if="!showCropper && !logo">
-        <Button
-          class="p-button-info mt-2"
-          label="Agregar foto portada"
-          @click.prevent="showFileChooser"
-        ></Button>
-
-        <input
-          class="hidden"
-          ref="inputFile"
-          type="file"
-          name="image"
-          accept="image/*"
-          @change="setImage"
-        />
-      </template>
-      <template v-if="!showCropper && logo">
-        <img class="w-full mt-2" style="border: 1px solid #000" :src="logo" />
-      </template>
-    </template>
-    <template v-slot:footer>
-      <div class="grid grid-nogutter justify-content-end">
+      <template v-if="showCropper && !cover">
         <Button
           :disabled="!showCropper"
+          :label="$t('form.buttons.cancel')"
           class="p-button-danger mr-2"
           type="button"
-          :label="$t('form.buttons.cancel')"
+          @click="cancelUpload"
         />
         <Button
-          :disabled="!logo"
-          type="submit"
-          :label="$t('form.buttons.save')"
-        />
-      </div>
+          class="mt-2 mr-2"
+          label="Guardar imagen"
+          @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
+        ></Button>
+      </template>
+      <template v-if="!showCropper && cover">
+        <img class="w-full mt-2" style="border: 1px solid #000" :src="cover" />
+      </template>
+      <Button
+        class="p-button-info mt-2"
+        label="Cambiar foto portada"
+        @click.prevent="showFileChooser"
+      ></Button>
+
+      <input
+        class="hidden"
+        ref="inputFile"
+        type="file"
+        name="image"
+        accept="image/*"
+        @change="setImage"
+      />
     </template>
   </Card>
 
