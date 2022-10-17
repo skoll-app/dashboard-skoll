@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 // VueCropper
 import VueCropper from "@ballcat/vue-cropper";
 import type { VueCropperInstance } from "@ballcat/vue-cropper";
@@ -11,9 +11,12 @@ import service from "@/http/services";
 import ScheduleTable from "@/components/tables/schedule/ScheduleTable.vue";
 // Utils
 import { useI18n } from "vue-i18n";
+// Store
+import { useBusinessStore } from "@/stores/business";
 
 const { t } = useI18n();
 const vueCropperRef = ref<VueCropperInstance>();
+const businessStore = useBusinessStore();
 
 const cropperOptions: Cropper.Options = reactive({
   aspectRatio: 16 / 5,
@@ -29,7 +32,14 @@ const cropperOptions: Cropper.Options = reactive({
 const data = ref<Cropper.SetDataOptions>({});
 const inputFile = ref<HTMLInputElement>();
 const showCropper = ref(false);
-const cover = ref("");
+const cover = computed({
+  get: () => {
+    return businessStore.cover;
+  },
+  set: (value: string) => {
+    businessStore.cover = value;
+  },
+});
 const imageSrc = ref();
 
 const onCrop = (e: CustomEvent) => {
@@ -86,6 +96,7 @@ const setImage = (e: any) => {
 };
 
 const showFileChooser = () => {
+  cover.value = "";
   inputFile.value?.click();
 };
 
