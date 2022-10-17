@@ -56,6 +56,9 @@ export const useBusinessStore = defineStore({
     documentsStepCompleted(): boolean {
       return this.stepsCompleted.includes(Steps.DOCUMENTS);
     },
+    photoAndCoverCompleted(): boolean {
+      return this.cover !== "" && this.logo !== "";
+    },
   },
   actions: {
     setBasicData(business: Partial<BusinessBasicData>) {

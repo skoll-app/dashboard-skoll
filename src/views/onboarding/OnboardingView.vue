@@ -84,6 +84,7 @@ import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
 import { useToast } from "primevue/usetoast";
+import getError from "@/utils/handle-errors";
 // Services
 import service from "@/http/services";
 // Interfaces
@@ -94,7 +95,6 @@ import { useBusinessStore } from "@/stores/business";
 import { useProductStore } from "@/stores/product";
 import { useScheduleStore } from "@/stores/schedule";
 import { useDocumentsStore } from "@/stores/documents";
-import getError from "@/utils/handle-errors";
 
 // Data
 const productsStore = useProductStore();

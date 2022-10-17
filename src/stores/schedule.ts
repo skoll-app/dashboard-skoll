@@ -20,6 +20,7 @@ export const useScheduleStore = defineStore({
     sunday: {} as ScheduleDay,
     activeDays: [] as Day[],
     editableDaysList: [] as Day[],
+    completed: false,
   }),
   actions: {
     addDayToActiveList(day: Day, start: string, end: string): void {
@@ -79,6 +80,7 @@ export const useScheduleStore = defineStore({
         const res = await service.schedule.get();
         const days: any = res.data.data;
         const daysKeys = Object.keys(days);
+        if (daysKeys.length > 0) this.completed = true;
         for (let index = 0; index < daysKeys.length; index++) {
           const day: Day = daysKeys[index] as Day;
           if (days[day].startDate === "00:00" && days[day].endDate === "00:00")
@@ -126,6 +128,9 @@ export const useScheduleStore = defineStore({
     },
     allowSave(): boolean {
       return this.activeDays.length > 0;
+    },
+    stepCompleted: (state) => {
+      return state.completed;
     },
   },
 });
