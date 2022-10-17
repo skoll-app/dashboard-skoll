@@ -1,33 +1,40 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
-import * as yup from "yup";
-import SKInputText from "../../components/ux/SKInputText.vue";
-import SKInputPassword from "../../components/ux/SKInputPassword.vue";
+// Components
+import SKInputText from "@/components/ux/SKInputText.vue";
+import SKInputPassword from "@/components/ux/SKInputPassword.vue";
+// Service
 import service from "@/http/services";
+// Interfaces
 import type HttpResponse from "@/interfaces/http-response";
 import type { Business } from "@/interfaces/business";
+// Primevue
+import { useToast } from "primevue/usetoast";
+// Utils
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import * as yup from "yup";
 
 const router = useRouter();
-
+const checked = ref(false);
 const schema = yup.object({
   email: yup.string().required().email(),
   password: yup.string().required(),
 });
-
-const checked = ref(false);
-
 const initialValues = {
   email: "adan.florez@skoll.com.co",
   password: "Af12345*",
 };
-
 let merchantAssociated: Array<Business> = reactive([]);
+const toast = useToast();
+const { t } = useI18n();
 
+// Vue lifecycle
 onMounted(() => {
   localStorage.removeItem("token");
 });
 
+// Methods
 const userLogin = async (values: Record<string, string>) => {
   try {
     const response: HttpResponse = await service.seller.login({
@@ -79,7 +86,12 @@ const onSubmit = async (values: Record<string, string>) => {
     await userLogin(values);
     await getAssociatedBusinesses();
   } catch (error) {
-    console.error(error);
+    toast.add({
+      severity: "error",
+      summary: t("toast.errorTitle"),
+      detail: t("toast.login.error.message"),
+      life: 5000,
+    });
   }
 };
 </script>
