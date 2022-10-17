@@ -226,6 +226,7 @@ const businessDetail = async () => {
         allowedReservations: business.numberOfReservation,
         minimumValue: business.minimumReserve,
         frontLogo: business.frontLogo,
+        logo: business.logo,
       };
       businessStore.setBasicData(formObject);
     }

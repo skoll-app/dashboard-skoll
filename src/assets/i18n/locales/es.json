@@ -89,7 +89,8 @@
       "save": "Guardar",
       "edit": "Editar",
       "saveImage": "Guardar imagen",
-      "changeCover": "Cambiar foto portada"
+      "changeCover": "Cambiar foto portada",
+      "changeLogo": "Cambiar foto perfíl"
     },
     "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
     "empty": {
@@ -207,6 +208,8 @@
     }
   },
   "customization": {
+    "logo": "Foto de perfíl",
+    "cover": "Foto de portada",
     "preview": "Previsualización"
   }
 }

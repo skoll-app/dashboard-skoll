@@ -38,6 +38,7 @@ export const useBusinessStore = defineStore({
     allowedReservations: 1,
     minimumValue: 1000,
     cover: "",
+    logo: "",
   }),
   getters: {
     getFirstBank(): Bank {
@@ -78,6 +79,7 @@ export const useBusinessStore = defineStore({
       this.allowedReservations = business.allowedReservations || 1;
       this.minimumValue = business.minimumValue || 1000;
       this.cover = business.frontLogo || "";
+      this.logo = business.logo || "";
       this.setStep(Steps.BASIC_DATA);
     },
     setBank(bank: Bank) {

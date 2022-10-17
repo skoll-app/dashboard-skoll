@@ -19,13 +19,13 @@ const data = ref<Cropper.SetDataOptions>({});
 const inputFile = ref<HTMLInputElement>();
 const showCropper = ref(false);
 const imageSrc = ref();
-const cover = ref();
+const logo = ref();
 
 const vueCropperRef = ref<VueCropperInstance>();
 const businessStore = useBusinessStore();
 
 const cropperOptions: Cropper.Options = reactive({
-  aspectRatio: 16 / 5,
+  aspectRatio: 1,
   viewMode: 1,
   responsive: true,
   restore: true,
@@ -37,9 +37,9 @@ const cropperOptions: Cropper.Options = reactive({
 
 // Watch
 watch(
-  () => businessStore.cover,
+  () => businessStore.logo,
   (value) => {
-    cover.value = value;
+    logo.value = value;
   },
   { deep: true }
 );
@@ -56,7 +56,7 @@ const cropImage = (options: Cropper.GetCroppedCanvasOptions) => {
 
   croppedCanvas?.toBlob((blob: any) => {
     const formData = new FormData();
-    formData.append("file", blob, `cover-page-${Date.now()}.png`);
+    formData.append("file", blob, `logo-page-${Date.now()}.png`);
     formData.append("description", "avatar");
     submitProfilePic(formData);
   }, "image/png");
@@ -66,10 +66,10 @@ const submitProfilePic = async (formData: FormData) => {
   try {
     const res = await service.multimedia.upload(formData);
     showCropper.value = false;
-    cover.value = res.data.location;
+    logo.value = res.data.location;
     const response = await service.seller.uploadCoverOrLogo(
-      cover.value,
-      businessStore.logo
+      businessStore.cover,
+      logo.value
     );
     console.log(response);
   } catch (error: any) {
@@ -99,23 +99,23 @@ const setImage = (e: any) => {
 };
 
 const showFileChooser = () => {
-  cover.value = "";
+  logo.value = "";
   inputFile.value?.click();
 };
 
 const cancelUpload = () => {
-  cover.value = businessStore.cover;
+  logo.value = businessStore.logo;
   showCropper.value = false;
   imageSrc.value = null;
 };
 </script>
 <template>
   <Card class="mb-3">
-    <template v-slot:title>{{ t("customization.cover") }}</template>
+    <template v-slot:title>{{ t("customization.logo") }}</template>
     <template v-slot:content>
       <div class="flex">
         <section class="cropper-area mr-3">
-          <template v-if="showCropper && !cover">
+          <template v-if="showCropper && !logo">
             <div class="img-cropper">
               <VueCropper
                 ref="vueCropperRef"
@@ -127,13 +127,13 @@ const cancelUpload = () => {
             </div>
           </template>
         </section>
-        <section v-if="showCropper && !cover" class="preview-area">
+        <section v-if="showCropper && !logo" class="preview-area">
           <p>{{ t("customization.preview") }}</p>
           <div class="preview" />
         </section>
       </div>
 
-      <template v-if="showCropper && !cover">
+      <template v-if="showCropper && !logo">
         <Button
           :disabled="!showCropper"
           :label="$t('form.buttons.cancel')"
@@ -147,12 +147,13 @@ const cancelUpload = () => {
           @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
         ></Button>
       </template>
-      <template v-if="!showCropper && cover">
-        <img class="w-full mt-2" style="border: 1px solid #000" :src="cover" />
+      <template v-if="!showCropper && logo">
+        <img class="mt-2" style="border: 1px solid #000" :src="logo" />
+        <br />
       </template>
       <Button
         class="p-button-info mt-2"
-        :label="t('form.buttons.changeCover')"
+        :label="t('form.buttons.changeLogo')"
         @click.prevent="showFileChooser"
       ></Button>
 
@@ -178,6 +179,7 @@ const cancelUpload = () => {
   height: calc(372px * (5 / 16));
   overflow: hidden;
   border: 1px solid #000;
+  border-radius: 50%;
 }
 
 .preview-area {
