@@ -37,6 +37,8 @@ export const useBusinessStore = defineStore({
     stepsCompleted: [] as Array<StepsCompleted>,
     allowedReservations: 1,
     minimumValue: 1000,
+    cover: "",
+    logo: "",
   }),
   getters: {
     getFirstBank(): Bank {
@@ -53,6 +55,9 @@ export const useBusinessStore = defineStore({
     },
     documentsStepCompleted(): boolean {
       return this.stepsCompleted.includes(Steps.DOCUMENTS);
+    },
+    photoAndCoverCompleted(): boolean {
+      return this.cover !== "" && this.logo !== "";
     },
   },
   actions: {
@@ -76,6 +81,8 @@ export const useBusinessStore = defineStore({
       };
       this.allowedReservations = business.allowedReservations || 1;
       this.minimumValue = business.minimumValue || 1000;
+      this.cover = business.frontLogo || "";
+      this.logo = business.logo || "";
       this.setStep(Steps.BASIC_DATA);
     },
     setBank(bank: Bank) {

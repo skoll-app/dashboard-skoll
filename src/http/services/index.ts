@@ -76,6 +76,19 @@ const service = {
         }
       });
     },
+    uploadCoverOrLogo(cover: string, logo: string): Promise<any> {
+      return new Promise((resolve, reject) => {
+        try {
+          const response = apiAuth.put(`${SKOLL_MERCHANT}/merchant/logo`, {
+            frontLogo: cover,
+            logo,
+          });
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
   },
   business: {
     login(apiKey: string, apiLogin: string): Promise<any> {
@@ -262,7 +275,7 @@ const service = {
 const parseBusiness = (
   businessData: Partial<BusinessBasicData>
 ): Partial<BusinessBasicData> => {
-  console.log(businessData)
+  console.log(businessData);
   const business = {
     address: businessData.address,
     bussinesName: businessData.companyName,
