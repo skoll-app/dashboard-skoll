@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import service from "@/http/services";
-import { Steps } from "./../interfaces/business-steps";
+import { BusinessSteps } from "@/enums/business-steps";
 import { useBusinessStore } from "./business";
 
 export const useDocumentsStore = defineStore({
@@ -33,7 +33,7 @@ export const useDocumentsStore = defineStore({
         const response = await service.utils.parameters();
         this.requiredDocuments =
           response.data.data.documentsRequiredForMerchant;
-        this.stepCompleted && businessStore.setStep(Steps.DOCUMENTS);
+        this.stepCompleted && businessStore.setStep(BusinessSteps.DOCUMENTS);
       } catch (error: any) {
         throw new Error(error);
       }

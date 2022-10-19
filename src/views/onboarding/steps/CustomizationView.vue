@@ -7,7 +7,7 @@ import LogoPhoto from "@/components/cropper/LogoPhoto.vue";
 // Store
 import { useScheduleStore } from "@/stores/schedule";
 import { useBusinessStore } from "@/stores/business";
-import { Steps } from "@/interfaces/business-steps";
+import { BusinessSteps } from "@/enums/business-steps";
 
 const scheduleStore = useScheduleStore();
 const businessStore = useBusinessStore();
@@ -17,7 +17,7 @@ watch(
   () => scheduleStore.stepCompleted,
   (value) => {
     if (value && businessStore.photoAndCoverCompleted)
-      businessStore.setStep(Steps.CUSTOMIZATION);
+      businessStore.setStep(BusinessSteps.CUSTOMIZATION);
   },
   { deep: true }
 );
@@ -26,7 +26,7 @@ watch(
   () => businessStore.photoAndCoverCompleted,
   (value) => {
     if (value && scheduleStore.stepCompleted)
-      businessStore.setStep(Steps.CUSTOMIZATION);
+      businessStore.setStep(BusinessSteps.CUSTOMIZATION);
   },
   { deep: true }
 );

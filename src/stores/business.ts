@@ -3,15 +3,15 @@ import type {
   BusinessBasicData,
   LegalRepresentative,
 } from "@/interfaces/business";
-import { Steps } from "@/interfaces/business-steps";
+import { BusinessSteps } from "@/enums/business-steps";
 import type Bank from "@/interfaces/bank";
 
 type StepsCompleted =
-  | Steps.BASIC_DATA
-  | Steps.BANK
-  | Steps.CUSTOMIZATION
-  | Steps.DOCUMENTS
-  | Steps.PRODUCTS;
+  | BusinessSteps.BASIC_DATA
+  | BusinessSteps.BANK
+  | BusinessSteps.CUSTOMIZATION
+  | BusinessSteps.DOCUMENTS
+  | BusinessSteps.PRODUCTS;
 
 export const useBusinessStore = defineStore({
   id: "business",
@@ -45,16 +45,16 @@ export const useBusinessStore = defineStore({
       return this.banks[0];
     },
     basicStepCompleted(): boolean {
-      return this.stepsCompleted.includes(Steps.BASIC_DATA);
+      return this.stepsCompleted.includes(BusinessSteps.BASIC_DATA);
     },
     customizationStepCompleted(): boolean {
-      return this.stepsCompleted.includes(Steps.CUSTOMIZATION);
+      return this.stepsCompleted.includes(BusinessSteps.CUSTOMIZATION);
     },
     bankStepCompleted(): boolean {
-      return this.stepsCompleted.includes(Steps.BANK);
+      return this.stepsCompleted.includes(BusinessSteps.BANK);
     },
     documentsStepCompleted(): boolean {
-      return this.stepsCompleted.includes(Steps.DOCUMENTS);
+      return this.stepsCompleted.includes(BusinessSteps.DOCUMENTS);
     },
     photoAndCoverCompleted(): boolean {
       return this.cover !== "" && this.logo !== "";
@@ -83,14 +83,14 @@ export const useBusinessStore = defineStore({
       this.minimumValue = business.minimumValue || 1000;
       this.cover = business.frontLogo || "";
       this.logo = business.logo || "";
-      this.setStep(Steps.BASIC_DATA);
+      this.setStep(BusinessSteps.BASIC_DATA);
     },
     setBank(bank: Bank) {
       const index = this.banks.findIndex((item) => item.id === bank.id);
       if (index < 0) {
         this.banks.push(bank);
       }
-      this.setStep(Steps.BANK);
+      this.setStep(BusinessSteps.BANK);
     },
     setStep(step: StepsCompleted) {
       this.stepsCompleted.push(step);
