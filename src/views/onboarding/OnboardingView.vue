@@ -79,7 +79,7 @@
 
 <script lang="ts" setup>
 // Vue
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 // Utils
 import { useI18n } from "vue-i18n";
@@ -95,6 +95,7 @@ import { useBusinessStore } from "@/stores/business";
 import { useProductStore } from "@/stores/product";
 import { useScheduleStore } from "@/stores/schedule";
 import { useDocumentsStore } from "@/stores/documents";
+import { BusinessSteps } from "@/enums/business-steps";
 
 // Data
 const productsStore = useProductStore();
@@ -159,6 +160,28 @@ onBeforeMount(async () => {
 const basicInfoCompleted = computed(() => {
   return businessStore.basicStepCompleted;
 });
+
+// Watch
+watch(
+  () => scheduleStore.stepCompleted,
+  (value) => {
+    if (value && businessStore.photoAndCoverCompleted) {
+      businessStore.setStep(BusinessSteps.CUSTOMIZATION);
+    }
+  },
+  { deep: true }
+);
+
+watch(
+  () => businessStore.photoAndCoverCompleted,
+  (value) => {
+    if (value && scheduleStore.stepCompleted) {
+      businessStore.setStep(BusinessSteps.CUSTOMIZATION);
+    }
+  },
+  { deep: true }
+);
+
 // Methods
 const nextPage = (event: { pageIndex: number; step: number }) => {
   router.push(stepItems.value[event.pageIndex + 1].to);

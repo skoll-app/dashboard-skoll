@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 // Service
 import service from "@/http/services";
 import { useBusinessStore } from "./business";
-import { Steps } from "@/interfaces/business-steps";
+import { BusinessSteps } from "@/enums/business-steps";
 
 export const useProductStore = defineStore({
   id: "product",
@@ -21,7 +21,7 @@ export const useProductStore = defineStore({
         this.loading = false;
         this.products = res.data.data.products;
         this.total = res.data.data.total;
-        this.total > 0 && businessStore.setStep(Steps.PRODUCTS);
+        this.total > 0 && businessStore.setStep(BusinessSteps.PRODUCTS);
       } catch (error: any) {
         throw new Error(error);
       }

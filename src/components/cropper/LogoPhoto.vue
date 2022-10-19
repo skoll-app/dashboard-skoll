@@ -12,9 +12,11 @@ import { useI18n } from "vue-i18n";
 import { useBusinessStore } from "@/stores/business";
 // Services
 import service from "@/http/services";
+// Primevue
+import { useToast } from "primevue/usetoast";
 
 const { t } = useI18n();
-
+const toast = useToast();
 const data = ref<Cropper.SetDataOptions>({});
 const inputFile = ref<HTMLInputElement>();
 const showCropper = ref(false);
@@ -66,14 +68,18 @@ const submitProfilePic = async (formData: FormData) => {
   try {
     const res = await service.multimedia.upload(formData);
     showCropper.value = false;
-    logo.value = res.data.location;
-    const response = await service.seller.uploadCoverOrLogo(
+    businessStore.logo = res.data.location;
+    await service.seller.uploadCoverOrLogo(
       businessStore.cover,
-      logo.value
+      res.data.location
     );
-    console.log(response);
-  } catch (error: any) {
-    console.log(error);
+  } catch (error: unknown) {
+    toast.add({
+      severity: "error",
+      summary: t("toast.logo.save.error.title"),
+      detail: t("toast.logo.save.error.message"),
+      life: 3000,
+    });
   }
 };
 
@@ -147,8 +153,12 @@ const cancelUpload = () => {
           @click="cropImage({ maxWidth: 4096, maxHeight: 4096 })"
         ></Button>
       </template>
-      <template v-if="!showCropper && logo">
-        <img class="mt-2" style="border: 1px solid #000" :src="logo" />
+      <template v-if="!showCropper && businessStore.logo">
+        <img
+          class="mt-2"
+          style="border: 1px solid #000"
+          :src="businessStore.logo"
+        />
         <br />
       </template>
       <Button

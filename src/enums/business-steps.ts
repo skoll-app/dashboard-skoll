@@ -1,4 +1,4 @@
-export enum Steps {
+export enum BusinessSteps {
   BASIC_DATA = "basic-data",
   BANK = "bank",
   CUSTOMIZATION = "customization",

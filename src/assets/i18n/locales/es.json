@@ -205,6 +205,22 @@
           "message": "El producto no ha sido creado"
         }
       }
+    },
+    "logo": {
+      "save": {
+        "error": {
+          "title": "Foto de perfíl",
+          "message": "Error al guardar"
+        }
+      }
+    },
+    "cover": {
+      "save": {
+        "error": {
+          "title": "Foto de portada",
+          "message": "Error al guardar"
+        }
+      }
     }
   },
   "customization": {
