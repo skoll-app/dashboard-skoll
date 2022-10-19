@@ -213,6 +213,14 @@
           "message": "Error al guardar"
         }
       }
+    },
+    "cover": {
+      "save": {
+        "error": {
+          "title": "Foto de portada",
+          "message": "Error al guardar"
+        }
+      }
     }
   },
   "customization": {
