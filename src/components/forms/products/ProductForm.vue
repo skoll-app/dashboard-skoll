@@ -56,7 +56,7 @@ onMounted(() => {
 });
 
 // Methods
-const openModal = () => {
+const openForm = () => {
   display.value = true;
 };
 
@@ -104,113 +104,123 @@ const setProductCategory = (
     categoryList.value.push({ code: brand.id, name: brand.name });
   });
 };
+
+const reset = () => {
+  display.value = false;
+  formRef.handleReset();
+};
 </script>
 
 <template>
   <Button
-    :label="$t('form.buttons.createProduct')"
-    @click="openModal"
+    :label="$t('form.buttons.newProduct')"
+    @click="openForm"
     class="mr-2"
   />
-  <Sidebar v-model:visible="display" position="right" class="p-sidebar-md">
-    <div class="px-3">
-      <h3>Producto</h3>
-      <form v-show="display" @submit="saveProduct">
-        <div class="grid">
-          <div class="col-12">
-            <SKInputText
-              name="name"
-              :label="$t('form.name')"
-              labelClasses="block mb-2"
-              :placeholder="$t('form.name')"
-              inputClasses="w-full"
-            />
-          </div>
-          <div class="col-12">
-            <SKInputText
-              name="description"
-              :label="$t('form.description')"
-              labelClasses="block mb-2"
-              :placeholder="$t('form.description')"
-              inputClasses="w-full"
-            />
-          </div>
-          <div class="col-12">
-            <SKSelect
-              name="category"
-              placeholder="Seleccione"
-              select-classes="w-full p-1"
-              :options="categoryList"
-              :label="$t('form.category')"
-              labelClasses="block mb-2"
-              filter
-            />
-          </div>
-          <div class="col-12">
-            <SKSelect
-              name="brandId"
-              placeholder="Seleccione"
-              select-classes="w-full p-1"
-              :options="brandList"
-              :label="$t('form.brand')"
-              labelClasses="block mb-2"
-              filter
-            />
-          </div>
-          <div class="col-12">
-            <SKInputNumber
-              labelClasses="block mb-2"
-              :label="t('form.amount')"
-              inputId="amount"
-              mode="currency"
-              currency="COP"
-              name="amount"
-              inputClasses="w-full"
-              showButtons
-              :min="100"
-              :step="100"
-            />
-          </div>
-          <div class="col-12">
-            <SKInputNumber
-              labelClasses="block mb-2"
-              :label="t('form.stock')"
-              inputId="stock"
-              mode="decimal"
-              name="stock"
-              inputClasses="w-full"
-              showButtons
-              :min="1"
-            />
-          </div>
-          <div class="col-12">
-            <div class="flex align-items-center">
-              <Checkbox
-                id="ageRestriction"
-                v-model="ageRestriction"
-                :binary="true"
-                class="mr-2"
-                name="ageRestriction"
-              ></Checkbox>
-              <label for="ageRestriction">{{
-                $t("form.ageRestriction")
-              }}</label>
-            </div>
-          </div>
-          <div class="col-12">
-            <div class="flex justify-content-end">
-              <Button
-                :disabled="!formRef.meta.valid"
-                type="submit"
-                :label="$t('form.buttons.createProduct')"
-                class="mt-3 p-button-success"
-              />
-            </div>
-          </div>
+  <form class="mt-3" v-show="display" @submit="saveProduct">
+    <div class="grid">
+      <div class="col-12">
+        <SKInputText
+          name="name"
+          :label="$t('form.name')"
+          labelClasses="block mb-2"
+          :placeholder="$t('form.name')"
+          inputClasses="w-full"
+        />
+      </div>
+      <div class="col-12">
+        <SKInputText
+          name="description"
+          :label="$t('form.description')"
+          labelClasses="block mb-2"
+          :placeholder="$t('form.description')"
+          inputClasses="w-full"
+        />
+      </div>
+      <div class="col-12 md:col-6">
+        <SKSelect
+          name="category"
+          placeholder="Seleccione"
+          select-classes="w-full p-1"
+          :options="categoryList"
+          :label="$t('form.category')"
+          labelClasses="block mb-2"
+          filter
+        />
+      </div>
+      <div class="col-12 md:col-6">
+        <SKSelect
+          name="brandId"
+          placeholder="Seleccione"
+          select-classes="w-full p-1"
+          :options="brandList"
+          :label="$t('form.brand')"
+          labelClasses="block mb-2"
+          filter
+        />
+      </div>
+      <div class="col-12 md:col-6">
+        <SKInputNumber
+          labelClasses="block mb-2"
+          :label="t('form.amount')"
+          inputId="amount"
+          mode="currency"
+          currency="COP"
+          name="amount"
+          inputClasses="w-full"
+          showButtons
+          :min="100"
+          :step="100"
+        />
+      </div>
+      <div class="col-12 md:col-6">
+        <SKInputNumber
+          labelClasses="block mb-2"
+          :label="t('form.stock')"
+          inputId="stock"
+          mode="decimal"
+          name="stock"
+          inputClasses="w-full"
+          showButtons
+          :min="1"
+        />
+      </div>
+      <div class="col-12">
+        <div class="flex align-items-center">
+          <Checkbox
+            id="ageRestriction"
+            v-model="ageRestriction"
+            :binary="true"
+            class="mr-2"
+            name="ageRestriction"
+          ></Checkbox>
+          <label for="ageRestriction">{{ $t("form.ageRestriction") }}</label>
         </div>
-      </form>
+      </div>
+      <div class="col-12">
+        <div class="flex justify-content-end">
+          <Button
+            type="button"
+            :label="$t('form.buttons.cancel')"
+            class="mt-3 mr-2 p-button-danger"
+            @click="reset"
+          />
+          <Button
+            :disabled="!formRef.meta.valid"
+            type="submit"
+            :label="$t('form.buttons.createProduct')"
+            class="mt-3 mr-2 p-button-success"
+          />
+          <Button
+            :disabled="!formRef.meta.valid"
+            type="submit"
+            :label="$t('form.buttons.saveAndCreateProduct')"
+            class="mt-3 p-button-secondary"
+          />
+        </div>
+      </div>
     </div>
-  </Sidebar>
+  </form>
 </template>
 
 <style scoped></style>

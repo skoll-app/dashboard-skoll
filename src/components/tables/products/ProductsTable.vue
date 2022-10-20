@@ -61,6 +61,7 @@ const deleteProduct = (product: Product) => {
 <template>
   <ProductForm />
   <hr />
+  <div class="p-card-title">{{ t("products.list") }}</div>
   <DataTable
     :value="products"
     paginator
