@@ -26,13 +26,14 @@ const display = ref(false);
 const categoryList = ref<SelectOption[]>([]);
 const brandList = ref<SelectOption[]>([]);
 const ageRestriction = ref(false);
+const saveAnotherProduct = ref(false);
 const initialValues = {
   name: "",
   description: "",
   category: "",
   brandId: "",
   amount: 0,
-  stock: 0,
+  price: 0,
 };
 // Form
 const validationSchema = yup.object({
@@ -40,8 +41,8 @@ const validationSchema = yup.object({
   description: yup.string().required(),
   category: yup.string().required(),
   brandId: yup.string().required(),
-  amount: yup.number().required().min(100),
-  stock: yup.number().required().min(1),
+  price: yup.number().required().min(100),
+  amount: yup.number().required().min(1),
 });
 const formRef = reactive(
   useForm({
@@ -68,7 +69,8 @@ const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
     };
     await service.product.create(product);
     resetForm();
-    display.value = false;
+    !saveAnotherProduct.value && (display.value = false);
+    saveAnotherProduct.value = false;
     productsStore.getProducts();
   } catch (error) {
     toast.add({
@@ -162,11 +164,11 @@ const reset = () => {
       <div class="col-12 md:col-6">
         <SKInputNumber
           labelClasses="block mb-2"
-          :label="t('form.amount')"
-          inputId="amount"
+          :label="t('form.price')"
+          inputId="price"
           mode="currency"
           currency="COP"
-          name="amount"
+          name="price"
           inputClasses="w-full"
           showButtons
           :min="100"
@@ -176,10 +178,10 @@ const reset = () => {
       <div class="col-12 md:col-6">
         <SKInputNumber
           labelClasses="block mb-2"
-          :label="t('form.stock')"
-          inputId="stock"
+          :label="t('form.amount')"
+          inputId="amount"
           mode="decimal"
-          name="stock"
+          name="amount"
           inputClasses="w-full"
           showButtons
           :min="1"
@@ -216,6 +218,7 @@ const reset = () => {
             type="submit"
             :label="$t('form.buttons.saveAndCreateProduct')"
             class="mt-3 p-button-secondary"
+            @click="saveAnotherProduct = true"
           />
         </div>
       </div>

@@ -57,7 +57,8 @@
     "description": "Descripción",
     "category": "Categoría",
     "brand": "Marca",
-    "amount": "Valor",
+    "amount": "Cantidad",
+    "price": "Precio",
     "ageRestriction": "Solo mayores de edad pueden comprar este producto",
     "stock": "Existencias",
     "validations": {

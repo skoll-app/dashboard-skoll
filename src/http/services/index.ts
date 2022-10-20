@@ -313,11 +313,11 @@ const parseProduct = (product: Product) => {
   const p = {
     ageRestriction: product.ageRestriction,
     amount: product.amount,
+    price: product.price,
     brandId: product.brandId,
     description: product.description,
     name: product.name,
     productCategory: product.category,
-    stock: product.stock,
   };
   return p;
 };
