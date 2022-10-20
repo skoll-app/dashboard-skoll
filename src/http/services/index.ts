@@ -318,6 +318,7 @@ const parseProduct = (product: Product) => {
     description: product.description,
     name: product.name,
     productCategory: product.category,
+    photo: product.photo,
   };
   return p;
 };

@@ -18,6 +18,7 @@ import type SelectOption from "@/interfaces/select-option";
 import service from "@/http/services";
 // Stores
 import { useProductStore } from "@/stores/product";
+import type { FileUploadRemoveEvent } from "primevue/fileupload";
 
 const productsStore = useProductStore();
 const toast = useToast();
@@ -27,6 +28,7 @@ const categoryList = ref<SelectOption[]>([]);
 const brandList = ref<SelectOption[]>([]);
 const ageRestriction = ref(false);
 const saveAnotherProduct = ref(false);
+const productImage = ref("");
 const initialValues = {
   name: "",
   description: "",
@@ -66,6 +68,7 @@ const saveProduct = formRef.handleSubmit(async (values: any, { resetForm }) => {
     const product: Product = {
       ...values,
       ageRestriction: ageRestriction.value,
+      photo: productImage.value,
     };
     await service.product.create(product);
     resetForm();
@@ -111,6 +114,28 @@ const reset = () => {
   display.value = false;
   formRef.handleReset();
 };
+
+const myUploader = async (event: FileUploadRemoveEvent) => {
+  const formData = new FormData();
+  formData.append("file", event.files[0]);
+  try {
+    const res = await service.multimedia.upload(formData);
+    productImage.value = res.data.location;
+    toast.add({
+      severity: "success",
+      summary: t("toast.products.uploadImage.success.title"),
+      detail: t("toast.products.uploadImage.success.message"),
+      life: 3000,
+    });
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: t("toast.products.uploadImage.error.title"),
+      detail: t("toast.products.uploadImage.error.message"),
+      life: 3000,
+    });
+  }
+};
 </script>
 
 <template>
@@ -119,111 +144,135 @@ const reset = () => {
     @click="openForm"
     class="mr-2"
   />
-  <form class="mt-3" v-show="display" @submit="saveProduct">
-    <div class="grid">
-      <div class="col-12">
-        <SKInputText
-          name="name"
-          :label="$t('form.name')"
-          labelClasses="block mb-2"
-          :placeholder="$t('form.name')"
-          inputClasses="w-full"
-        />
-      </div>
-      <div class="col-12">
-        <SKInputText
-          name="description"
-          :label="$t('form.description')"
-          labelClasses="block mb-2"
-          :placeholder="$t('form.description')"
-          inputClasses="w-full"
-        />
-      </div>
-      <div class="col-12 md:col-6">
-        <SKSelect
-          name="category"
-          placeholder="Seleccione"
-          select-classes="w-full p-1"
-          :options="categoryList"
-          :label="$t('form.category')"
-          labelClasses="block mb-2"
-          filter
-        />
-      </div>
-      <div class="col-12 md:col-6">
-        <SKSelect
-          name="brandId"
-          placeholder="Seleccione"
-          select-classes="w-full p-1"
-          :options="brandList"
-          :label="$t('form.brand')"
-          labelClasses="block mb-2"
-          filter
-        />
-      </div>
-      <div class="col-12 md:col-6">
-        <SKInputNumber
-          labelClasses="block mb-2"
-          :label="t('form.price')"
-          inputId="price"
-          mode="currency"
-          currency="COP"
-          name="price"
-          inputClasses="w-full"
-          showButtons
-          :min="100"
-          :step="100"
-        />
-      </div>
-      <div class="col-12 md:col-6">
-        <SKInputNumber
-          labelClasses="block mb-2"
-          :label="t('form.amount')"
-          inputId="amount"
-          mode="decimal"
-          name="amount"
-          inputClasses="w-full"
-          showButtons
-          :min="1"
-        />
-      </div>
-      <div class="col-12">
-        <div class="flex align-items-center">
-          <Checkbox
-            id="ageRestriction"
-            v-model="ageRestriction"
-            :binary="true"
-            class="mr-2"
-            name="ageRestriction"
-          ></Checkbox>
-          <label for="ageRestriction">{{ $t("form.ageRestriction") }}</label>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="flex justify-content-end">
-          <Button
-            type="button"
-            :label="$t('form.buttons.cancel')"
-            class="mt-3 mr-2 p-button-danger"
-            @click="reset"
-          />
-          <Button
-            :disabled="!formRef.meta.valid"
-            type="submit"
-            :label="$t('form.buttons.createProduct')"
-            class="mt-3 mr-2 p-button-success"
-          />
-          <Button
-            :disabled="!formRef.meta.valid"
-            type="submit"
-            :label="$t('form.buttons.saveAndCreateProduct')"
-            class="mt-3 p-button-secondary"
-            @click="saveAnotherProduct = true"
-          />
-        </div>
-      </div>
+  <div v-show="display">
+    <hr />
+    <div class="flex align-items-center">
+      <FileUpload
+        mode="basic"
+        name="demo[]"
+        accept="image/*"
+        customUpload
+        :maxFileSize="1000000"
+        :auto="true"
+        @uploader="myUploader"
+        chooseLabel="Cargar imagen"
+        class="p-button-info mr-2"
+      />
+      <p class="text-red-500">La imagen del producto es obligatoria*</p>
     </div>
-  </form>
+    <img
+      v-if="productImage"
+      class="mt-3"
+      :src="productImage"
+      alt="product-img"
+      style="max-width: 300px"
+    />
+    <form class="mt-3" @submit="saveProduct">
+      <div class="grid">
+        <div class="col-12">
+          <SKInputText
+            name="name"
+            :label="$t('form.name')"
+            labelClasses="block mb-2"
+            :placeholder="$t('form.name')"
+            inputClasses="w-full"
+          />
+        </div>
+        <div class="col-12">
+          <SKInputText
+            name="description"
+            :label="$t('form.description')"
+            labelClasses="block mb-2"
+            :placeholder="$t('form.description')"
+            inputClasses="w-full"
+          />
+        </div>
+        <div class="col-12 md:col-6">
+          <SKSelect
+            name="category"
+            placeholder="Seleccione"
+            select-classes="w-full p-1"
+            :options="categoryList"
+            :label="$t('form.category')"
+            labelClasses="block mb-2"
+            filter
+          />
+        </div>
+        <div class="col-12 md:col-6">
+          <SKSelect
+            name="brandId"
+            placeholder="Seleccione"
+            select-classes="w-full p-1"
+            :options="brandList"
+            :label="$t('form.brand')"
+            labelClasses="block mb-2"
+            filter
+          />
+        </div>
+        <div class="col-12 md:col-6">
+          <SKInputNumber
+            labelClasses="block mb-2"
+            :label="t('form.price')"
+            inputId="price"
+            mode="currency"
+            currency="COP"
+            name="price"
+            inputClasses="w-full"
+            showButtons
+            :min="100"
+            :step="100"
+          />
+        </div>
+        <div class="col-12 md:col-6">
+          <SKInputNumber
+            labelClasses="block mb-2"
+            :label="t('form.amount')"
+            inputId="amount"
+            mode="decimal"
+            name="amount"
+            inputClasses="w-full"
+            showButtons
+            :min="1"
+          />
+        </div>
+        <div class="col-12">
+          <div class="flex align-items-center">
+            <Checkbox
+              id="ageRestriction"
+              v-model="ageRestriction"
+              :binary="true"
+              class="mr-2"
+              name="ageRestriction"
+            ></Checkbox>
+            <label for="ageRestriction">{{ $t("form.ageRestriction") }}</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="flex justify-content-end">
+            <Button
+              type="button"
+              :label="$t('form.buttons.cancel')"
+              class="mt-3 mr-2 p-button-danger"
+              @click="reset"
+            />
+            <Button
+              :disabled="!formRef.meta.valid || !productImage"
+              type="submit"
+              :label="$t('form.buttons.createProduct')"
+              class="mt-3 mr-2 p-button-success"
+            />
+            <Button
+              :disabled="!formRef.meta.valid || !productImage"
+              type="submit"
+              :label="$t('form.buttons.saveAndCreateProduct')"
+              class="mt-3 p-button-secondary"
+              @click="saveAnotherProduct = true"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </template>
 
 <style scoped></style>

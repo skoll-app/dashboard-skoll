@@ -9,4 +9,5 @@ export default interface Product {
   status: boolean;
   serialNumber: string;
   visibility: boolean;
+  photo: string;
 }

@@ -76,7 +76,7 @@ const deleteProduct = (product: Product) => {
   >
     <Column field="name" :header="t('form.name')"></Column>
     <Column field="description" :header="t('form.description')"></Column>
-    <Column field="stock" :header="t('form.stock')"></Column>
+    <Column field="price" :header="t('form.price')"></Column>
     <Column field="amount" :header="t('form.amount')"></Column>
     <Column field="brand" :header="t('form.brand')"></Column>
     <Column
