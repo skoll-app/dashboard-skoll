@@ -61,6 +61,7 @@ const deleteProduct = (product: Product) => {
 <template>
   <ProductForm />
   <hr />
+  <div class="p-card-title">{{ t("products.list") }}</div>
   <DataTable
     :value="products"
     paginator
@@ -73,9 +74,22 @@ const deleteProduct = (product: Product) => {
     :loading="loading"
     @page="onPage($event)"
   >
+    <Column
+      :header="t('form.image')"
+      headerStyle="width: 4rem; text-align: center"
+      bodyStyle="text-align: center; overflow: visible"
+    >
+      <template v-slot:body="slotProps">
+        <img
+          style="width: 80px"
+          :src="slotProps.data.photo"
+          alt="product-img"
+        />
+      </template>
+    </Column>
     <Column field="name" :header="t('form.name')"></Column>
     <Column field="description" :header="t('form.description')"></Column>
-    <Column field="stock" :header="t('form.stock')"></Column>
+    <Column field="price" :header="t('form.price')"></Column>
     <Column field="amount" :header="t('form.amount')"></Column>
     <Column field="brand" :header="t('form.brand')"></Column>
     <Column

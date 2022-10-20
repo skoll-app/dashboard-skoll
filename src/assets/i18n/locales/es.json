@@ -57,9 +57,10 @@
     "description": "Descripción",
     "category": "Categoría",
     "brand": "Marca",
-    "amount": "Valor",
+    "amount": "Cantidad",
+    "price": "Precio",
     "ageRestriction": "Solo mayores de edad pueden comprar este producto",
-    "stock": "Existencias",
+    "image": "Imagen",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",
@@ -70,7 +71,8 @@
       "number": {
         "min": "El valor debe ser igual o superior a ${min}"
       },
-      "password": "No cumple con los requisitos"
+      "password": "No cumple con los requisitos",
+      "requiredProductImage": "La imagen del producto es obligatoria"
     },
     "buttons": {
       "login": "Iniciar sesión",
@@ -83,6 +85,8 @@
       "upload": "Subir",
       "cancel": "Cancelar",
       "createProduct": "Crear producto",
+      "saveAndCreateProduct": "Guardar y crear otro producto",
+      "newProduct": "Nuevo producto",
       "createCategory": "Crear categoría",
       "yes": "Si",
       "no": "No",
@@ -90,7 +94,8 @@
       "edit": "Editar",
       "saveImage": "Guardar imagen",
       "changeCover": "Cambiar foto portada",
-      "changeLogo": "Cambiar foto perfíl"
+      "changeLogo": "Cambiar foto perfíl",
+      "uploadImage": "Subir imagen"
     },
     "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
     "empty": {
@@ -204,6 +209,16 @@
           "title": "Productos",
           "message": "El producto no ha sido creado"
         }
+      },
+      "uploadImage": {
+        "success": {
+          "title": "Imagen",
+          "message": "Imagen guardada"
+        },
+        "error": {
+          "title": "Imagen",
+          "message": "No se pudo guardar la imagen"
+        }
       }
     },
     "logo": {
@@ -227,5 +242,8 @@
     "logo": "Foto de perfíl",
     "cover": "Foto de portada",
     "preview": "Previsualización"
+  },
+  "products": {
+    "list": "Listado de productos"
   }
 }
