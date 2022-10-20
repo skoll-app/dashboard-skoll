@@ -74,6 +74,19 @@ const deleteProduct = (product: Product) => {
     :loading="loading"
     @page="onPage($event)"
   >
+    <Column
+      :header="t('form.image')"
+      headerStyle="width: 4rem; text-align: center"
+      bodyStyle="text-align: center; overflow: visible"
+    >
+      <template v-slot:body="slotProps">
+        <img
+          style="width: 80px"
+          :src="slotProps.data.photo"
+          alt="product-img"
+        />
+      </template>
+    </Column>
     <Column field="name" :header="t('form.name')"></Column>
     <Column field="description" :header="t('form.description')"></Column>
     <Column field="price" :header="t('form.price')"></Column>

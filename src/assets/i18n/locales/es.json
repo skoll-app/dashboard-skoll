@@ -60,7 +60,7 @@
     "amount": "Cantidad",
     "price": "Precio",
     "ageRestriction": "Solo mayores de edad pueden comprar este producto",
-    "stock": "Existencias",
+    "image": "Imagen",
     "validations": {
       "required": "El campo es requerido",
       "email": "Correo inválido",
