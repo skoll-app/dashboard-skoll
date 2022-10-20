@@ -71,7 +71,8 @@
       "number": {
         "min": "El valor debe ser igual o superior a ${min}"
       },
-      "password": "No cumple con los requisitos"
+      "password": "No cumple con los requisitos",
+      "requiredProductImage": "La imagen del producto es obligatoria"
     },
     "buttons": {
       "login": "Iniciar sesión",
@@ -93,7 +94,8 @@
       "edit": "Editar",
       "saveImage": "Guardar imagen",
       "changeCover": "Cambiar foto portada",
-      "changeLogo": "Cambiar foto perfíl"
+      "changeLogo": "Cambiar foto perfíl",
+      "uploadImage": "Subir imagen"
     },
     "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
     "empty": {

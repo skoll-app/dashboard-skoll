@@ -154,11 +154,13 @@ const myUploader = async (event: FileUploadRemoveEvent) => {
         customUpload
         :maxFileSize="1000000"
         :auto="true"
+        :chooseLabel="t('form.buttons.uploadImage')"
         @uploader="myUploader"
-        chooseLabel="Cargar imagen"
         class="p-button-info mr-2"
       />
-      <p class="text-red-500">La imagen del producto es obligatoria*</p>
+      <p class="text-red-500">
+        {{ t("form.validations.requiredProductImage") }}*
+      </p>
     </div>
     <img
       v-if="productImage"
