@@ -1,6 +1,6 @@
 {
   "name": "dashboard-skoll",
-  "version": "0.21.1",
+  "version": "0.22.0",
   "scripts": {
     "dev": "run-p type-check dev-only",
     "build": "run-p type-check build-only",
