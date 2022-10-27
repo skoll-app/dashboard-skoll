@@ -301,7 +301,7 @@ const setDocumentsType = (documents: Array<{ id: string; name: string }>) => {
   <form @submit="registerBusiness">
     <Card>
       <template v-slot:title>
-        {{ t("onboarding.steps.basicData") }}
+        {{ t("business.title") }}
       </template>
       <template v-slot:content>
         <div class="grid">

@@ -238,6 +238,9 @@
       }
     }
   },
+  "business": {
+    "title": "Crea tu negocio"
+  },
   "customization": {
     "logo": "Foto de perfíl",
     "cover": "Foto de portada",
