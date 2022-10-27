@@ -22,8 +22,8 @@ const schema = yup.object({
   password: yup.string().required(),
 });
 const initialValues = {
-  email: "adan.florez@skoll.com.co",
-  password: "Af12345*",
+  email: localStorage.getItem("email") || "adan.florezb@gmail.com",
+  password: localStorage.getItem("password") || "Af12345*",
 };
 let merchantAssociated: Array<Business> = reactive([]);
 const toast = useToast();
@@ -41,6 +41,10 @@ const userLogin = async (values: Record<string, string>) => {
       user: values.email,
       password: values.password,
     });
+    if (checked.value) {
+      localStorage.setItem("email", values.email);
+      localStorage.setItem("password", values.password);
+    }
     localStorage.setItem("token", response.data.token);
   } catch (error) {
     throw new Error("user login error");
@@ -50,7 +54,6 @@ const userLogin = async (values: Record<string, string>) => {
 const getAssociatedBusinesses = async () => {
   try {
     const response: HttpResponse = await service.seller.associatedBusinesses();
-
     merchantAssociated = response.data.data.merchantAssociated;
 
     const someActive = merchantAssociated.some((business) => business.status);
