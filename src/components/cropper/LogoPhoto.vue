@@ -156,7 +156,7 @@ const cancelUpload = () => {
       <template v-if="!showCropper && businessStore.logo">
         <img
           class="mt-2"
-          style="border: 1px solid #000"
+          style="max-width: 200px; border-radius: 50%"
           :src="businessStore.logo"
         />
         <br />

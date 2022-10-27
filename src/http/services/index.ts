@@ -1,5 +1,10 @@
 // Constants
-import { SKOLL_MERCHANT, SKOLL_PARAMETER, SKOLL_SECURITY } from "@/constants";
+import {
+  SKOLL_MERCHANT,
+  SKOLL_PARAMETER,
+  SKOLL_SECURITY,
+  SKOLL_SOCIAL_NETWORKS,
+} from "@/constants";
 // Interface
 import type HttpResponse from "@/interfaces/http-response";
 import type { BusinessBasicData } from "@/interfaces/business";
@@ -235,9 +240,13 @@ const service = {
       return new Promise((resolve, reject) => {
         try {
           const headers = { "Content-Type": "multipart/form-data" };
-          const response = apiAuth.post(`/multimedia/posts`, formdata, {
-            headers,
-          });
+          const response = apiAuth.post(
+            `${SKOLL_SOCIAL_NETWORKS}/multimedia/posts`,
+            formdata,
+            {
+              headers,
+            }
+          );
           resolve(response);
         } catch (error) {
           reject(error);
