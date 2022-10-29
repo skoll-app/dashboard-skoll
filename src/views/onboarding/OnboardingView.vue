@@ -1,6 +1,8 @@
 <template>
   <Toolbar class="sticky top-0 bg-white z-5">
-    <template #start> SKOLL </template>
+    <template #start>
+      <img class="mr-2" height="30" src="@/assets/img/logo.png" alt="logo" /> SKOLL
+    </template>
 
     <template #end>
       <SplitButton
