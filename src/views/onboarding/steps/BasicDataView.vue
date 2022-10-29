@@ -492,7 +492,7 @@ const setDocumentsType = (documents: Array<{ id: string; name: string }>) => {
             type="submit"
             :label="
               stepCompleted
-                ? t('form.buttons.edit')
+                ? t('form.buttons.update')
                 : t('form.buttons.createBusiness')
             "
             :disabled="!formRef.meta.valid"

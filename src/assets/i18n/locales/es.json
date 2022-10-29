@@ -95,7 +95,8 @@
       "saveImage": "Guardar imagen",
       "changeCover": "Cambiar foto portada",
       "changeLogo": "Cambiar foto perfíl",
-      "uploadImage": "Subir imagen"
+      "uploadImage": "Subir imagen",
+      "update": "Actualizar"
     },
     "dragAndDrop": "Arrastre y suelte los archivos aquí para cargarlos.",
     "empty": {
