@@ -6,13 +6,6 @@ import type {
 import { BusinessSteps } from "@/enums/business-steps";
 import type Bank from "@/interfaces/bank";
 
-type StepsCompleted =
-  | BusinessSteps.BASIC_DATA
-  | BusinessSteps.BANK
-  | BusinessSteps.CUSTOMIZATION
-  | BusinessSteps.DOCUMENTS
-  | BusinessSteps.PRODUCTS;
-
 export const useBusinessStore = defineStore({
   id: "business",
   state: () => ({
@@ -34,7 +27,7 @@ export const useBusinessStore = defineStore({
       documentType: "",
     } as LegalRepresentative,
     banks: [] as Bank[],
-    stepsCompleted: [] as Array<StepsCompleted>,
+    stepsCompleted: [] as Array<BusinessSteps>,
     allowedReservations: 1,
     minimumValue: 1000,
     cover: "",
@@ -92,7 +85,7 @@ export const useBusinessStore = defineStore({
       }
       this.setStep(BusinessSteps.BANK);
     },
-    setStep(step: StepsCompleted) {
+    setStep(step: BusinessSteps) {
       this.stepsCompleted.push(step);
     },
   },
