@@ -16,7 +16,7 @@
     </Toolbar>
     <div class="flex">
       <OnboardingSidebar />
-      <div class="p-4 w-full">
+      <div class="p-2 md:p-4 w-full">
         <router-view></router-view>
       </div>
     </div>
@@ -237,5 +237,11 @@ const getDocuments = async () => {
 
 ::v-deep(.p-card-body) {
   padding: 2rem;
+}
+
+@media (max-width: 576px) {
+  ::v-deep(.p-card-body) {
+    padding: 0.75rem;
+  }
 }
 </style>

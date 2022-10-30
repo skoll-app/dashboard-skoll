@@ -63,11 +63,12 @@ const stepItems = ref([
           }"
         >
           <div>
-            <i class="mr-2 pi" :class="[item.icon]"></i> {{ item.label }}
+            <i class="mr-3 pi" :class="[item.icon]"></i>
+            <span class="hidden md:inline-block">{{ item.label }}</span>
           </div>
           <i
             v-if="businessStore.stepsCompleted.includes(item.step)"
-            class="ml-auto pi pi-check-circle text-green-500"
+            class="ml-auto pi pi-check-circle text-green-500 hidden md:inline-block"
             :class="[item.icon]"
           ></i>
         </a>
@@ -113,6 +114,12 @@ const stepItems = ref([
         font-weight: bolder;
       }
     }
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    min-width: 50px;
   }
 }
 </style>

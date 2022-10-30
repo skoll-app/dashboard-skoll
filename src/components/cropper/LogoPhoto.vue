@@ -119,7 +119,7 @@ const cancelUpload = () => {
   <Card class="mb-3">
     <template v-slot:title>{{ t("customization.logo") }}</template>
     <template v-slot:content>
-      <div class="flex">
+      <div class="flex flex-column md:flex-row">
         <section class="cropper-area mr-3">
           <template v-if="showCropper && !logo">
             <div class="img-cropper">
@@ -154,11 +154,7 @@ const cancelUpload = () => {
         ></Button>
       </template>
       <template v-if="!showCropper && businessStore.logo">
-        <img
-          class="mt-2"
-          style="max-width: 200px; border-radius: 50%"
-          :src="businessStore.logo"
-        />
+        <img class="mt-2 profile" :src="businessStore.logo" />
         <br />
       </template>
       <Button
@@ -183,7 +179,6 @@ const cancelUpload = () => {
 .cropper-area {
   width: 500px;
 }
-
 .preview {
   width: 100%;
   height: calc(372px * (5 / 16));
@@ -199,5 +194,23 @@ const cancelUpload = () => {
   font-size: 1.25rem;
   margin: 0;
   margin-bottom: 1rem;
+}
+
+.profile {
+  max-width: 200px;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  .cropper-area {
+    width: 100%;
+  }
+
+  .preview-area {
+    width: 100%;
+  }
+  .profile {
+    max-width: 100px;
+  }
 }
 </style>
