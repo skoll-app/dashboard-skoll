@@ -54,7 +54,14 @@ const stepItems = ref([
       custom
       v-slot="{ href, navigate, isActive, isExactActive }"
     >
-      <div class="item w-full" :href="href" @click="navigate">
+      <div
+        class="item w-full"
+        :class="{
+          'surface-200': isExactActive,
+        }"
+        :href="href"
+        @click="navigate"
+      >
         <a
           class="p-menuitem-link"
           :class="{
@@ -63,7 +70,21 @@ const stepItems = ref([
           }"
         >
           <div>
-            <i class="mr-3 pi" :class="[item.icon]"></i>
+            <i
+              class="hidden md:inline-block m-0 md:mr-3 pi"
+              :class="[item.icon]"
+            ></i>
+            <i
+              class="flex md:hidden m-0 md:mr-3 pi"
+              :class="[
+                item.icon,
+                {
+                  'text-green-500': businessStore.stepsCompleted.includes(
+                    item.step
+                  ),
+                },
+              ]"
+            ></i>
             <span class="hidden md:inline-block">{{ item.label }}</span>
           </div>
           <i
@@ -108,7 +129,6 @@ const stepItems = ref([
       justify-content: space-between;
       color: var(--text-color) !important;
 
-      // &.active-link,
       &.exact-active-link {
         color: var(--primary-color) !important;
         font-weight: bolder;
