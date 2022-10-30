@@ -4,4 +4,5 @@ export enum BusinessSteps {
   CUSTOMIZATION = "customization",
   DOCUMENTS = "documents",
   PRODUCTS = "products",
+  SUMMARY = "summary",
 }

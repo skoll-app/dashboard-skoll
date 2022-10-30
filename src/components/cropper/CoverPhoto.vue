@@ -119,7 +119,7 @@ const cancelUpload = () => {
   <Card class="mb-3">
     <template v-slot:title>{{ t("customization.cover") }}</template>
     <template v-slot:content>
-      <div class="flex">
+      <div class="flex flex-column md:flex-row">
         <section class="cropper-area mr-3">
           <template v-if="showCropper && !cover">
             <div class="img-cropper">
@@ -197,5 +197,15 @@ const cancelUpload = () => {
   font-size: 1.25rem;
   margin: 0;
   margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .cropper-area {
+    width: 90%;
+  }
+
+  .preview-area {
+    width: 90%;
+  }
 }
 </style>
