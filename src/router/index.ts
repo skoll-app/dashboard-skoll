@@ -10,7 +10,7 @@ import CustomizationView from "../views/onboarding/steps/CustomizationView.vue";
 import BankView from "@/views/onboarding/steps/BankView.vue";
 import DocumentsView from "@/views/onboarding/steps/DocumentsView.vue";
 import ProductsView from "@/views/onboarding/steps/ProductsView.vue";
-import ResumeView from "@/views/onboarding/steps/ResumeView.vue";
+import SummaryView from "@/views/onboarding/steps/SummaryView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -70,7 +70,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "summary",
         name: "summary",
-        component: ResumeView,
+        component: SummaryView,
         meta: { requiresAuth: true },
       },
     ],
