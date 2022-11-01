@@ -52,7 +52,7 @@ const { t } = useI18n();
             'exact-active-link': isExactActive,
           }"
         >
-          <div>
+          <div class="flex align-items-center">
             <i
               class="hidden md:inline-block m-0 md:mr-3 pi"
               :class="[item.icon]"
@@ -107,6 +107,8 @@ const { t } = useI18n();
     border-bottom: 1px solid #dee2e6;
     display: flex;
     align-items: center;
+    text-transform: uppercase;
+    font-size: 11px;
 
     &:hover {
       cursor: pointer;
