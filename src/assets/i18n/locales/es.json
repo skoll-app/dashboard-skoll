@@ -249,5 +249,8 @@
   },
   "products": {
     "list": "Listado de productos"
+  },
+  "summary": {
+    "title": "Resumen"
   }
 }
