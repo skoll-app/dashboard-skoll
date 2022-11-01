@@ -38,3 +38,11 @@ export const ONBOARDING_MENU = [
     step: BusinessSteps.SUMMARY,
   },
 ];
+
+export const DASHBOARD_MENU = [
+  {
+    label: "onboarding.steps.basicData",
+    to: "/dashboard",
+    icon: "pi-building",
+  },
+];

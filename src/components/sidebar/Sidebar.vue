@@ -102,7 +102,7 @@ const { t } = useI18n();
   }
 
   .item {
-    min-height: 60px;
+    min-height: 50px;
     padding: 16px;
     border-bottom: 1px solid #dee2e6;
     display: flex;
