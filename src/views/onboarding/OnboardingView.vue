@@ -1,21 +1,8 @@
 <template>
   <div class="w-full">
-    <Toolbar class="sticky top-0 bg-white z-5">
-      <template #start>
-        <img class="mr-2" height="30" src="@/assets/img/logo.png" alt="logo" />
-        SKOLL
-      </template>
-
-      <template #end>
-        <SplitButton
-          icon="pi pi-user"
-          class="p-button-secondary"
-          :model="userOptionsItems"
-        ></SplitButton>
-      </template>
-    </Toolbar>
+    <Header />
     <div class="flex">
-      <OnboardingSidebar />
+      <Sidebar :menu="menu" />
       <div class="p-2 md:p-4 w-full">
         <router-view></router-view>
       </div>
@@ -43,23 +30,20 @@ import { useDocumentsStore } from "@/stores/documents";
 // Enums
 import { BusinessSteps } from "@/enums/business-steps";
 // Components
-import OnboardingSidebar from "@/components/sidebar/OnboardingSidebar.vue";
+import Sidebar from "@/components/sidebar/Sidebar.vue";
+import Header from "@/components/headers/Header.vue";
+// Constants
+import { ONBOARDING_MENU } from "@/constants/menus";
 
 // Data
 const productsStore = useProductStore();
 const { t } = useI18n();
-const userOptionsItems = ref([
-  {
-    label: "Cerrar sesión",
-    command: () => {
-      location.href = "/";
-    },
-  },
-]);
+
 const businessStore = useBusinessStore();
 const toast = useToast();
 const scheduleStore = useScheduleStore();
 const documentsStore = useDocumentsStore();
+const menu = ref(ONBOARDING_MENU);
 
 // Vue lifecycle
 onBeforeMount(async () => {
