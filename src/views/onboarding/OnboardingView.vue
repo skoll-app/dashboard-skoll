@@ -1,15 +1,3 @@
-<template>
-  <div class="w-full">
-    <Header />
-    <div class="flex">
-      <Sidebar :menu="menu" />
-      <div class="p-2 md:p-4 w-full">
-        <router-view></router-view>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 // Vue
 import { onBeforeMount, ref, watch } from "vue";
@@ -213,6 +201,18 @@ const getDocuments = async () => {
   }
 };
 </script>
+
+<template>
+  <div class="w-full">
+    <Header />
+    <div class="flex">
+      <Sidebar :menu="menu" :full-height="false" />
+      <div class="p-2 md:p-4 w-full">
+        <router-view></router-view>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 ::v-deep(b) {

@@ -2,6 +2,7 @@
 import { onMounted } from "vue";
 import service from "@/http/services";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
 
 const getDetail = async () => {
@@ -18,6 +19,4 @@ onMounted(() => {
   getDetail();
 });
 </script>
-<template>
-  <div>Dashboard</div>
-</template>
+<template>Dashboard</template>

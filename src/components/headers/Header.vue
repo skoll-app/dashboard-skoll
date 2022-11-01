@@ -1,8 +1,33 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+
+defineProps({
+  showName: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const route = useRoute();
+const userOptionsItems = ref([
+  {
+    label: "Cerrar sesión",
+    command: () => {
+      location.href = "/";
+    },
+  },
+]);
+</script>
+
 <template>
   <Toolbar class="sticky top-0 bg-white z-5">
     <template #start>
-      <img class="mr-2" height="30" src="@/assets/img/logo.png" alt="logo" />
-      SKOLL
+      <h4 v-if="showName" class="m-0">{{ route.name }}</h4>
+      <template v-else>
+        <img class="mr-2" height="30" src="@/assets/img/logo.png" alt="logo" />
+        SKOLL
+      </template>
     </template>
 
     <template #end>
@@ -14,18 +39,5 @@
     </template>
   </Toolbar>
 </template>
-
-<script setup lang="ts">
-import { ref } from "vue";
-
-const userOptionsItems = ref([
-  {
-    label: "Cerrar sesión",
-    command: () => {
-      location.href = "/";
-    },
-  },
-]);
-</script>
 
 <style scoped></style>

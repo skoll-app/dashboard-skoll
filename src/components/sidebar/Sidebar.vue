@@ -1,6 +1,9 @@
 <script setup lang="ts">
+// Utils
 import { useI18n } from "vue-i18n";
+// Interfaces
 import type Menu from "@/interfaces/menu";
+// Store
 import { useBusinessStore } from "@/stores/business";
 
 defineProps({
@@ -8,13 +11,25 @@ defineProps({
     type: Array<Menu>,
     default: () => [],
   },
+  fullHeight: {
+    type: Boolean,
+    default: true,
+  },
+  showLogo: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const businessStore = useBusinessStore();
 const { t } = useI18n();
 </script>
 <template>
-  <div class="sidebar">
+  <div class="sidebar" :class="{ 'min-h-screen': fullHeight }">
+    <div v-if="showLogo" class="flex align-items-center px-2 logo">
+      <img class="mr-2" height="30" src="@/assets/img/logo.png" alt="logo" />
+      <h4>SKOLL</h4>
+    </div>
     <RouterLink
       v-for="(item, i) in menu"
       :key="i"
@@ -78,6 +93,13 @@ const { t } = useI18n();
   z-index: 2;
   height: calc(100vh - 62.5px);
   border-right: 1px solid #dee2e6;
+
+  .logo {
+    height: 62.5px;
+    border-bottom: 1px solid #dee2e6;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
 
   .item {
     min-height: 60px;

@@ -3,14 +3,15 @@ import {
   createWebHistory,
   type RouteRecordRaw,
 } from "vue-router";
-import LoginView from "../views/auth/LoginView.vue";
-import SignupView from "../views/auth/SignupView.vue";
-import BasicData from "../views/onboarding/steps/BasicDataView.vue";
-import CustomizationView from "../views/onboarding/steps/CustomizationView.vue";
+import LoginView from "@/views/auth/LoginView.vue";
+import SignupView from "@/views/auth/SignupView.vue";
+import BasicData from "@/views/onboarding/steps/BasicDataView.vue";
+import CustomizationView from "@/views/onboarding/steps/CustomizationView.vue";
 import BankView from "@/views/onboarding/steps/BankView.vue";
 import DocumentsView from "@/views/onboarding/steps/DocumentsView.vue";
 import ProductsView from "@/views/onboarding/steps/ProductsView.vue";
 import ResumeView from "@/views/onboarding/steps/ResumeView.vue";
+import DashboardView from "@/views/dashboard/DashboardView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -78,8 +79,16 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/dashboard",
     name: "dashboard",
-    component: () => import("../views/dashboard/DashboardView.vue"),
+    component: () => import("../layouts/DashboardLayout.vue"),
     meta: { requiresAuth: true },
+    redirect: "",
+    children: [
+      {
+        path: "",
+        name: "Inicio",
+        component: DashboardView,
+      },
+    ],
   },
 ];
 
