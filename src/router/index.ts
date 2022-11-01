@@ -1,3 +1,4 @@
+// Components
 import {
   createRouter,
   createWebHistory,
@@ -12,6 +13,8 @@ import DocumentsView from "@/views/onboarding/steps/DocumentsView.vue";
 import ProductsView from "@/views/onboarding/steps/ProductsView.vue";
 import ResumeView from "@/views/onboarding/steps/ResumeView.vue";
 import DashboardView from "@/views/dashboard/DashboardView.vue";
+// Constants
+import { ONBOARDING_MENU } from "@/constants/menus";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -80,7 +83,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/dashboard",
     name: "dashboard",
     component: () => import("../layouts/DashboardLayout.vue"),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, menu: ONBOARDING_MENU },
     redirect: "",
     children: [
       {
